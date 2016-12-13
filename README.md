@@ -1,2 +1,2 @@
 # whitefish
-Simulation engine for obstructed random walk diffusion processes
+Simulation engine for obstructed diffusion, based on random walk particle tracking.
