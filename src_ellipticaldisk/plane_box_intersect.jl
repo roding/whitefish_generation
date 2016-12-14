@@ -26,6 +26,11 @@ function plane_box_intersect(	px::Float64,
 	y_vertex::Array{Float64, 1} = [lby, lby, uby, uby, lby, lby, uby, uby]
 	z_vertex::Array{Float64, 1} = [lbz, ubz, lbz, ubz, lbz, ubz, lbz, ubz]
 	
+	# Compute vertex coordinates relative to point in plane.
+	x_vertex = x_vertex - px
+	y_vertex = y_vertex - py
+	z_vertex = z_vertex - pz
+	
 	
 	
 	
