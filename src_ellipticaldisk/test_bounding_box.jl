@@ -26,10 +26,14 @@ function test_bounding_box()
 									R2)
 	
 	t::Array{Float64, 1} = linspace(0, 2*pi, 100000)
-	x = xc + r1*cos(t)*cos(theta2)*cos(theta3) - r2*cos(theta2)*sin(t)*sin(theta3);
-y = yc + r1*cos(t)*(cos(theta1)*sin(theta3) + cos(theta3)*sin(theta1)*sin(theta2)) + r2*sin(t)*(cos(theta1)*cos(theta3) - sin(theta1)*sin(theta2)*sin(theta3));
-z = zc + r1*cos(t)*(sin(theta1)*sin(theta3) - cos(theta1)*cos(theta3)*sin(theta2)) + r2*sin(t)*(cos(theta3)*sin(theta1) + cos(theta1)*sin(theta2)*sin(theta3));
+	
+	x::Array{Float64, 1} = X + R1*cos(t)*cos(THETA2)*cos(THETA3) - R2*cos(THETA2)*sin(t)*sin(THETA3)
+	y::Array{Float64, 1} = Y + R1*cos(t)*(cos(THETA1)*sin(THETA3) + cos(THETA3)*sin(THETA1)*sin(THETA2)) + R2*sin(t)*(cos(THETA1)*cos(THETA3) - sin(THETA1)*sin(THETA2)*sin(THETA3))
+	z::Array{Float64, 1} = Z + R1*cos(t)*(sin(THETA1)*sin(THETA3) - cos(THETA1)*cos(THETA3)*sin(THETA2)) + R2*sin(t)*(cos(THETA3)*sin(THETA1) + cos(THETA1)*sin(THETA2)*sin(THETA3))
+	
+	error::Float64 = norm([minimum(x) - lbx, maximum(x) - ubx, minimum(y) - lby, maximum(y) - uby, minimum(z) - lbz, maximum(z) - ubz])
 
+	println(error)
 
 	nothing
 end
