@@ -21,12 +21,21 @@ function plane_box_intersect(	px::Float64,
 							lbz::Float64,
 							ubz::Float64)
 	
-	# Compute coordinates of the 8 box vertices. 	
-	x_vertex = Array(Float64, 8)
-	y_vertex = Array(Float64, 8)
-	z_vertex = Array(Float64, 8)
+	# Compute absolute coordinates of the 8 box vertices.
+	x_vertex::Array{Float64, 1} = [lbx, lbx, lbx, lbx, ubx, ubx, ubx, ubx]
+	y_vertex::Array{Float64, 1} = [lby, lby, uby, uby, lby, lby, uby, uby]
+	z_vertex::Array{Float64, 1} = [lbz, ubz, lbz, ubz, lbz, ubz, lbz, ubz]
 	
 	
+	
+	
+	w3 = q31[current_particle] * vx + q32[current_particle] * vy + q33[current_particle] * vz	
+						
+					if sign(maximum(w3)) - sign(minimum(w3)) >= 1.0 # Different sides of plane or one point intersecting plane
+						if minimum(vx.^2 + vy.^2 + vz.^2) <= RMAX[current_particle]^2
+							push!(cell_lists[current_cell_x, current_cell_y, current_cell_z], current_particle)
+						end
+					end
 	
 
 end
