@@ -26,28 +26,28 @@ function plane_box_intersect(	px::Float64,
 							Lz::Float64)
 	
 	# Move box 1 to its image closest to point.
-	if 0.5 * (lbx1 + ubx1) - px < -0.5*Lx
-		lbx1 = lbx1 + Lx
-		ubx1 = ubx1 + Lx
-	elseif 0.5 * (lbx1 + ubx1) - px > 0.5*Lx
-		lbx1 = lbx1 - Lx
-		ubx1 = ubx1 - Lx
+	if 0.5 * (lbx + ubx) - px < -0.5*Lx
+		lbx = lbx + Lx
+		ubx = ubx + Lx
+	elseif 0.5 * (lbx + ubx) - px > 0.5*Lx
+		lbx = lbx - Lx
+		ubx = ubx - Lx
 	end
 	
-	if 0.5 * (lby1 + uby1) - py < -0.5*Ly
-		lby1 = lby1 + Ly
-		uby1 = uby1 + Ly
-	elseif 0.5 * (lby1 + uby1) - py > 0.5*Ly
-		lby1 = lby1 - Ly
-		uby1 = uby1 - Ly
+	if 0.5 * (lby + uby) - py < -0.5*Ly
+		lby = lby + Ly
+		uby = uby + Ly
+	elseif 0.5 * (lby + uby) - py > 0.5*Ly
+		lby = lby - Ly
+		uby = uby - Ly
 	end
 	
-	if 0.5 * (lbz1 + ubz1) - pz < -0.5*Lz
-		lbz1 = lbz1 + Lz
-		ubz1 = ubz1 + Lz
-	elseif 0.5 * (lbz1 + ubz1) - pz > 0.5*Lz
-		lbz1 = lbz1 - Lz
-		ubz1 = ubz1 - Lz
+	if 0.5 * (lbz + ubz) - pz < -0.5*Lz
+		lbz = lbz + Lz
+		ubz = ubz + Lz
+	elseif 0.5 * (lbz + ubz) - pz > 0.5*Lz
+		lbz = lbz - Lz
+		ubz = ubz - Lz
 	end
 	
 	# Compute absolute coordinates of the 8 box vertices.
