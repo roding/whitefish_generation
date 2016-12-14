@@ -17,6 +17,11 @@ function test_plane_box_intersect()
 	lbz::Float64 = 0.0
 	ubz::Float64 = 2.0
 	
+	Lx::Float64 = 10.0
+	Ly::Float64 = 10.0
+	Lz::Float64 = 10.0
+	
+	
 	is_intersecting = plane_box_intersect(	px,
 										py,
 										pz,
@@ -28,7 +33,10 @@ function test_plane_box_intersect()
 										lby,
 										uby,
 										lbz,
-										ubz)
+										ubz,
+										Lx,
+										Ly,
+										Lz)
 										
 	println(is_intersecting)
 
