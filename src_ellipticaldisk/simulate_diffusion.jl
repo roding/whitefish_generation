@@ -50,7 +50,7 @@ function simulate_diffusion(	X::Array{Float64,1},
 	
 	# Create cell lists,
 	cell_overlap::Float64 = 6 * sigma
-	lists::Array{Array{Int64, 1}}(number_of_cells_x, number_of_cells_y, number_of_cells_z) = cell_lists(	X,
+	lists = cell_lists(	X,
 																								Y,
 																								Z,
 																								THETA1,
@@ -65,8 +65,8 @@ function simulate_diffusion(	X::Array{Float64,1},
 																								number_of_cells_y,
 																								number_of_cells_z,
 																								cell_overlap)
-	println(lists)
-	return :TEST
+	#println(lists)
+	return (rand(number_of_time_points_coarse), rand(number_of_time_points_coarse), rand(number_of_time_points_coarse), NaN)
 
 	# Simulate diffusion.
 	current_particle::Int64 = 0

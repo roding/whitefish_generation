@@ -14,7 +14,7 @@ function test_simulate_diffusion()
 	Lz::Float64 = 200.0
 	
 	# Particle parameters (lengths are in µm).
-	number_of_particles::Int64 = 500
+	number_of_particles::Int64 = 5
 	X::Array{Float64,1} = Lx * rand(number_of_particles)
 	Y::Array{Float64,1} = Ly * rand(number_of_particles)
 	Z::Array{Float64,1} = Lz * rand(number_of_particles)
@@ -31,9 +31,9 @@ function test_simulate_diffusion()
 	const number_of_time_points_fine_per_coarse::Int64 = 10
 	const number_of_diffusers::Int64 = 10 # Number of diffusing particles.
 	
-	number_of_cells_x::Int64 = 10
-	number_of_cells_y::Int64 = 10
-	number_of_cells_z::Int64 = 20
+	number_of_cells_x::Int64 = 2#10
+	number_of_cells_y::Int64 = 2#10
+	number_of_cells_z::Int64 = 2#20
 
 	# Run simulation.
 	println("   Simulating diffusion...")
@@ -64,7 +64,7 @@ function test_simulate_diffusion()
 	#println(sigma_empirical/sigma)
 	
 	t_exec_diffusion::Float64 = convert(Float64, time_ns() - t_start_diffusion) / 1e9
-	file_name_diffusion = join((output_dir, "/", "diffusion.dat"))
+	file_name_diffusion = "diffusion.dat"
 	file_stream_diffusion = open(file_name_diffusion,"w")
 	writedlm(file_stream_diffusion, t_exec_diffusion, ",")
 	writedlm(file_stream_diffusion, sigma_empirical/sigma, ",")
