@@ -1,6 +1,6 @@
-include("create_cell_lists.jl")
+include("cell_lists.jl")
 
-function test_create_cell_lists()
+function test_cell_lists()
 	Lx::Float64 = 100.0
 	Ly::Float64 = 100.0
 	Lz::Float64 = 200.0
@@ -51,4 +51,4 @@ function test_create_cell_lists()
 	nothing
 end
 
-test_create_cell_lists()
+test_cell_lists()
