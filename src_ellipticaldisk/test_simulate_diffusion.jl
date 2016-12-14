@@ -14,10 +14,10 @@ function test_simulate_diffusion()
 	Lz::Float64 = 200.0
 	
 	# Particle parameters (lengths are in µm).
-	number_of_particles::Int64 = 50
+	number_of_particles::Int64 = 500
 	X::Array{Float64,1} = Lx * rand(number_of_particles)
 	Y::Array{Float64,1} = Ly * rand(number_of_particles)
-	Z::Array{Float64,1} = Lz * rand(number_of_particles)
+	Z::Array{Float64,1} = 100.0 * zeros(number_of_particles)#Lz * rand(number_of_particles)
 	THETA1::Array{Float64,1} = zeros(number_of_particles)#randn(number_of_particles)
 	THETA2::Array{Float64,1} = zeros(number_of_particles)#randn(number_of_particles)
 	THETA3::Array{Float64,1} = zeros(number_of_particles)#randn(number_of_particles)
@@ -27,7 +27,7 @@ function test_simulate_diffusion()
 		# Simulation parameters.
 	const D0::Float64 = 1.0 # Intrinsic diffusion coefficient.	
 	const deltat_coarse::Float64 = 10.0 # Time step.
-	const number_of_time_points_coarse::Int64 = 150
+	const number_of_time_points_coarse::Int64 = 2500
 	const number_of_time_points_fine_per_coarse::Int64 = 10
 	const number_of_diffusers::Int64 = 10000 # Number of diffusing particles.
 	
