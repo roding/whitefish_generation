@@ -20,7 +20,7 @@ function test_cell_lists()
 	number_of_cells_z::Int64 = 20
 	cell_overlap::Float64 = 0.0 # same unit as simulation domain dimensions (µm).
 
-	(cell_lists, cell_bounds_x, cell_bounds_y, cell_bounds_z) = cell_lists(	X,
+	(lists, cell_bounds_x, cell_bounds_y, cell_bounds_z) = cell_lists(	X,
 																		Y,
 																		Z,
 																		THETA1,
@@ -43,7 +43,7 @@ function test_cell_lists()
 	
 	count = 0.0
 	for i = 1:(number_of_cells_x*number_of_cells_y*number_of_cells_z)
-		count += length(cell_lists[i])
+		count += length(lists[i])
 	end
 	println(count/(number_of_cells_x*number_of_cells_y*number_of_cells_z))
 	

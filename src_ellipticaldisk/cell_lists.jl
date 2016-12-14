@@ -1,3 +1,7 @@
+include("bounding_box.jl")
+include("box_box_intersect.jl")
+include("plane_box_intersect.jl")
+
 function cell_lists(	X::Array{Float64,1},
 					Y::Array{Float64,1},
 					Z::Array{Float64,1},
@@ -65,26 +69,23 @@ function cell_lists(	X::Array{Float64,1},
 
 	# Create cell dimension data structures.
 	const cell_bounds_x::Array{Float64, 1} = linspace(0.0, Lx, number_of_cells_x + 1)
-	#const cell_centers_x::Array{Float64, 1} = 0.5 * cell_bounds_x[1:end-1] + 0.5 * cell_bounds_x[2:end]
-	const lbx_cell::Array{Float64, 1} = cell_bounds_x[1:end-1]
-	const ubx_cell::Array{Float64, 1} = cell_bounds_x[2:end]
+	const lbx_cell::Array{Float64, 1} = cell_bounds_x[1:end-1] - cell_overlap
+	const ubx_cell::Array{Float64, 1} = cell_bounds_x[2:end] + cell_overlap
 	
 	const cell_bounds_y::Array{Float64, 1} = linspace(0.0, Ly, number_of_cells_y + 1)
-	#const cell_centers_y::Array{Float64, 1} = 0.5 * cell_bounds_y[1:end-1] + 0.5 * cell_bounds_y[2:end]
-	const lby_cell::Array{Float64, 1} = cell_bounds_y[1:end-1]
-	const uby_cell::Array{Float64, 1} = cell_bounds_y[2:end]
+	const lby_cell::Array{Float64, 1} = cell_bounds_y[1:end-1] - cell_overlap
+	const uby_cell::Array{Float64, 1} = cell_bounds_y[2:end] + cell_overlap
 	
 	const cell_bounds_z::Array{Float64, 1} = linspace(0.0, Lz, number_of_cells_z + 1)
-	#const cell_centers_z::Array{Float64, 1} = 0.5 * cell_bounds_z[1:end-1] + 0.5 * cell_bounds_z[2:end]
-	const lbz_cell::Array{Float64, 1} = cell_bounds_z[1:end-1]
-	const ubz_cell::Array{Float64, 1} = cell_bounds_z[2:end]
+	const lbz_cell::Array{Float64, 1} = cell_bounds_z[1:end-1] - cell_overlap
+	const ubz_cell::Array{Float64, 1} = cell_bounds_z[2:end] + cell_overlap
 	
 	# Initialize cell list data structure.
-	cell_lists = Array{Any}(number_of_cells_x, number_of_cells_y, number_of_cells_z)
+	lists = Array{Any}(number_of_cells_x, number_of_cells_y, number_of_cells_z)
 	for current_cell_x = 1:number_of_cells_x
 		for current_cell_y = 1:number_of_cells_y
 			for current_cell_z = 1:number_of_cells_z
-				cell_lists[current_cell_x, current_cell_y, current_cell_z] = Array{Int64}(0)
+				lists[current_cell_x, current_cell_y, current_cell_z] = Array{Int64}(0)
 			end
 		end
 	end
@@ -124,12 +125,12 @@ function cell_lists(	X::Array{Float64,1},
 												Lx,
 												Ly,
 												Lz)
-							push!(cell_lists[current_cell_x, current_cell_y, current_cell_z], current_particle)
+							push!(lists[current_cell_x, current_cell_y, current_cell_z], current_particle)
 						end
 					end
 				end
 			end
 		end
 	end
-	return (cell_lists, cell_bounds_x, cell_bounds_y, cell_bounds_z)
+	return (lists, cell_bounds_x, cell_bounds_y, cell_bounds_z)
 end
