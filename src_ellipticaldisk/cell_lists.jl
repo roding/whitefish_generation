@@ -81,7 +81,7 @@ function cell_lists(	X::Array{Float64,1},
 	const ubz_cell::Array{Float64, 1} = cell_bounds_z[2:end] + cell_overlap
 	
 	# Initialize cell list data structure.
-	lists = Array{Any}(number_of_cells_x, number_of_cells_y, number_of_cells_z)
+	lists = Array{Array{Int64, 1}}(number_of_cells_x, number_of_cells_y, number_of_cells_z)
 	for current_cell_x = 1:number_of_cells_x
 		for current_cell_y = 1:number_of_cells_y
 			for current_cell_z = 1:number_of_cells_z
