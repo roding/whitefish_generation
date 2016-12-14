@@ -1,18 +1,18 @@
-function create_cell_lists(	X::Array{Float64,1},
-							Y::Array{Float64,1},
-							Z::Array{Float64,1},
-							THETA1::Array{Float64,1},
-							THETA2::Array{Float64,1},
-							THETA3::Array{Float64,1},
-							R1::Array{Float64,1}, 
-							R2::Array{Float64,1},
-							Lx::Float64,
-							Ly::Float64,
-							Lz::Float64,
-							number_of_cells_x::Int64,
-							number_of_cells_y::Int64,
-							number_of_cells_z::Int64,
-							cell_overlap::Float64)
+function cell_lists(	X::Array{Float64,1},
+					Y::Array{Float64,1},
+					Z::Array{Float64,1},
+					THETA1::Array{Float64,1},
+					THETA2::Array{Float64,1},
+					THETA3::Array{Float64,1},
+					R1::Array{Float64,1}, 
+					R2::Array{Float64,1},
+					Lx::Float64,
+					Ly::Float64,
+					Lz::Float64,
+					number_of_cells_x::Int64,
+					number_of_cells_y::Int64,
+					number_of_cells_z::Int64,
+					cell_overlap::Float64)
 		
 	# Ellipse parameters.
 	const number_of_particles::Int64 = length(X)
