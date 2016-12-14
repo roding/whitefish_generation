@@ -14,7 +14,7 @@ function test_simulate_diffusion()
 	Lz::Float64 = 200.0
 	
 	# Particle parameters (lengths are in µm).
-	number_of_particles::Int64 = 5
+	number_of_particles::Int64 = 500
 	X::Array{Float64,1} = Lx * rand(number_of_particles)
 	Y::Array{Float64,1} = Ly * rand(number_of_particles)
 	Z::Array{Float64,1} = Lz * rand(number_of_particles)
@@ -29,11 +29,11 @@ function test_simulate_diffusion()
 	const deltat_coarse::Float64 = 10.0 # Time step.
 	const number_of_time_points_coarse::Int64 = 1500
 	const number_of_time_points_fine_per_coarse::Int64 = 10
-	const number_of_diffusers::Int64 = 10 # Number of diffusing particles.
+	const number_of_diffusers::Int64 = 10000 # Number of diffusing particles.
 	
-	number_of_cells_x::Int64 = 2#10
-	number_of_cells_y::Int64 = 2#10
-	number_of_cells_z::Int64 = 2#20
+	number_of_cells_x::Int64 = 10
+	number_of_cells_y::Int64 = 10
+	number_of_cells_z::Int64 = 20
 
 	# Run simulation.
 	println("   Simulating diffusion...")

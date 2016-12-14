@@ -1,6 +1,6 @@
 include("cell_lists.jl")
 
-function simulate_diffusion(	X::Array{Float64,1},
+@inbounds function simulate_diffusion(	X::Array{Float64,1},
 							Y::Array{Float64,1},
 							Z::Array{Float64,1},
 							THETA1::Array{Float64,1},
@@ -51,22 +51,20 @@ function simulate_diffusion(	X::Array{Float64,1},
 	# Create cell lists,
 	cell_overlap::Float64 = 6 * sigma
 	lists = cell_lists(	X,
-																								Y,
-																								Z,
-																								THETA1,
-																								THETA2,
-																								THETA3,
-																								R1, 
-																								R2,
-																								Lx,
-																								Ly,
-																								Lz,
-																								number_of_cells_x,
-																								number_of_cells_y,
-																								number_of_cells_z,
-																								cell_overlap)
-	#println(lists)
-	return (rand(number_of_time_points_coarse), rand(number_of_time_points_coarse), rand(number_of_time_points_coarse), NaN)
+						Y,
+						Z,
+						THETA1,
+						THETA2,
+						THETA3,
+						R1, 
+						R2,
+						Lx,
+						Ly,
+						Lz,
+						number_of_cells_x,
+						number_of_cells_y,
+						number_of_cells_z,
+						cell_overlap)
 
 	# Simulate diffusion.
 	current_particle::Int64 = 0
@@ -131,11 +129,11 @@ function simulate_diffusion(	X::Array{Float64,1},
 				current_cell_x = convert(Int64, ceil(x / Lx * convert(Float64, number_of_cells_x)))
 				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
 				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
-				println((current_cell_x,current_cell_y,current_cell_z))
-				println(size(lists))
+				#println((current_cell_x,current_cell_y,current_cell_z))
+				#println(size(lists))
 				number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
-				println(number_of_particles_current_cell)
-				return :TEST	
+				#println(number_of_particles_current_cell)
+				#return :TEST	
 				list = lists[current_cell_x, current_cell_y, current_cell_z]
 				# Random proposal displacement.
 				deltax = sigma * randn()

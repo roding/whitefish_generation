@@ -132,6 +132,6 @@ function cell_lists(	X::Array{Float64,1},
 			end
 		end
 	end
-	println(lists)
+	#println(lists)
 	return lists
 end
