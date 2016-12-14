@@ -66,18 +66,18 @@ function cell_lists(	X::Array{Float64,1},
 	# Create cell dimension data structures.
 	const cell_bounds_x::Array{Float64, 1} = linspace(0.0, Lx, number_of_cells_x + 1)
 	#const cell_centers_x::Array{Float64, 1} = 0.5 * cell_bounds_x[1:end-1] + 0.5 * cell_bounds_x[2:end]
-	#const cell_lbx::Array{Float64, 1} = cell_bounds_x[1:end-1]
-	#const cell_ubx::Array{Float64, 1} = cell_bounds_x[2:end]
+	const lbx_cell::Array{Float64, 1} = cell_bounds_x[1:end-1]
+	const ubx_cell::Array{Float64, 1} = cell_bounds_x[2:end]
 	
 	const cell_bounds_y::Array{Float64, 1} = linspace(0.0, Ly, number_of_cells_y + 1)
 	#const cell_centers_y::Array{Float64, 1} = 0.5 * cell_bounds_y[1:end-1] + 0.5 * cell_bounds_y[2:end]
-	#const cell_lby::Array{Float64, 1} = cell_bounds_y[1:end-1]
-	#const cell_uby::Array{Float64, 1} = cell_bounds_y[2:end]
+	const lby_cell::Array{Float64, 1} = cell_bounds_y[1:end-1]
+	const uby_cell::Array{Float64, 1} = cell_bounds_y[2:end]
 	
 	const cell_bounds_z::Array{Float64, 1} = linspace(0.0, Lz, number_of_cells_z + 1)
 	#const cell_centers_z::Array{Float64, 1} = 0.5 * cell_bounds_z[1:end-1] + 0.5 * cell_bounds_z[2:end]
-	#const cell_lbz::Array{Float64, 1} = cell_bounds_z[1:end-1]
-	#const cell_ubz::Array{Float64, 1} = cell_bounds_z[2:end]
+	const lbz_cell::Array{Float64, 1} = cell_bounds_z[1:end-1]
+	const ubz_cell::Array{Float64, 1} = cell_bounds_z[2:end]
 	
 	# Initialize cell list data structure.
 	cell_lists = Array{Any}(number_of_cells_x, number_of_cells_y, number_of_cells_z)
@@ -90,49 +90,67 @@ function cell_lists(	X::Array{Float64,1},
 	end
 	
 	# Compute cell lists.
-	x_cell_vertex::Array{Float64, 1} = zeros(8)
-	y_cell_vertex::Array{Float64, 1} = zeros(8)
-	z_cell_vertex::Array{Float64, 1} = zeros(8)
+	#x_cell_vertex::Array{Float64, 1} = zeros(8)
+	#y_cell_vertex::Array{Float64, 1} = zeros(8)
+	#z_cell_vertex::Array{Float64, 1} = zeros(8)
 	
-	vx::Array{Float64, 1} = zeros(8)
-	vy::Array{Float64, 1} = zeros(8)
-	vz::Array{Float64, 1} = zeros(8)
-	w3::Array{Float64, 1} = zeros(8)
+	#vx::Array{Float64, 1} = zeros(8)
+	#vy::Array{Float64, 1} = zeros(8)
+	#vz::Array{Float64, 1} = zeros(8)
+	#w3::Array{Float64, 1} = zeros(8)
 	
 	for current_cell_x = 1:number_of_cells_x
 		for current_cell_y = 1:number_of_cells_y
 			for current_cell_z = 1:number_of_cells_z
 				# Compute vertices (corners) of current cell.
-				vertex_count = 0
-				for bx = current_cell_x:current_cell_x+1
-					for by = current_cell_y:current_cell_y+1
-						for bz = current_cell_z:current_cell_z+1
-							vertex_count += 1
-							if bx == current_cell_x
-								x_cell_vertex[vertex_count] = cell_bounds_x[bx] - cell_overlap
-							else
-								x_cell_vertex[vertex_count] = cell_bounds_x[bx] + cell_overlap
-							end
-							
-							y_cell_vertex[vertex_count] = cell_bounds_y[by]
-							if by == current_cell_y
-								y_cell_vertex[vertex_count] = cell_bounds_y[by] - cell_overlap
-							else
-								y_cell_vertex[vertex_count] = cell_bounds_y[by] + cell_overlap
-							end
-							
-							z_cell_vertex[vertex_count] = cell_bounds_z[bz]
-							if bz == current_cell_z
-								z_cell_vertex[vertex_count] = cell_bounds_z[bz] - cell_overlap
-							else
-								z_cell_vertex[vertex_count] = cell_bounds_z[bz] + cell_overlap
-							end
-						end
-					end
-				end
+			#	vertex_count = 0
+			#	for bx = current_cell_x:current_cell_x+1
+			#		for by = current_cell_y:current_cell_y+1
+			#			for bz = current_cell_z:current_cell_z+1
+			#				vertex_count += 1
+			#				if bx == current_cell_x
+			#					x_cell_vertex[vertex_count] = cell_bounds_x[bx] - cell_overlap
+			#				else
+			#					x_cell_vertex[vertex_count] = cell_bounds_x[bx] + cell_overlap
+			#				end
+			#				
+			#				y_cell_vertex[vertex_count] = cell_bounds_y[by]
+			#				if by == current_cell_y
+			#					y_cell_vertex[vertex_count] = cell_bounds_y[by] - cell_overlap
+			#				else
+			#					y_cell_vertex[vertex_count] = cell_bounds_y[by] + cell_overlap
+			#				end
+			#				
+			#				z_cell_vertex[vertex_count] = cell_bounds_z[bz]
+			#				if bz == current_cell_z
+			#					z_cell_vertex[vertex_count] = cell_bounds_z[bz] - cell_overlap
+			#				else
+			#					z_cell_vertex[vertex_count] = cell_bounds_z[bz] + cell_overlap
+			#				end
+			#			end
+			#		end
+			#	end
 				
 				# Check particle.
-				for current_particle = 1:number_of_particles					
+				for current_particle = 1:number_of_particles				
+
+
+
+
+					if box_box_intersect(	lbx_bounding_box[current_particle],
+										ubx_bounding_box[current_particle],
+										lby_bounding_box[current_particle],
+										uby_bounding_box[current_particle],
+										lbz_bounding_box[current_particle],
+										ubz_bounding_box[current_particle],
+										lbx_cell[current_cell_x],
+										ubx_cell[current_cell_x],
+										lby_cell[current_cell_y],
+										uby_cell[current_cell_y],
+										lbz_cell[current_cell_z],
+										ubz_cell[current_cell_z],
+										
+										
 					# Coordinates of vertex positions relative to particle.
 					vx = x_cell_vertex - X[current_particle]
 					if mean(vx) < -0.5*Lx
