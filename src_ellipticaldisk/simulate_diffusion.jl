@@ -130,7 +130,7 @@ function simulate_diffusion(	X::Array{Float64,1},
 				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
 				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
 				number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
-				
+				list = lists[current_cell_x, current_cell_y, current_cell_z]
 				# Random proposal displacement.
 				deltax = sigma * randn()
 				deltay = sigma * randn()
@@ -164,21 +164,21 @@ function simulate_diffusion(	X::Array{Float64,1},
 					current_particle += 1
 						
 					# Coordinates of current diffuser position relative to particle.
-					vx = x - X[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
+					vx = x - X[list[current_particle]]
 					if vx < -0.5*Lx
 						vx = vx + Lx
 					elseif vx > 0.5*Lx
 						vx = vx - Lx
 					end
 					
-					vy = y - Y[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
+					vy = y - Y[list[current_particle]]
 					if vy < -0.5*Ly
 						vy = vy + Ly
 					elseif vy > 0.5*Ly
 						vy = vy - Ly
 					end
 					
-					vz = z - Z[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
+					vz = z - Z[list[current_particle]]
 					if vz < -0.5*Lz
 						vz = vz + Lz
 					elseif vz > 0.5*Lz
@@ -190,23 +190,23 @@ function simulate_diffusion(	X::Array{Float64,1},
 					vy_star = vy + deltay
 					vz_star = vz + deltaz
 					
-					if ( vx^2 + vy^2 + vz^2 < RMAX[current_particle]^2 ) || ( vx_star^2 + vy_star^2 + vz_star^2 < RMAX[current_particle]^2 )
+					if ( vx^2 + vy^2 + vz^2 < RMAX[list[current_particle]]^2 ) || ( vx_star^2 + vy_star^2 + vz_star^2 < RMAX[list[current_particle]]^2 )
 						#println("Within bounding sphere of ellipse...")
 						
 						# Coordinate of current and candidate diffuser position relative to particle 
 						# in the intrinsic coordinates of the particle, orthogonal to ellipse plane.
-						w3 = q31[current_particle] * vx + q32[current_particle] * vy + q33[current_particle] * vz
-						w3_star = q31[current_particle] * vx_star + q32[current_particle] * vy_star + q33[current_particle] * vz_star
+						w3 = q31[list[current_particle]] * vx + q32[list[current_particle]] * vy + q33[list[current_particle]] * vz
+						w3_star = q31[list[current_particle]] * vx_star + q32[list[current_particle]] * vy_star + q33[list[current_particle]] * vz_star
 		
 						if sign(w3_star) != sign(w3)
 							#println("   On different sides of ellipse...")
 							#println((z, z_star, w3, w3_star))
 							# Coordinate of current and candidate diffuser position relative to particle 
 							# in the intrinsic coordinates of the particle, parallel to ellipse plane.
-							w1 = q11[current_particle] * vx + q12[current_particle] * vy + q13[current_particle] * vz
-							w1_star = q11[current_particle] * vx_star + q12[current_particle] * vy_star + q13[current_particle] * vz_star
-							w2 = q21[current_particle] * vx + q22[current_particle] * vy + q23[current_particle] * vz
-							w2_star = q21[current_particle] * vx_star + q22[current_particle] * vy_star + q23[current_particle] * vz_star
+							w1 = q11[list[current_particle]] * vx + q12[list[current_particle]] * vy + q13[list[current_particle]] * vz
+							w1_star = q11[list[current_particle]] * vx_star + q12[list[current_particle]] * vy_star + q13[list[current_particle]] * vz_star
+							w2 = q21[list[current_particle]] * vx + q22[list[current_particle]] * vy + q23[list[current_particle]] * vz
+							w2_star = q21[list[current_particle]] * vx_star + q22[list[current_particle]] * vy_star + q23[list[current_particle]] * vz_star
 							
 							# Compute intersection point between diffuser trajectory and ellipse plane.
 							alpha = - w3_star / (w3 - w3_star)
@@ -214,7 +214,7 @@ function simulate_diffusion(	X::Array{Float64,1},
 							w2_intersection = alpha * w2 + (1 - alpha) * w2_star
 							
 							# If intrinsic elliptical planar coordinates lie satisfy ellipse equation we have hit the ellipse.
-							if (w1_intersection/R1[current_particle])^2 + (w2_intersection/R2[current_particle])^2 < 1.0
+							if (w1_intersection/R1[list[current_particle]])^2 + (w2_intersection/R2[list[current_particle]])^2 < 1.0
 								#println("      Intersection point within ellipse...")
 								#println(join(("      ", string((current_time, current_particle)))))
 								is_ok = false

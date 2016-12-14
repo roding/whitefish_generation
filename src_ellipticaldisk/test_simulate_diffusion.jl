@@ -30,27 +30,34 @@ function test_simulate_diffusion()
 	const number_of_time_points_coarse::Int64 = 1500
 	const number_of_time_points_fine_per_coarse::Int64 = 10
 	const number_of_diffusers::Int64 = 10 # Number of diffusing particles.
+	
+	number_of_cells_x::Int64 = 10
+	number_of_cells_y::Int64 = 10
+	number_of_cells_z::Int64 = 20
 
 	# Run simulation.
 	println("   Simulating diffusion...")
 	t_start_diffusion::Int64 = convert(Int64, time_ns())
-	(msd_x, msd_y, msd_z, sigma_empirical) = rwpt(	X,
-													Y,
-													Z,
-													THETA1,
-													THETA2,
-													THETA3,
-													R1,
-													R2,
-													Lx,
-													Ly,
-													Lz,
-													D0,
-													deltat_coarse,
-													number_of_time_points_coarse,
-													number_of_time_points_fine_per_coarse,
-													number_of_diffusers)
-												
+	(msd_x, msd_y, msd_z, sigma_empirical) = simulate_diffusion(	X,
+															Y,
+															Z,
+															THETA1,
+															THETA2,
+															THETA3,
+															R1,
+															R2,
+															Lx,
+															Ly,
+															Lz,
+															D0,
+															deltat_coarse,
+															number_of_time_points_coarse,
+															number_of_time_points_fine_per_coarse,
+															number_of_diffusers,
+															number_of_cells_x,
+															number_of_cells_y,
+															number_of_cells_z)
+																				
 	const t::Array{Float64, 1} = 0.0:deltat_coarse:(convert(Float64, number_of_time_points_coarse-1) * deltat_coarse)
 	const deltat_fine::Float64 = deltat_coarse / convert(Float64, number_of_time_points_fine_per_coarse)
 	const sigma::Float64 = sqrt(2 * D0 * deltat_fine)
@@ -70,4 +77,4 @@ function test_simulate_diffusion()
 	
 end
 
-run_simulation_test()
+test_simulate_diffusion()
