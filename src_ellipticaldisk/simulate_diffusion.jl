@@ -1,24 +1,24 @@
 function simulate_diffusion(	X::Array{Float64,1},
-				Y::Array{Float64,1},
-				Z::Array{Float64,1},
-				THETA1::Array{Float64,1},
-				THETA2::Array{Float64,1},
-				THETA3::Array{Float64,1},
-				R1::Array{Float64,1}, 
-				R2::Array{Float64,1},
-				Lx::Float64,
-				Ly::Float64,
-				Lz::Float64,
-				D0::Float64,
-				deltat_coarse::Float64,
-				number_of_time_points_coarse::Int64,
-				number_of_time_points_fine_per_coarse::Int64,
-				number_of_diffusers::Int64,
-				number_of_cells_x::Int64,
-				number_of_cells_y::Int64,
-				number_of_cells_z::Int64)
+							Y::Array{Float64,1},
+							Z::Array{Float64,1},
+							THETA1::Array{Float64,1},
+							THETA2::Array{Float64,1},
+							THETA3::Array{Float64,1},
+							R1::Array{Float64,1}, 
+							R2::Array{Float64,1},
+							Lx::Float64,
+							Ly::Float64,
+							Lz::Float64,
+							D0::Float64,
+							deltat_coarse::Float64,
+							number_of_time_points_coarse::Int64,
+							number_of_time_points_fine_per_coarse::Int64,
+							number_of_diffusers::Int64,
+							number_of_cells_x::Int64,
+							number_of_cells_y::Int64,
+							number_of_cells_z::Int64)
 		
-	# Ellipse parameters.
+	# Elliptical disk parameters.
 	const number_of_particles::Int64 = length(X)
 	const RMAX = Array(Float64,number_of_particles)
 	for current_particle = 1:number_of_particles
