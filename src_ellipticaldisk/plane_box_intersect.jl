@@ -31,16 +31,17 @@ function plane_box_intersect(	px::Float64,
 	y_vertex = y_vertex - py
 	z_vertex = z_vertex - pz
 	
-	
-	
-	
-	w3 = q31[current_particle] * vx + q32[current_particle] * vy + q33[current_particle] * vz	
-						
-					if sign(maximum(w3)) - sign(minimum(w3)) >= 1.0 # Different sides of plane or one point intersecting plane
-						if minimum(vx.^2 + vy.^2 + vz.^2) <= RMAX[current_particle]^2
-							push!(cell_lists[current_cell_x, current_cell_y, current_cell_z], current_particle)
-						end
-					end
-	
+	# Compute coordinates along axis defined by normal vector and relative to point.
+	w::Array{Float64, 1} = nx * x_vertex + ny * y_vertex + nz * z_vertex	
+		
+	# Check if vertices are on same or opposite sides of plane. If the maximum sign 
+	# difference is 0.0, they are on the same side (or both are in the plane, but 
+	# this case is of no relevance), if it is 1.0, one point is outside the plane and
+	# one inside, if it is 2.0, points are  strictly on different sides.
+	if sign(maximum(w)) - sign(minimum(w)) >= 1.0
+		return true
+	else
+		return false
+	end
 
 end
