@@ -50,7 +50,7 @@ function simulate_diffusion(	X::Array{Float64,1},
 	
 	# Create cell lists,
 	cell_overlap::Float64 = 6 * sigma
-	lists = cell_lists(	X,
+	lists::Array{Array{Float64, 1}}(number_of_cells_x, number_of_cells_y, number_of_cells_z) = cell_lists(	X,
 						Y,
 						Z,
 						THETA1,
@@ -130,8 +130,10 @@ function simulate_diffusion(	X::Array{Float64,1},
 				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
 				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
 				println((current_cell_x,current_cell_y,current_cell_z))
-				return :TEST
-				#number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
+				println(size(lists))
+				number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
+				println(number_of_particles_current_cell)
+				return :TEST	
 				list = lists[current_cell_x, current_cell_y, current_cell_z]
 				# Random proposal displacement.
 				deltax = sigma * randn()

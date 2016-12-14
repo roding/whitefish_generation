@@ -132,5 +132,5 @@ function cell_lists(	X::Array{Float64,1},
 			end
 		end
 	end
-	return (lists, cell_bounds_x, cell_bounds_y, cell_bounds_z)
+	return lists
 end
