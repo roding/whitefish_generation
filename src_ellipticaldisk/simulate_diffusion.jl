@@ -1,3 +1,5 @@
+include("cell_lists.jl")
+
 function simulate_diffusion(	X::Array{Float64,1},
 							Y::Array{Float64,1},
 							Z::Array{Float64,1},
@@ -48,22 +50,22 @@ function simulate_diffusion(	X::Array{Float64,1},
 	
 	# Create cell lists,
 	cell_overlap::Float64 = 6 * sigma
-	(cell_lists, cell_bounds_x, cell_bounds_y, cell_bounds_z) = create_cell_lists(	X,
-																			Y,
-																			Z,
-																			THETA1,
-																			THETA2,
-																			THETA3,
-																			R1, 
-																			R2,
-																			Lx,
-																			Ly,
-																			Lz,
-																			number_of_cells_x,
-																			number_of_cells_y,
-																			number_of_cells_z,
-																			cell_overlap)
-	
+	lists = cell_lists(	X,
+						Y,
+						Z,
+						THETA1,
+						THETA2,
+						THETA3,
+						R1, 
+						R2,
+						Lx,
+						Ly,
+						Lz,
+						number_of_cells_x,
+						number_of_cells_y,
+						number_of_cells_z,
+						cell_overlap)
+
 	# Simulate diffusion.
 	current_particle::Int64 = 0
 	is_ok::Bool = true
@@ -112,7 +114,6 @@ function simulate_diffusion(	X::Array{Float64,1},
 		y = Ly * rand()
 		z = Lz * rand()
 		
-		
 		x_abs = x
 		y_abs = y
 		z_abs = z
@@ -124,6 +125,12 @@ function simulate_diffusion(	X::Array{Float64,1},
 		# Starting diffusion.
 		for current_time_coarse = 2:number_of_time_points_coarse
 			for current_time_fine = 1:number_of_time_points_fine_per_coarse
+				# Determine current cell.
+				current_cell_x = convert(Int64, ceil(x / Lx * convert(Float64, number_of_cells_x)))
+				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
+				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
+				number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
+				
 				# Random proposal displacement.
 				deltax = sigma * randn()
 				deltay = sigma * randn()
@@ -150,34 +157,28 @@ function simulate_diffusion(	X::Array{Float64,1},
 					z_star -= Lz
 				end
 				
-				# In what cell is new position?
-				current_cell_x = convert(Int64, ceil(x / Lx * convert(Float64, number_of_cells_x)))
-				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
-				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
-				
-				number_of_particles_current_cell = length(cell_lists[current_cell_x, current_cell_y, current_cell_z])
-				
+				# Check for diffuser-particle intersections.
 				current_particle = 0
 				is_ok = true
 				while is_ok & ( current_particle < number_of_particles_current_cell )
 					current_particle += 1
 						
 					# Coordinates of current diffuser position relative to particle.
-					vx = x - X[current_particle]
+					vx = x - X[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
 					if vx < -0.5*Lx
 						vx = vx + Lx
 					elseif vx > 0.5*Lx
 						vx = vx - Lx
 					end
 					
-					vy = y - Y[current_particle]
+					vy = y - Y[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
 					if vy < -0.5*Ly
 						vy = vy + Ly
 					elseif vy > 0.5*Ly
 						vy = vy - Ly
 					end
 					
-					vz = z - Z[current_particle]
+					vz = z - Z[lists[current_cell_x, current_cell_y, current_cell_z][current_particle]]
 					if vz < -0.5*Lz
 						vz = vz + Lz
 					elseif vz > 0.5*Lz
