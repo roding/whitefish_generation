@@ -129,7 +129,9 @@ function simulate_diffusion(	X::Array{Float64,1},
 				current_cell_x = convert(Int64, ceil(x / Lx * convert(Float64, number_of_cells_x)))
 				current_cell_y = convert(Int64, ceil(y / Ly * convert(Float64, number_of_cells_y)))
 				current_cell_z = convert(Int64, ceil(z / Lz * convert(Float64, number_of_cells_z)))
-				number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
+				println((current_cell_x,current_cell_y,current_cell_z))
+				return :TEST
+				#number_of_particles_current_cell = length(lists[current_cell_x, current_cell_y, current_cell_z])
 				list = lists[current_cell_x, current_cell_y, current_cell_z]
 				# Random proposal displacement.
 				deltax = sigma * randn()
