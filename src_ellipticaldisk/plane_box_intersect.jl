@@ -21,5 +21,12 @@ function plane_box_intersect(	px::Float64,
 							lbz::Float64,
 							ubz::Float64)
 	
+	# Compute coordinates of the 8 box vertices. 	
+	x_vertex = Array(Float64, 8)
+	y_vertex = Array(Float64, 8)
+	z_vertex = Array(Float64, 8)
+	
+	
+	
 
 end
