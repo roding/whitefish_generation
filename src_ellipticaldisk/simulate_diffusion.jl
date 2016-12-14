@@ -103,7 +103,7 @@ include("cell_lists.jl")
 	msd_x::Array{Float64} = zeros(number_of_time_points_coarse)
 	msd_y::Array{Float64} = zeros(number_of_time_points_coarse)
 	msd_z::Array{Float64} = zeros(number_of_time_points_coarse)
-	sigma_empirical::Float64 = 0.0
+	D0_empirical::Float64 = 0.0
 	
 	for current_diffuser = 1:number_of_diffusers
 		println(current_diffuser)
@@ -236,7 +236,7 @@ include("cell_lists.jl")
 					y_abs = y_abs + deltay
 					z_abs = z_abs + deltaz
 					
-					sigma_empirical = sigma_empirical + deltax^2 + deltay^2 + deltaz^2
+					D0_empirical = D0_empirical + deltax^2 + deltay^2 + deltaz^2
 				end
 			end
 			
@@ -255,7 +255,7 @@ include("cell_lists.jl")
 	msd_y = msd_y ./ convert(Float64, number_of_diffusers)
 	msd_z = msd_z ./ convert(Float64, number_of_diffusers)
 	
-	sigma_empirical = sqrt(sigma_empirical / (3.0 * convert(Float64, number_of_diffusers * (number_of_time_points_coarse-1) * number_of_time_points_fine_per_coarse)))
-	
-	return (msd_x, msd_y, msd_z, sigma_empirical)
+	D0_empirical = D0_empirical / (3.0 * convert(Float64, number_of_diffusers * (number_of_time_points_coarse-1) * number_of_time_points_fine_per_coarse) * 2.0 * deltat_fine)
+		
+	return (msd_x, msd_y, msd_z, D0_empirical)
 end

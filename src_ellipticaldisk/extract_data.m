@@ -2,7 +2,7 @@ clear
 clc
 close all hidden
 
-filename = 'output_layer\output_1\diffusion.dat';
+filename = 'diffusion.dat';
 delimiter = ',';
 formatSpec = '%f%f%f%f%[^\n\r]';
 fileID = fopen(filename,'r');
