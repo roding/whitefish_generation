@@ -24,7 +24,8 @@ function box_box_intersect(	lbx1::Float64,
 							Lx::Float64,
 							Ly::Float64,
 							Lz::Float64)
-							
+		
+	# Move box 1 to its image closest to box 2.
 	if 0.5 * (lbx1 + ubx1) - 0.5 * (lbx2 + ubx2) < -0.5*Lx
 		lbx1 = lbx1 + Lx
 		ubx1 = ubx1 + Lx
