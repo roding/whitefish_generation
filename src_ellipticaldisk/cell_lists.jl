@@ -14,7 +14,7 @@ function cell_lists(	X::Array{Float64,1},
 					number_of_cells_z::Int64,
 					cell_overlap::Float64)
 		
-	# Ellipse parameters.
+	# Elliptical disk parameters.
 	const number_of_particles::Int64 = length(X)
 	
 	const RMAX = Array(Float64, number_of_particles)
@@ -38,6 +38,30 @@ function cell_lists(	X::Array{Float64,1},
 	const q31::Array{Float64,1} = s1.*s3 - c1.*c3.*s2
 	const q32::Array{Float64,1} = c3.*s1 + c1.*s2.*s3
 	const q33::Array{Float64,1} = c1.*c2
+	
+	# Compute bounding box for all elliptical disks.
+	lbx_bounding_box = Array(Float64, number_of_particles)
+	ubx_bounding_box = Array(Float64, number_of_particles)
+	lby_bounding_box = Array(Float64, number_of_particles)
+	uby_bounding_box = Array(Float64, number_of_particles)
+	lbz_bounding_box = Array(Float64, number_of_particles)
+	ubz_bounding_box = Array(Float64, number_of_particles)
+	
+	for current_particle = 1:number_of_particles
+		(	lbx_bounding_box[current_particle], 
+			ubx_bounding_box[current_particle],
+			lby_bounding_box[current_particle],
+			uby_bounding_box[current_particle],
+			lbz_bounding_box[current_particle],
+			ubz_bounding_box[current_particle]) = bounding_box(	X[current_particle],
+															Y[current_particle],
+															Z[current_particle],
+															THETA1[current_particle],
+															THETA2[current_particle],
+															THETA3[current_particle],
+															R1[current_particle], 
+															R2[current_particle])
+	end
 
 	# Create cell dimension data structures.
 	const cell_bounds_x::Array{Float64, 1} = linspace(0.0, Lx, number_of_cells_x + 1)
@@ -78,8 +102,6 @@ function cell_lists(	X::Array{Float64,1},
 	for current_cell_x = 1:number_of_cells_x
 		for current_cell_y = 1:number_of_cells_y
 			for current_cell_z = 1:number_of_cells_z
-			warn("Bounding sphere argument wrong")
-				
 				# Compute vertices (corners) of current cell.
 				vertex_count = 0
 				for bx = current_cell_x:current_cell_x+1
