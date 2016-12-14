@@ -26,28 +26,30 @@ function box_box_intersect(	lbx1::Float64,
 							Lz::Float64)
 							
 	if 0.5 * (lbx1 + ubx1) - 0.5 * (lbx2 + ubx2) < -0.5*Lx
-		lbx2 = lbx2 + Lx
-		ubx2 = ubx2 + Lx
+		lbx1 = lbx1 + Lx
+		ubx1 = ubx1 + Lx
 	elseif 0.5 * (lbx1 + ubx1) - 0.5 * (lbx2 + ubx2) > 0.5*Lx
-		lbx2 = lbx2 - Lx
-		ubx2 = ubx2 - Lx
+		lbx1 = lbx1 - Lx
+		ubx1 = ubx1 - Lx
 	end
 	
 	if 0.5 * (lby1 + uby1) - 0.5 * (lby2 + uby2) < -0.5*Ly
-		lby2 = lby2 + Ly
-		uby2 = uby2 + Ly
+		lby1 = lby1 + Ly
+		uby1 = uby1 + Ly
 	elseif 0.5 * (lby1 + uby1) - 0.5 * (lby2 + uby2) > 0.5*Ly
-		lby2 = lby2 - Ly
-		uby2 = uby2 - Ly
+		lby1 = lby1 - Ly
+		uby1 = uby1 - Ly
 	end
 	
 	if 0.5 * (lbz1 + ubz1) - 0.5 * (lbz2 + ubz2) < -0.5*Lz
-		lbz2 = lbz2 + Lz
-		ubz2 = ubz2 + Lz
+		lbz1 = lbz1 + Lz
+		ubz1 = ubz1 + Lz
 	elseif 0.5 * (lbz1 + ubz1) - 0.5 * (lbz2 + ubz2) > 0.5*Lz
-		lbz2 = lbz2 - Lz
-		ubz2 = ubz2 - Lz
+		lbz1 = lbz1 - Lz
+		ubz1 = ubz1 - Lz
 	end
+	
+	#println((lbx1,ubx1,lby1,uby1,lbz1,ubz1))
 
 	return 	(abs( (lbx1 + ubx1) - (lbx2 + ubx2)) <= ubx1 - lbx1 + ubx2 - lbx2 ) &&
 			(abs( (lby1 + uby1) - (lby2 + uby2)) <= uby1 - lby1 + uby2 - lby2 ) &&
