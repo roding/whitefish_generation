@@ -2,7 +2,7 @@ include("get_version.jl")
 include("print_header.jl")
 #include("ellipticaldisk/*.jl")
 
-function whitefish()
+function run()
 	silent_mode::Bool = false
 		
 	if !silent_mode
@@ -15,4 +15,4 @@ function whitefish()
 	nothing
 end
 
-whitefish()
+run()
