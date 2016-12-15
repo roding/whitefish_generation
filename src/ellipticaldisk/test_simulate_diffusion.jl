@@ -34,6 +34,8 @@ function test_simulate_diffusion()
 	number_of_cells_x::Int64 = 10
 	number_of_cells_y::Int64 = 10
 	number_of_cells_z::Int64 = 20
+	
+	silent_mode::Bool = false
 
 	# Run simulation.
 	println("   Simulating diffusion...")
@@ -56,7 +58,8 @@ function test_simulate_diffusion()
 															number_of_diffusers,
 															number_of_cells_x,
 															number_of_cells_y,
-															number_of_cells_z)
+															number_of_cells_z,
+															silent_mode)
 																				
 	const t::Array{Float64, 1} = 0.0:deltat_coarse:(convert(Float64, number_of_time_points_coarse-1) * deltat_coarse)
 	#const deltat_fine::Float64 = deltat_coarse / convert(Float64, number_of_time_points_fine_per_coarse)

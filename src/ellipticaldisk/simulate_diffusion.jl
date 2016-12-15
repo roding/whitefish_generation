@@ -54,7 +54,7 @@ include("cell_lists.jl")
 	
 	# Create cell lists.
 	if !silent_mode
-		println(join("Creating cell lists for ", string(number_of_cells_x), "*", string(number_of_cells_y), "*", string(number_of_cells_z), " cells..."))
+		println(join(("Creating cell lists for ", string(number_of_cells_x), "x", string(number_of_cells_y), "x", string(number_of_cells_z), " cells...")))
 	end
 	cell_overlap::Float64 = 6 * sigma
 	lists = cell_lists(	X,
@@ -117,10 +117,13 @@ include("cell_lists.jl")
 	
 	t_start_diffusion::Float64 = convert(Float64, time_ns()) / 1e9
 	t_elapsed_diffusion::Float64 = 0.0
+	fraction_done::Float64 = 0.0
 	percent_done::Float64 = 0.0
+	t_remaining_diffusion::Float64 = 0.0
+	chunk::Int64 = 0
 	
 	for current_diffuser = 1:number_of_diffusers
-		println(current_diffuser)
+		#println(current_diffuser)
 		
 		# By definition, a random position end up in void almost surely (w.p. 1),
 		# so as initial position we just pick one randomly.
@@ -263,10 +266,16 @@ include("cell_lists.jl")
 			msd_z[current_time_coarse] += (trajectory_z[current_time_coarse] - trajectory_z[1])^2
 		end
 		
-		if !silent_mode
-			t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
-			percent_done = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
+		t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
+		if !silent_mode && convert(Int64, floor(t_elapsed_diffusion / 10.0)) > chunk
 			
+			fraction_done = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
+			t_remaining_diffusion = (1 - fraction_done) / fraction_done * t_elapsed_diffusion
+			percent_done = 100.0 * fraction_done
+			
+			println((t_elapsed_diffusion, percent_done, t_remaining_diffusion))
+		end
+		chunk = convert(Int64, floor(t_elapsed_diffusion / 10.0))
 	end
 	#println((x,x_star,y,y_star,z,z_star))
 	
