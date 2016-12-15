@@ -18,8 +18,12 @@ include("cell_lists.jl")
 							number_of_diffusers::Int64,
 							number_of_cells_x::Int64,
 							number_of_cells_y::Int64,
-							number_of_cells_z::Int64)
+							number_of_cells_z::Int64,
+							silent_mode::Bool)
 		
+	if !silent_mode
+		println("Preparing simulation in elliptical disk system...")
+	end
 	# Elliptical disk parameters.
 	const number_of_particles::Int64 = length(X)
 	const RMAX = Array(Float64,number_of_particles)
@@ -48,7 +52,10 @@ include("cell_lists.jl")
 	const deltat_fine::Float64 = deltat_coarse / convert(Float64, number_of_time_points_fine_per_coarse)
 	const sigma::Float64 = sqrt(2 * D0 * deltat_fine)
 	
-	# Create cell lists,
+	# Create cell lists.
+	if !silent_mode
+		println(join("Creating cell lists for ", string(number_of_cells_x), "*", string(number_of_cells_y), "*", string(number_of_cells_z), " cells..."))
+	end
 	cell_overlap::Float64 = 6 * sigma
 	lists = cell_lists(	X,
 						Y,
@@ -67,6 +74,9 @@ include("cell_lists.jl")
 						cell_overlap)
 
 	# Simulate diffusion.
+	if !silent_mode
+		println("Starting diffusion simulation...")
+	end
 	current_particle::Int64 = 0
 	is_ok::Bool = true
 	
@@ -104,6 +114,10 @@ include("cell_lists.jl")
 	msd_y::Array{Float64} = zeros(number_of_time_points_coarse)
 	msd_z::Array{Float64} = zeros(number_of_time_points_coarse)
 	D0_empirical::Float64 = 0.0
+	
+	t_start_diffusion::Float64 = convert(Float64, time_ns()) / 1e9
+	t_elapsed_diffusion::Float64 = 0.0
+	percent_done::Float64 = 0.0
 	
 	for current_diffuser = 1:number_of_diffusers
 		println(current_diffuser)
@@ -248,6 +262,11 @@ include("cell_lists.jl")
 			msd_y[current_time_coarse] += (trajectory_y[current_time_coarse] - trajectory_y[1])^2
 			msd_z[current_time_coarse] += (trajectory_z[current_time_coarse] - trajectory_z[1])^2
 		end
+		
+		if !silent_mode
+			t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
+			percent_done = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
+			
 	end
 	#println((x,x_star,y,y_star,z,z_star))
 	

@@ -4,8 +4,7 @@ include("print_header.jl")
 
 function whitefish()
 	silent_mode::Bool = false
-	
-	
+		
 	if !silent_mode
 		print_header()
 	end
