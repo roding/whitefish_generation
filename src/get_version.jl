@@ -12,5 +12,3 @@ function get_version()
 	
 	return version_string
 end
-
-println(get_version())
