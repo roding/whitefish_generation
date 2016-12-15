@@ -10,3 +10,5 @@ function set_version()
 	write(file_stream_version, version_patch)
 	close(file_stream_version)
 end
+
+set_version()
