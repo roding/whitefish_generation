@@ -194,7 +194,7 @@ include("cell_lists.jl")
 					vy_star = vy + deltay
 					vz_star = vz + deltaz
 					
-					if ( vx^2 + vy^2 + vz^2 < RMAX[list[current_particle]]^2 ) || ( vx_star^2 + vy_star^2 + vz_star^2 < RMAX[list[current_particle]]^2 )
+					#if ( vx^2 + vy^2 + vz^2 < RMAX[list[current_particle]]^2 ) || ( vx_star^2 + #vy_star^2 + vz_star^2 < RMAX[list[current_particle]]^2 )
 						#println("Within bounding sphere of ellipse...")
 						
 						# Coordinate of current and candidate diffuser position relative to particle 
@@ -224,7 +224,7 @@ include("cell_lists.jl")
 								is_ok = false
 							end
 						end
-					end
+					#end
 				end
 			
 				if is_ok
