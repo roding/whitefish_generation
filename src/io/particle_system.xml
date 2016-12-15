@@ -1,0 +1,8 @@
+<particle_system>
+<type>elliptical_disk</type>
+<domain_size_x>100.0<domain_size_x>
+<domain_size_y>100.0<domain_size_y>
+<domain_size_z>100.0<domain_size_z>
+<number_of_particles>1</number_of_particles>
+<parameters>10.0,10.0,10.0,0.0,1.0,2.0,10.0,5.0</parameters>
+</particle_system>
