@@ -4,6 +4,7 @@ include("io/get_version.jl")
 include("io/print_header.jl")
 include("io/read_xml_system.jl")
 include("io/read_xml_input.jl")
+include("io/print_simulation_stats.jl")
 
 function run()
 	# Process input arguments.
@@ -34,6 +35,12 @@ function run()
 	end
 	
 	# Process input file.
+	(particle_system_path::String, output_path::String, D0::Float64, deltat_coarse::Float64, number_of_time_points_coarse::Int64, number_of_time_points_fine_per_coarse::Int64, number_of_diffusers::Int64, number_of_cells_x::Int64, number_of_cells_y::Int64, number_of_cells_z::Int64) = read_xml_input(input_file_path)
+	
+	# Print simulation stats.
+	if !silent_mode
+		print_simulation_stats()
+	end
 	
 	
 	
@@ -44,6 +51,10 @@ function run()
 	
 	
 	
+	# Print output information.
+	if !silent_mode
+		println(join(("Output written to ", output_path)))
+	end
 	
 	nothing
 end
