@@ -121,7 +121,7 @@ include("cell_lists.jl")
 	#percent_done::Float64 = 0.0
 	#t_remaining_diffusion::Float64 = 0.0
 	chunk::Int64 = 0
-	
+	println("   Elapsed time (hh:mm:ss)    Done (%)   Est. time remaining (hh:mm:ss)")
 	for current_diffuser = 1:number_of_diffusers
 		#println(current_diffuser)
 		

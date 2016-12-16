@@ -26,7 +26,7 @@ function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, n
 	
 	fraction_done::Float64 = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
 	
-	t_remaining_seconds::Int64 = convert(Int64, round((1 - fraction_done) / fraction_done * t_elapsed_diffusion))
+	time_remaining_seconds::Int64 = convert(Int64, round((1 - fraction_done) / fraction_done * t_elapsed_diffusion))
 	
 	time_remaining_hours::Int64 = fld(time_remaining_seconds, 3600)
 	time_remaining_seconds = time_remaining_seconds - time_remaining_hours * 3600
@@ -51,8 +51,13 @@ function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, n
 	
 	time_remaining_string::String = join((time_remaining_hours_string, ":", time_remaining_minutes_string, ":", time_remaining_seconds_string))
 	
-	output_str::String = join(("   ", time_elapsed_string, "   ", time_remaining_string))
-	#println(time_elapsed_string)
+	percent_done_string::String = @sprintf("%2.2f", 100.0 * fraction_done)
+	if length(percent_done_string) == 3
+		percent_done_string = join(("0", percent_done_string))
+	end
+	
+	output_str::String = join(("   ", time_elapsed_string, "   ", percent_done_string, "   ", time_remaining_string))
+	println(output_str)
 	
 	
 	#percent_done::Float64 = 100.0 * fraction_done
