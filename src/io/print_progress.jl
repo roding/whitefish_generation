@@ -53,10 +53,12 @@ function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, n
 	
 	percent_done_string::String = @sprintf("%2.2f", 100.0 * fraction_done)
 	if length(percent_done_string) == 4
+		percent_done_string = join(("00", percent_done_string))
+	elseif length(percent_done_string) == 5
 		percent_done_string = join(("0", percent_done_string))
 	end
 	
-	output_str::String = join(("   ", time_elapsed_string, "                  ", percent_done_string, "      ", time_remaining_string))
+	output_str::String = join(("   ", time_elapsed_string, "                  ", percent_done_string, "     ", time_remaining_string))
 	println(output_str)
 	
 	

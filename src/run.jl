@@ -57,6 +57,8 @@ function run()
 	# Simulate diffusion.
 	(msd_x::Array{Float64, 1}, msd_y::Array{Float64, 1}, msd_z::Array{Float64, 1}, D0_empirical::Float64) = simulate_diffusion(X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz, D0, deltat_coarse, number_of_time_points_coarse, number_of_time_points_fine_per_coarse, number_of_diffusers, number_of_cells_x, number_of_cells_y, number_of_cells_z, silent_mode)	
 	
+	# Write output.
+	
 	# Print output information.
 	if !silent_mode
 		println(join(("Output written to ", output_path, ".")))
