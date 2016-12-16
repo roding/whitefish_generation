@@ -121,7 +121,7 @@ include("cell_lists.jl")
 	#percent_done::Float64 = 0.0
 	#t_remaining_diffusion::Float64 = 0.0
 	chunk::Int64 = 0
-	println("   Elapsed time (hh:mm:ss)    Done (%)   Est. time remaining (hh:mm:ss)")
+	println("   Elapsed time (hh:mm:ss)   Done (%)   Est. time remaining (hh:mm:ss)")
 	for current_diffuser = 1:number_of_diffusers
 		#println(current_diffuser)
 		
@@ -272,7 +272,7 @@ include("cell_lists.jl")
 		end
 		chunk = convert(Int64, floor(t_elapsed_diffusion / 10.0))
 	end
-	#println((x,x_star,y,y_star,z,z_star))
+	print_progress(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
 	
 	msd_x = msd_x ./ convert(Float64, number_of_diffusers)
 	msd_y = msd_y ./ convert(Float64, number_of_diffusers)

@@ -52,11 +52,11 @@ function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, n
 	time_remaining_string::String = join((time_remaining_hours_string, ":", time_remaining_minutes_string, ":", time_remaining_seconds_string))
 	
 	percent_done_string::String = @sprintf("%2.2f", 100.0 * fraction_done)
-	if length(percent_done_string) == 3
+	if length(percent_done_string) == 4
 		percent_done_string = join(("0", percent_done_string))
 	end
 	
-	output_str::String = join(("   ", time_elapsed_string, "   ", percent_done_string, "   ", time_remaining_string))
+	output_str::String = join(("   ", time_elapsed_string, "                  ", percent_done_string, "      ", time_remaining_string))
 	println(output_str)
 	
 	

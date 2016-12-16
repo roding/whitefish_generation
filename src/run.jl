@@ -59,7 +59,8 @@ function run()
 	
 	# Print output information.
 	if !silent_mode
-		println(join(("Output written to ", output_path)))
+		println(join(("Output written to ", output_path, ".")))
+		println("Finished.")
 	end
 	
 	nothing
