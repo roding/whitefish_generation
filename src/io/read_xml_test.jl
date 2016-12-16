@@ -10,19 +10,19 @@ function read_xml_test()
 	ind_before = search(file_string, "<domain_size_x>")
 	ind_after = search(file_string, "</domain_size_x>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	Lx::Float64 = parse(file_string[ind])
+	Lx::Float64 = parse(Float64, file_string[ind])
 	
 	# Read simulation domain size in y direction.
 	ind_before = search(file_string, "<domain_size_y>")
 	ind_after = search(file_string, "</domain_size_y>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	Ly::Float64 = parse(file_string[ind])
+	Ly::Float64 = parse(Float64, file_string[ind])
 	
 	# Read simulation domain size in z direction.
 	ind_before = search(file_string, "<domain_size_z>")
 	ind_after = search(file_string, "</domain_size_z>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	Lz::Float64 = parse(file_string[ind])
+	Lz::Float64 = parse(Float64, file_string[ind])
 	
 	# Read particle type.
 	ind_before = search(file_string, "<type>")
@@ -34,10 +34,19 @@ function read_xml_test()
 	ind_before = search(file_string, "<number_of_particles>")
 	ind_after = search(file_string, "</number_of_particles>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_particles::Int64 = parse(file_string[ind])
+	number_of_particles::Int64 = parse(Int64, file_string[ind])
 	
-	# For now we assume particles are ellipical disks.
+	# FOR NOW WE ASSUME PARTICLES ARE ELLIPICAL DISKS.
+	ind_before = search(file_string, "<X>")
+	ind_after = search(file_string, "</X>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array::Array{String, 1} = split(file_string[ind], ",")
 	X = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		X[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	println(X)
+	
 	Y = Array(Float64, number_of_particles)
 	Z = Array(Float64, number_of_particles)
 	THETA1 = Array(Float64, number_of_particles)
@@ -45,29 +54,27 @@ function read_xml_test()
 	THETA3 = Array(Float64, number_of_particles)
 	R1 = Array(Float64, number_of_particles)
 	R2 = Array(Float64, number_of_particles)
-	ind_before = search(file_string, "<parameters>")
-	ind_after = search(file_string, "</parameters>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	parameters_string_array::Array{String, 1} = split(file_string[ind], ",")
-	for current_particle = 1:number_of_particles
+	
+	
+	
 		
 	
-	parameters_array = Array(Float64, number_of_particles * 8) = 
+	#parameters_array = Array(Float64, number_of_particles * 8) = 
 	
 	
 	
 	
 	
 	
-	println(Lx)
+	#println(Lx)
 	#stream_ = IOBuffer(string)
 	
 	
 	
 	
 	
-	println(ind_before)
-	println(ind_after)
+	#println(ind_before)
+	#println(ind_after)
 
 
 
