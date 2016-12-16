@@ -44,13 +44,13 @@ function run()
 	if !silent_mode
 		println(join(("Reading particle system configuration from file ", particle_system_path, "...")))
 	end
-	(X::Array{Float64, 1}, Y::Array{Float64, 1}, Z::Array{Float64, 1}, THETA1::Array{Float64, 1}, THETA2::Array{Float64, 1}, THETA3::Array{Float64, 1}, R1::Array{Float64, 1}, R2::Array{Float64, 1}, Lx::Float64, Ly::Float64, Lz::Float64) = read_xml_system(particle_system_path)
+	(particles::String, X::Array{Float64, 1}, Y::Array{Float64, 1}, Z::Array{Float64, 1}, THETA1::Array{Float64, 1}, THETA2::Array{Float64, 1}, THETA3::Array{Float64, 1}, R1::Array{Float64, 1}, R2::Array{Float64, 1}, Lx::Float64, Ly::Float64, Lz::Float64) = read_xml_system(particle_system_path)
 	
 	number_of_particles::Int64	 = length(X)
 		
 	# Print simulation stats.
 	if !silent_mode
-		print_simulation_stats(number_of_particles, number_of_diffusers, Lx, Ly, Lz)
+		print_simulation_stats(particles, number_of_particles, number_of_diffusers, Lx, Ly, Lz, number_of_cells_x, number_of_cells_y, number_of_cells_z)
 	end
 	
 	# Simulate diffusion.

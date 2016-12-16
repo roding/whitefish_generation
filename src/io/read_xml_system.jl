@@ -25,7 +25,7 @@ function read_xml_system(file_name::String)
 	ind_before = search(file_string, "<type>")
 	ind_after = search(file_string, "</type>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	particle_category::Symbol = Symbol(file_string[ind])
+	particles::String = file_string[ind]
 	
 	# Read number of particles.
 	ind_before = search(file_string, "<number_of_particles>")
@@ -107,7 +107,7 @@ function read_xml_system(file_name::String)
 		R2[current_particle] = parse(Float64, string_array[current_particle])
 	end
 	
-	return (X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
+	return (particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
 end
 
 #read_xml_system("particle_system.xml")

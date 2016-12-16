@@ -22,7 +22,7 @@ include("cell_lists.jl")
 							silent_mode::Bool)
 		
 	if !silent_mode
-		println("Preparing simulation in elliptical disk system...")
+		println("Preparing simulation...")
 	end
 	# Elliptical disk parameters.
 	const number_of_particles::Int64 = length(X)
@@ -54,7 +54,7 @@ include("cell_lists.jl")
 	
 	# Create cell lists.
 	if !silent_mode
-		println(join(("Creating cell lists for ", string(number_of_cells_x), "x", string(number_of_cells_y), "x", string(number_of_cells_z), " cells...")))
+		println("Creating cell lists...")
 	end
 	cell_overlap::Float64 = 6 * sigma
 	lists = cell_lists(	X,
@@ -75,7 +75,7 @@ include("cell_lists.jl")
 
 	# Simulate diffusion.
 	if !silent_mode
-		println("Starting diffusion simulation...")
+		println("Starting simulation...")
 	end
 	current_particle::Int64 = 0
 	is_ok::Bool = true
@@ -268,7 +268,7 @@ include("cell_lists.jl")
 		
 		t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
 		if !silent_mode && convert(Int64, floor(t_elapsed_diffusion / 10.0)) > chunk
-			
+			print_time(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
 			fraction_done = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
 			t_remaining_diffusion = (1 - fraction_done) / fraction_done * t_elapsed_diffusion
 			percent_done = 100.0 * fraction_done
