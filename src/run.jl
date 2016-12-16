@@ -3,6 +3,7 @@ include("io/print_header.jl")
 include("io/read_xml_system.jl")
 include("io/read_xml_input.jl")
 include("io/print_simulation_stats.jl")
+include("io/print_progress.jl")
 
 include("ellipticaldisk/simulate_diffusion.jl")
 

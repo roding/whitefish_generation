@@ -117,9 +117,9 @@ include("cell_lists.jl")
 	
 	t_start_diffusion::Float64 = convert(Float64, time_ns()) / 1e9
 	t_elapsed_diffusion::Float64 = 0.0
-	fraction_done::Float64 = 0.0
-	percent_done::Float64 = 0.0
-	t_remaining_diffusion::Float64 = 0.0
+	#fraction_done::Float64 = 0.0
+	#percent_done::Float64 = 0.0
+	#t_remaining_diffusion::Float64 = 0.0
 	chunk::Int64 = 0
 	
 	for current_diffuser = 1:number_of_diffusers
@@ -268,12 +268,7 @@ include("cell_lists.jl")
 		
 		t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
 		if !silent_mode && convert(Int64, floor(t_elapsed_diffusion / 10.0)) > chunk
-			print_time(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
-			fraction_done = convert(Float64, current_diffuser) / convert(Float64, number_of_diffusers)
-			t_remaining_diffusion = (1 - fraction_done) / fraction_done * t_elapsed_diffusion
-			percent_done = 100.0 * fraction_done
-			
-			println((t_elapsed_diffusion, percent_done, t_remaining_diffusion))
+			print_progress(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
 		end
 		chunk = convert(Int64, floor(t_elapsed_diffusion / 10.0))
 	end
