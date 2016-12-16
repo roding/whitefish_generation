@@ -1,15 +1,20 @@
 function read_xml_test()
-	file_name_diffusion = "particle_system.xml"
-	file_stream_diffusion = open(file_name_diffusion, "r")
+	file_name::String = "particle_system.xml"
+	file_stream::IOStream = open(file_name, "r")
+	file_lines::Array{String, 1} = readlines(file_stream)
+	close(file_stream)
+	#stream_ = IOBuffer(string)
 	
 	
 	
-	close(file_stream_diffusion)
+	println(file_lines)
 
 
 
 
 
 
-
+	nothing
 end
+
+read_xml_test()
