@@ -1,113 +1,57 @@
-function read_xml_system(file_name::String)
-	file_stream::IOStream = open(file_name, "r")
-	file_string::String = readstring(file_stream)
-	close(file_stream)
+function write_xml_output(file_name::String, D0::Float64, D0_empirical::Float64, deltat_coarse::Float64, number_of_time_points_coarse::Int64, msd_x::Array{Float64, 1}, msd_y::Array{Float64, 1}, msd_z::Array{Float64, 1})
+	
+	file_stream::IOStream = open(file_name, "w")
 		
-	# Read simulation domain size in x direction.
-	ind_before = search(file_string, "<domain_size_x>")
-	ind_after = search(file_string, "</domain_size_x>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	Lx::Float64 = parse(Float64, file_string[ind])
+	t::Array{Float64, 1} = 0.0:deltat_coarse:(convert(Float64, number_of_time_points_coarse-1) * deltat_coarse)
 	
-	# Read simulation domain size in y direction.
-	ind_before = search(file_string, "<domain_size_y>")
-	ind_after = search(file_string, "</domain_size_y>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	Ly::Float64 = parse(Float64, file_string[ind])
+	@printf(file_stream, "%s", "<output>\n")
 	
-	# Read simulation domain size in z direction.
-	ind_before = search(file_string, "<domain_size_z>")
-	ind_after = search(file_string, "</domain_size_z>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	Lz::Float64 = parse(Float64, file_string[ind])
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", "<diagnostic_diffusion_coefficient_ratio>")
+	@printf(file_stream, "%0.3f", D0_empirical/D0) 
+	@printf(file_stream, "%s", "</diagnostic_diffusion_coefficient_ratio>\n")
 	
-	# Read particle type.
-	ind_before = search(file_string, "<type>")
-	ind_after = search(file_string, "</type>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	particles::String = file_string[ind]
-	
-	# Read number of particles.
-	ind_before = search(file_string, "<number_of_particles>")
-	ind_after = search(file_string, "</number_of_particles>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_particles::Int64 = parse(Int64, file_string[ind])
-	
-	# FOR NOW WE ASSUME PARTICLES ARE ELLIPICAL DISKS.
-	
-	ind_before = search(file_string, "<X>")
-	ind_after = search(file_string, "</X>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	X = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		X[current_particle] = parse(Float64, string_array[current_particle])
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", "<time>")
+	for i = 1:length(t)-1
+		@printf(file_stream, "%0.3f", t[i])
+		@printf(file_stream, "%s", ",")
 	end
+	@printf(file_stream, "%0.3f", t[end])
+	@printf(file_stream, "%s", "</time>\n")
 	
-	ind_before = search(file_string, "<Y>")
-	ind_after = search(file_string, "</Y>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	Y = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		Y[current_particle] = parse(Float64, string_array[current_particle])
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", "<mean_square_displacement_x>")
+	for i = 1:length(t)-1
+		@printf(file_stream, "%0.3f", msd_x[i])
+		@printf(file_stream, "%s", ",")
 	end
+	@printf(file_stream, "%0.3f", msd_x[end])
+	@printf(file_stream, "%s", "</mean_square_displacement_x>\n")
 	
-	ind_before = search(file_string, "<Z>")
-	ind_after = search(file_string, "</Z>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	Z = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		Z[current_particle] = parse(Float64, string_array[current_particle])
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", "<mean_square_displacement_y>")
+	for i = 1:length(t)-1
+		@printf(file_stream, "%0.3f", msd_y[i])
+		@printf(file_stream, "%s", ",")
 	end
+	@printf(file_stream, "%0.3f", msd_y[end])
+	@printf(file_stream, "%s", "</mean_square_displacement_y>\n")
 	
-	ind_before = search(file_string, "<THETA1>")
-	ind_after = search(file_string, "</THETA1>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	THETA1 = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		THETA1[current_particle] = parse(Float64, string_array[current_particle])
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", "<mean_square_displacement_z>")
+	for i = 1:length(t)-1
+		@printf(file_stream, "%0.3f", msd_z[i])
+		@printf(file_stream, "%s", ",")
 	end
+	@printf(file_stream, "%0.3f", msd_z[end])
+	@printf(file_stream, "%s", "</mean_square_displacement_z>\n")
 	
-	ind_before = search(file_string, "<THETA2>")
-	ind_after = search(file_string, "</THETA2>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	THETA2 = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		THETA2[current_particle] = parse(Float64, string_array[current_particle])
-	end
+	@printf(file_stream, "%s", "</output>\n")
 	
-	ind_before = search(file_string, "<THETA3>")
-	ind_after = search(file_string, "</THETA3>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	THETA3 = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		THETA3[current_particle] = parse(Float64, string_array[current_particle])
-	end
+	close(file_stream)
 	
-	ind_before = search(file_string, "<R1>")
-	ind_after = search(file_string, "</R1>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	R1 = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		R1[current_particle] = parse(Float64, string_array[current_particle])
-	end
-	
-	ind_before = search(file_string, "<R2>")
-	ind_after = search(file_string, "</R2>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	string_array = split(file_string[ind], ",")
-	R2 = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		R2[current_particle] = parse(Float64, string_array[current_particle])
-	end
-	
-	return (particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
+	nothing
 end
 
 #read_xml_system("particle_system.xml")
