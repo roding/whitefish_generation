@@ -2,7 +2,7 @@ function read_xml_system(file_name::String)
 	file_stream::IOStream = open(file_name, "r")
 	file_string::String = readstring(file_stream)
 	close(file_stream)
-	
+		
 	# Read simulation domain size in x direction.
 	ind_before = search(file_string, "<domain_size_x>")
 	ind_after = search(file_string, "</domain_size_x>")
@@ -106,8 +106,6 @@ function read_xml_system(file_name::String)
 	for current_particle = 1:number_of_particles
 		R2[current_particle] = parse(Float64, string_array[current_particle])
 	end
-	
-	
 	
 	return (X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
 end

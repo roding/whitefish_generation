@@ -2,7 +2,7 @@
 	<domain_size_x>100.0</domain_size_x>
 	<domain_size_y>100.0</domain_size_y>
 	<domain_size_z>100.0</domain_size_z>
-	<type>elliptical_disk</type>
+	<type>ellipticaldisk</type>
 	<number_of_particles>1</number_of_particles>
 	<X>10.0</X>
 	<Y>10.0</Y>
