@@ -1,8 +1,6 @@
 function read_xml_test()
 	file_name::String = "particle_system.xml"
 	file_stream::IOStream = open(file_name, "r")
-	#file_lines::Array{String, 1} = readlines(file_stream)
-	#println(file_lines)
 	file_string::String = readstring(file_stream)
 	close(file_stream)
 	
@@ -37,50 +35,82 @@ function read_xml_test()
 	number_of_particles::Int64 = parse(Int64, file_string[ind])
 	
 	# FOR NOW WE ASSUME PARTICLES ARE ELLIPICAL DISKS.
+	
 	ind_before = search(file_string, "<X>")
 	ind_after = search(file_string, "</X>")
 	ind = ind_before[end]+1:ind_after[1]-1
-	string_array::Array{String, 1} = split(file_string[ind], ",")
+	string_array = split(file_string[ind], ",")
 	X = Array(Float64, number_of_particles)
 	for current_particle = 1:number_of_particles
 		X[current_particle] = parse(Float64, string_array[current_particle])
 	end
-	println(X)
 	
+	ind_before = search(file_string, "<Y>")
+	ind_after = search(file_string, "</Y>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	Y = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		Y[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<Z>")
+	ind_after = search(file_string, "</Z>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	Z = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		Z[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<THETA1>")
+	ind_after = search(file_string, "</THETA1>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	THETA1 = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		THETA1[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<THETA2>")
+	ind_after = search(file_string, "</THETA2>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	THETA2 = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		THETA2[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<THETA3>")
+	ind_after = search(file_string, "</THETA3>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	THETA3 = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		THETA3[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<R1>")
+	ind_after = search(file_string, "</R1>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	R1 = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		R1[current_particle] = parse(Float64, string_array[current_particle])
+	end
+	
+	ind_before = search(file_string, "<R2>")
+	ind_after = search(file_string, "</R2>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	string_array = split(file_string[ind], ",")
 	R2 = Array(Float64, number_of_particles)
+	for current_particle = 1:number_of_particles
+		R2[current_particle] = parse(Float64, string_array[current_particle])
+	end
 	
 	
 	
-		
-	
-	#parameters_array = Array(Float64, number_of_particles * 8) = 
-	
-	
-	
-	
-	
-	
-	#println(Lx)
-	#stream_ = IOBuffer(string)
-	
-	
-	
-	
-	
-	#println(ind_before)
-	#println(ind_after)
-
-
-
-
-
-	nothing
+	return (X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
 end
 
 read_xml_test()
