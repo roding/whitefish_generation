@@ -1,5 +1,4 @@
-function read_xml_test()
-	file_name::String = "particle_system.xml"
+function read_xml_system(file_name::String)
 	file_stream::IOStream = open(file_name, "r")
 	file_string::String = readstring(file_stream)
 	close(file_stream)
@@ -113,4 +112,4 @@ function read_xml_test()
 	return (X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz)
 end
 
-read_xml_test()
+#read_xml_system("particle_system.xml")
