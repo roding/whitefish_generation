@@ -36,9 +36,23 @@ function read_xml_test()
 	ind = ind_before[end]+1:ind_after[1]-1
 	number_of_particles::Int64 = parse(file_string[ind])
 	
-	# For now we assume particles are ellipical disks
+	# For now we assume particles are ellipical disks.
+	X = Array(Float64, number_of_particles)
+	Y = Array(Float64, number_of_particles)
+	Z = Array(Float64, number_of_particles)
+	THETA1 = Array(Float64, number_of_particles)
+	THETA2 = Array(Float64, number_of_particles)
+	THETA3 = Array(Float64, number_of_particles)
+	R1 = Array(Float64, number_of_particles)
+	R2 = Array(Float64, number_of_particles)
+	ind_before = search(file_string, "<parameters>")
+	ind_after = search(file_string, "</parameters>")
+	ind = ind_before[end]+1:ind_after[1]-1
+	parameters_string_array::Array{String, 1} = split(file_string[ind], ",")
+	for current_particle = 1:number_of_particles
+		
 	
-	
+	parameters_array = Array(Float64, number_of_particles * 8) = 
 	
 	
 	
