@@ -8,7 +8,11 @@ include("io/print_progress.jl")
 
 include("ellipticaldisk/simulate_diffusion.jl")
 
-function run()
+function wfrun()
+	# Change current folder to the folder where this script lies.
+	(program_dir::String, script_file_name::String) = splitdir(PROGRAM_FILE)
+	cd(program_dir)
+	
 	# Process input arguments.
 	silent_mode::Bool = false
 	
@@ -70,4 +74,4 @@ function run()
 	nothing
 end
 
-run()
+wfrun()
