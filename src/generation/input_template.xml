@@ -1,0 +1,12 @@
+<input>
+	<particle_system_path>PARTICLE_SYSTEM_PATH</particle_system_path>
+	<output_path>OUTPUT_PATH</output_path>
+	<inherent_diffusion_coefficient>1.0</inherent_diffusion_coefficient>
+	<deltat_coarse>10.0</deltat_coarse>
+	<number_of_time_points_coarse>500</number_of_time_points_coarse>
+	<number_of_time_points_fine_per_coarse>500</number_of_time_points_fine_per_coarse>
+	<number_of_diffusers>1000000</number_of_diffusers>
+	<number_of_cells_x>10</number_of_cells_x>
+	<number_of_cells_y>10</number_of_cells_y>
+	<number_of_cells_z>20</number_of_cells_z>
+</input>
