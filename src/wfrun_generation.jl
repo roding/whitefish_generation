@@ -1,7 +1,7 @@
 include("io/get_version.jl")
 include("io/print_header.jl")
 include("io/read_xml_input_generation.jl")
-include("io/get_xml_key.jl")
+include("io/read_xml_key.jl")
 
 
 

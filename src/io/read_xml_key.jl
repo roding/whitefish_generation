@@ -1,4 +1,4 @@
-function get_xml_key(file_string::String, key_name::String, fmt::DataType)
+function read_xml_key(file_string::String, key_name::String, fmt::DataType)
 	
 	ind_before::UnitRange{Int64} = search(file_string, join(("<", key_name, ">")))
 	ind_after::UnitRange{Int64} = search(file_string, join(("</", key_name, ">")))
