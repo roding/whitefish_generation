@@ -11,7 +11,9 @@ function read_xml_input_generation(input_file_path::String)
 	ubz::Float64 = get_xml_key(file_string, "upper_bound_z", Float64)
 	ubangle::Float64 = get_xml_key(file_string, "upper_bound_angle_to_z_axis", Float64)
 	number_of_equilibration_sweeps::Int64 = get_xml_key(file_string, "number_of_equilibration_sweeps", Int64)
-	output_path::String = get_xml_key(file_string, "output_path", String)
+	output_file_path::String = get_xml_key(file_string, "output_file_path", String)
 	
-	return (Lx, Ly, Lz, number_of_particles, lbz, ubz, ubangle, number_of_equilibration_sweeps, output_path)
+	return (Lx, Ly, Lz, number_of_particles, lbz, ubz, ubangle, number_of_equilibration_sweeps, output_file_path)
 end
+
+#(Lx, Ly, Lz, number_of_particles, lbz, ubz, ubangle, number_of_equilibration_sweeps, output_file_path) = read_xml_input_generation("../io_test_files/input_generation.xml")

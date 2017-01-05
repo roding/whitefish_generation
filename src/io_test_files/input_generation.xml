@@ -8,5 +8,5 @@
 	<upper_bound_z>200.0</upper_bound_z>
 	<upper_bound_angle_to_z_axis>1.5707963267948966</upper_bound_angle_to_z_axis>
 	<number_of_equilibration_sweeps>10</number_of_equilibration_sweeps>
-	<output_path>V:/whitefish/dev/whitefish/src/io_test_files/structure.xml</output_path>
+	<output_file_path>V:/whitefish/dev/whitefish/src/io_test_files/output_generation.xml</output_file_path>
 </input_generation>
