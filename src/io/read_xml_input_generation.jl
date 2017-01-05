@@ -11,8 +11,10 @@ function read_xml_input_generation(input_file_path::String)
 	lbz::Float64 = read_xml_key(file_string, "lower_bound_z", Float64)
 	ubz::Float64 = read_xml_key(file_string, "upper_bound_z", Float64)
 	ubangle::Float64 = read_xml_key(file_string, "upper_bound_angle_to_z_axis", Float64)
+	R1::Array{Float64,1} = rand(number_of_particles)
+	R2::Array{Float64,1} = rand(number_of_particles)
 	number_of_equilibration_sweeps::Int64 = read_xml_key(file_string, "number_of_equilibration_sweeps", Int64)
 	output_file_path::String = read_xml_key(file_string, "output_file_path", String)
 	
-	return (Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, number_of_equilibration_sweeps, output_file_path)
+	return (Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2, number_of_equilibration_sweeps, output_file_path)
 end

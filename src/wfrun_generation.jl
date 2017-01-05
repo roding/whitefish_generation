@@ -48,16 +48,22 @@ function wfrun_generation()
 	if !silent_mode
 		println(join(("Reading input from file ", input_file_path, "...")))
 	end
-	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
+	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
 	
 	# Print simulation stats.
 	if !silent_mode
 		print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
 	end
 	
-	# Generate system
+	# Generate system.
 	
 	# Write output.
+	X::Array{Float64,1} = Lx * rand(number_of_particles)
+	Y::Array{Float64,1} = Ly * rand(number_of_particles)
+	Z::Array{Float64,1} = lbz + (ubz - lbz) * rand(number_of_particles)
+	THETA1::Array{Float64,1} = zeros(number_of_particles)
+	THETA2::Array{Float64,1} = zeros(number_of_particles)
+	THETA3::Array{Float64,1} = 2 * pi * rand(number_of_particles)
 	write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
 	
 	# Print output information.

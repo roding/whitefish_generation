@@ -8,7 +8,17 @@ function read_xml_key(file_string::String, key_name::String, fmt::DataType)
 	
 	if fmt == String
 		return key_string
-	else
+	elseif fmt == Int64 || fmt == Float64
 		return parse(fmt, key_string)
+	elseif fmt == Array{Float64, 1}
+		key_string_array = split(key_string, ",")
+		data = Array(Float64, length(key_string_array))
+		for current_value = 1:number_of_values
+			data[current_value] = parse(Float64, key_string_array[current_value])
+		end
+		return data
+	else
+		error("Incompatible data type.")
+		nothing
 	end
 end
