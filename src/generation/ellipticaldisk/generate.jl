@@ -1,4 +1,4 @@
-@inbounds function generate_elliptical_disk_system(R1::Array{Float64,1}, R2::Array{Float64,1}, Lx::Float64, Ly::Float64, Lz::Float64, lbz::Float64, ubz::Float64, ubangle::Float64, number_of_equilibration_sweeps::Int64, acceptance_probability_target::Float64, number_of_iterations_overlap_criterion::Int64, silent::Bool)
+@inbounds function generate(R1::Array{Float64,1}, R2::Array{Float64,1}, Lx::Float64, Ly::Float64, Lz::Float64, lbz::Float64, ubz::Float64, ubangle::Float64, number_of_equilibration_sweeps::Int64, acceptance_probability_target::Float64, number_of_iterations_overlap_criterion::Int64, silent::Bool)
 
 	# Particle system parameters.
 	const number_of_particles::Int64 = length(R1)
