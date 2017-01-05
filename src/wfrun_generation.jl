@@ -1,12 +1,16 @@
 include("io/get_version.jl")
 include("io/print_header.jl")
-include("io/read_xml_system.jl")
-include("io/read_xml_input.jl")
-include("io/write_xml_output.jl")
-include("io/print_simulation_stats.jl")
-include("io/print_progress.jl")
+include("io/read_xml_input_generation.jl")
+include("io/get_xml_key.jl")
 
-include("generation/ellipticaldisk/generate.jl")
+
+
+#include("io/read_xml_system.jl")
+#include("io/write_xml_output.jl")
+#include("io/print_simulation_stats.jl")
+#include("io/print_progress.jl")
+
+#include("generation/ellipticaldisk/generate.jl")
 
 function wfrun_generation()
 	# Change current folder to the folder where this script lies.
@@ -46,7 +50,7 @@ function wfrun_generation()
 	if !silent_mode
 		println(join(("Reading input from file ", input_file_path, "...")))
 	end
-	(Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation("../io_test_files/input_generation.xml")
+	(Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
 	
 	# Print simulation stats.
 #	if !silent_mode
@@ -57,7 +61,8 @@ function wfrun_generation()
 #	(msd_x::Array{Float64, 1}, msd_y::Array{Float64, 1}, msd_z::Array{Float64, 1}, D0_empirical::Float64) = s#imulate_diffusion(X, Y, Z, THETA1, THETA2, THETA3, R1, R2, Lx, Ly, Lz, D0, deltat_coarse, number_of_time_points_coarse, number_of_time_points_fine_per_coarse, number_of_diffusers, number_of_cells_x, number_of_cells_y, number_of_cells_z, silent_mode)	
 	
 	# Write output.
-#	write_xml_output(output_path, D0, D0_empirical, deltat_coarse, number_of_time_points_coarse, msd_x, msd_y, msd_z)
+	write_xml_output_generation(output_path, D0, D0_empirical, deltat_coarse, number_of_time_points_coarse, msd_x, msd_y, msd_z)
+	
 	
 	# Print output information.
 	if !silent_mode
