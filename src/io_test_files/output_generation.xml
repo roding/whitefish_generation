@@ -1,0 +1,15 @@
+<output_generation>
+	<domain_size_x>100.000000</domain_size_x>
+	<domain_size_y>100.000000</domain_size_y>
+	<domain_size_z>200.000000</domain_size_z>
+	<particle_type>ellipticaldisk</particle_type>
+	<number_of_particles>3</number_of_particles>
+	<X>87.061731,17.505873,85.961124</X>
+	<Y>36.350052,90.760681,30.765579</Y>
+	<Z>69.003453,69.752660,35.777502</Z>
+	<THETA1>0.601978,1.574442,0.690955</THETA1>
+	<THETA2>0.030837,-2.092472,-1.262821</THETA2>
+	<THETA3>-0.238164,0.803570,-2.855662</THETA3>
+	<R1>34.200000,23.200000,1.000000</R1>
+	<R1>34.200000,23.200000,1.000000</R1>
+</output_generation>

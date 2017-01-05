@@ -12,7 +12,8 @@ function read_xml_key(file_string::String, key_name::String, fmt::DataType)
 		return parse(fmt, key_string)
 	elseif fmt == Array{Float64, 1}
 		key_string_array = split(key_string, ",")
-		data = Array(Float64, length(key_string_array))
+		number_of_values = length(key_string_array)
+		data = Array(Float64, number_of_values)
 		for current_value = 1:number_of_values
 			data[current_value] = parse(Float64, key_string_array[current_value])
 		end

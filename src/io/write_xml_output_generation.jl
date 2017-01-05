@@ -17,7 +17,7 @@ function write_xml_output_generation(output_file_path::String, Lx::Float64, Ly::
 	write_xml_key(file_stream, "THETA2", THETA2)
 	write_xml_key(file_stream, "THETA3", THETA3)
 	write_xml_key(file_stream, "R1", R1)
-	write_xml_key(file_stream, "R1", R2)
+	write_xml_key(file_stream, "R2", R2)
 	
 	@printf(file_stream, "%s", "</output_generation>")
 	

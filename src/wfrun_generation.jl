@@ -1,11 +1,12 @@
 include("io/get_version.jl")
 include("io/print_header.jl")
 include("io/read_xml_input_generation.jl")
+include("io/print_simulation_stats_generation.jl")
+
 include("io/write_xml_output_generation.jl")
 
 #include("io/read_xml_system.jl")
 #include("io/write_xml_output.jl")
-#include("io/print_simulation_stats.jl")
 #include("io/print_progress.jl")
 
 include("generation/ellipticaldisk/generate.jl")
@@ -56,14 +57,11 @@ function wfrun_generation()
 	end
 	
 	# Generate system.
+	acceptance_probability_target::Float64 = 0.25
+	number_of_iterations_overlap_criterion::Int64 = 20
+	(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
 	
 	# Write output.
-	X::Array{Float64,1} = Lx * rand(number_of_particles)
-	Y::Array{Float64,1} = Ly * rand(number_of_particles)
-	Z::Array{Float64,1} = lbz + (ubz - lbz) * rand(number_of_particles)
-	THETA1::Array{Float64,1} = zeros(number_of_particles)
-	THETA2::Array{Float64,1} = zeros(number_of_particles)
-	THETA3::Array{Float64,1} = 2 * pi * rand(number_of_particles)
 	write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
 	
 	# Print output information.
