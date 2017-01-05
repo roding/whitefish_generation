@@ -6,9 +6,9 @@ include("io/write_xml_output.jl")
 include("io/print_simulation_stats.jl")
 include("io/print_progress.jl")
 
-include("generation/ellipticaldisk/simulate_diffusion.jl")
+include("generation/ellipticaldisk/generate.jl")
 
-function wfrun_diffusion()
+function wfrun_generation()
 	# Change current folder to the folder where this script lies.
 	(program_dir::String, script_file_name::String) = splitdir(PROGRAM_FILE)
 	cd(program_dir)
