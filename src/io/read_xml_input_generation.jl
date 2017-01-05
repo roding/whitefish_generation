@@ -1,69 +1,17 @@
-function read_xml_input(input_file_path::String)
+function read_xml_input_generation(input_file_path::String)
 	file_stream::IOStream = open(input_file_path, "r")
 	file_string::String = readstring(file_stream)
 	close(file_stream)
+			
+	Lx::Float64 = get_xml_key(file_string, "domain_size_x", Float64)
+	Ly::Float64 = get_xml_key(file_string, "domain_size_y", Float64)
+	Lz::Float64 = get_xml_key(file_string, "domain_size_z", Float64)
+	number_of_particles::Int64 = get_xml_key(file_string, "number_of_particles", Int64)
+	lbz::Float64 = get_xml_key(file_string, "lower_bound_z", Float64)
+	ubz::Float64 = get_xml_key(file_string, "upper_bound_z", Float64)
+	ubangle::Float64 = get_xml_key(file_string, "upper_bound_angle_to_z_axis", Float64)
+	number_of_equilibration_sweeps::Int64 = get_xml_key(file_string, "number_of_equilibration_sweeps", Int64)
+	output_path::String = get_xml_key(file_string, "output_path", String)
 	
-	# Read path to particle system configuration.
-	ind_before = search(file_string, "<particle_system_path>")
-	ind_after = search(file_string, "</particle_system_path>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	particle_system_path::String = file_string[ind]
-	
-	# Read path to output file.
-	ind_before = search(file_string, "<output_path>")
-	ind_after = search(file_string, "</output_path>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	output_path::String = file_string[ind]
-	
-	# Read inherent diffusion coefficient.
-	ind_before = search(file_string, "<inherent_diffusion_coefficient>")
-	ind_after = search(file_string, "</inherent_diffusion_coefficient>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	D0::Float64 = parse(Float64, file_string[ind])
-	
-	# Read deltat_coarse.
-	ind_before = search(file_string, "<deltat_coarse>")
-	ind_after = search(file_string, "</deltat_coarse>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	deltat_coarse::Float64 = parse(Float64, file_string[ind])
-	
-	# Read number_of_time_points_coarse.
-	ind_before = search(file_string, "<number_of_time_points_coarse>")
-	ind_after = search(file_string, "</number_of_time_points_coarse>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_time_points_coarse::Int64 = parse(Int64, file_string[ind])
-	
-	# Read number_of_time_points_fine_per_coarse.
-	ind_before = search(file_string, "<number_of_time_points_fine_per_coarse>")
-	ind_after = search(file_string, "</number_of_time_points_fine_per_coarse>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_time_points_fine_per_coarse::Int64 = parse(Int64, file_string[ind])
-	
-	# Read number_of_diffusers.
-	ind_before = search(file_string, "<number_of_diffusers>")
-	ind_after = search(file_string, "</number_of_diffusers>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_diffusers::Int64 = parse(Int64, file_string[ind])
-	
-	# Read number_of_cells_x.
-	ind_before = search(file_string, "<number_of_cells_x>")
-	ind_after = search(file_string, "</number_of_cells_x>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_cells_x::Int64 = parse(Int64, file_string[ind])
-	
-	# Read number_of_cells_y.
-	ind_before = search(file_string, "<number_of_cells_y>")
-	ind_after = search(file_string, "</number_of_cells_y>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_cells_y::Int64 = parse(Int64, file_string[ind])
-	
-	# Read number_of_cells_z.
-	ind_before = search(file_string, "<number_of_cells_z>")
-	ind_after = search(file_string, "</number_of_cells_z>")
-	ind = ind_before[end]+1:ind_after[1]-1
-	number_of_cells_z::Int64 = parse(Int64, file_string[ind])
-	
-	return (particle_system_path, output_path, D0, deltat_coarse, number_of_time_points_coarse, number_of_time_points_fine_per_coarse, number_of_diffusers, number_of_cells_x, number_of_cells_y, number_of_cells_z)
+	return (Lx, Ly, Lz, number_of_particles, lbz, ubz, ubangle, number_of_equilibration_sweeps, output_path)
 end
-
-#read_xml_input("../input.xml")
