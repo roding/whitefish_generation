@@ -1,14 +1,10 @@
-function write_xml_key(file_string::String, key_name::String, fmt::DataType)
+function write_xml_key(file_stream::IOStream, key_name::String, key_value)
 	
-	ind_before::UnitRange{Int64} = search(file_string, join(("<", key_name, ">")))
-	ind_after::UnitRange{Int64} = search(file_string, join(("</", key_name, ">")))
-	ind::UnitRange{Int64} = ind_before[end]+1:ind_after[1]-1
+	@printf(file_stream, "%s", "\u0009")
+	@printf(file_stream, "%s", join(("<", key_name, ">")))
+	@printf(file_stream, "%0.3f", key_value)
+	@printf(file_stream, "%s", join(("</", key_name, ">")))
+	@printf(file_stream, "%s", "\n")
 	
-	key_string::String = file_string[ind]
-	
-	if fmt == String
-		return key_string
-	else
-		return parse(fmt, key_string)
-	end
+	nothing
 end
