@@ -8,7 +8,7 @@ include("io/print_progress.jl")
 
 include("ellipticaldisk/simulate_diffusion.jl")
 
-function wfrun()
+function wfrun_diffusion()
 	# Change current folder to the folder where this script lies.
 	(program_dir::String, script_file_name::String) = splitdir(PROGRAM_FILE)
 	cd(program_dir)
@@ -74,4 +74,4 @@ function wfrun()
 	nothing
 end
 
-wfrun()
+wfrun_diffusion()
