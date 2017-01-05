@@ -1,22 +1,26 @@
-include("read_xml_key.jl")
+include("write_xml_key.jl")
 
-function read_xml_input_generation(input_file_path::String)
-	file_stream::IOStream = open(input_file_path, "r")
-	file_string::String = readstring(file_stream)
-	close(file_stream)
-			
-	Lx::Float64 = read_xml_key(file_string, "domain_size_x", Float64)
-	Ly::Float64 = read_xml_key(file_string, "domain_size_y", Float64)
-	Lz::Float64 = read_xml_key(file_string, "domain_size_z", Float64)
-	particle_type::String = read_xml_key(file_string, "particle_type", String)
-	number_of_particles::Int64 = read_xml_key(file_string, "number_of_particles", Int64)
-	lbz::Float64 = read_xml_key(file_string, "lower_bound_z", Float64)
-	ubz::Float64 = read_xml_key(file_string, "upper_bound_z", Float64)
-	ubangle::Float64 = read_xml_key(file_string, "upper_bound_angle_to_z_axis", Float64)
-	R1::Array{Float64,1} = read_xml_key(file_string, "R1", Array{Float64, 1})
-	R2::Array{Float64,1} = read_xml_key(file_string, "R2", Array{Float64, 1})
-	number_of_equilibration_sweeps::Int64 = read_xml_key(file_string, "number_of_equilibration_sweeps", Int64)
-	output_file_path::String = read_xml_key(file_string, "output_file_path", String)
+function write_xml_input_generation(output_file_path::String, Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64, 1}, R2::Array{Float64, 1})
+	file_stream::IOStream = open(output_file_path, "w")
 	
-	return (Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2, number_of_equilibration_sweeps, output_file_path)
+	@printf(file_stream, "%s", "<input_generation>\n")
+
+	write_xml_key(file_stream, "domain_size_x", Lx)
+	write_xml_key(file_stream, "domain_size_y", Ly)
+	write_xml_key(file_stream, "domain_size_z", Lz)
+	write_xml_key(file_stream, "particle_type", "ellipticaldisk")
+	write_xml_key(file_stream, "number_of_particles", number_of_particles)
+	write_xml_key(file_stream, "lower_bound_z", lbz)
+	write_xml_key(file_stream, "upper_bound_z", ubz)
+	write_xml_key(file_stream, "upper_bound_angle_to_z_axis", ubangle)
+	write_xml_key(file_stream, "R1", R1)
+	write_xml_key(file_stream, "R2", R2)
+	write_xml_key(file_stream, "number_of_equilibration_sweeps", number_of_equilibration_sweeps)
+	write_xml_key(file_stream, "output_file_path", output_file_path)
+	
+	@printf(file_stream, "%s", "</input_generation>")
+	
+	close(file_stream)
+
+	nothing
 end
