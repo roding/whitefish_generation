@@ -1,6 +1,6 @@
 include("write_xml_key.jl")
 
-function write_xml_output_generation(output_file_path::String)
+function write_xml_output_generation(output_file_path::String, Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, X::Array{Float64, 1}, Y::Array{Float64, 1}, Z::Array{Float64, 1}, THETA1::Array{Float64, 1}, THETA2::Array{Float64, 1}, THETA3::Array{Float64, 1}, R1::Array{Float64, 1}, R2::Array{Float64, 1})
 	file_stream::IOStream = open(output_file_path, "w")
 	
 	@printf(file_stream, "%s", "<output_generation>\n")
@@ -11,6 +11,13 @@ function write_xml_output_generation(output_file_path::String)
 	write_xml_key(file_stream, "particle_type", "ellipticaldisk")
 	write_xml_key(file_stream, "number_of_particles", number_of_particles)
 	write_xml_key(file_stream, "X", X)
+	write_xml_key(file_stream, "Y", Y)
+	write_xml_key(file_stream, "Z", Z)
+	write_xml_key(file_stream, "THETA1", THETA1)
+	write_xml_key(file_stream, "THETA2", THETA2)
+	write_xml_key(file_stream, "THETA3", THETA3)
+	write_xml_key(file_stream, "R1", R1)
+	write_xml_key(file_stream, "R1", R2)
 	
 	@printf(file_stream, "%s", "</output_generation>")
 	
@@ -18,21 +25,3 @@ function write_xml_output_generation(output_file_path::String)
 
 	nothing
 end
-
-#write_xml_output_generation("test_output.xml")
-
-<particle_system>
-	<domain_size_x>100.0</domain_size_x>
-	<domain_size_y>100.0</domain_size_y>
-	<domain_size_z>100.0</domain_size_z>
-	<type>ellipticaldisk</type>
-	<number_of_particles>1</number_of_particles>
-	<X>10.0</X>
-	<Y>10.0</Y>
-	<Z>10.0</Z>
-	<THETA1>0.0</THETA1>
-	<THETA2>1.0</THETA2>
-	<THETA3>2.0</THETA3>
-	<R1>10.0</R1>
-	<R2>10.0</R2>
-</particle_system>
