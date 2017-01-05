@@ -1,6 +1,5 @@
-<input>
-	<particle_system_path>particle_system.xml</particle_system_path>
-	<output_path>V:/output.xml</output_path>
+<input_diffusion>
+	<output_generation_path>output_generation.xml</output_generation_path>
 	<inherent_diffusion_coefficient>1.0</inherent_diffusion_coefficient>
 	<deltat_coarse>10.0</deltat_coarse>
 	<number_of_time_points_coarse>2500</number_of_time_points_coarse>
@@ -9,4 +8,5 @@
 	<number_of_cells_x>10</number_of_cells_x>
 	<number_of_cells_y>10</number_of_cells_y>
 	<number_of_cells_z>10</number_of_cells_z>
-</input>
+	<output_diffusion_path>output_diffusion.xml</output_diffusion_path>
+</input_diffusion>
