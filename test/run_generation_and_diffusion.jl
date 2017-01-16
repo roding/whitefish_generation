@@ -14,7 +14,7 @@ function run_generation_and_diffusion()
 	end
 	
 	# Main output directory.
-	main_output_dir = join((pwd(), "/", "output"))
+	main_output_dir = join((pwd(), "../../../", "output_layer"))
 	if !isdir(main_output_dir)
         mkdir(main_output_dir)
     end
@@ -31,13 +31,13 @@ function run_generation_and_diffusion()
 	Lz::Float64 = 200.0 # µm.
 	particle_type::String = "ellipticaldisk"
 	number_of_particles::Int64 = 500
-	thickness::Float64 = Lz#10.0#50.0 + (Lz - 50.0) * rand() # µm.
+	thickness::Float64 = 50.0 + (Lz - 50.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
-	ubangle::Float64 = 0.0 # Radians.
+	ubangle::Float64 = pi # Radians.
 	R1::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
 	R2::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
-	number_of_equilibration_sweeps::Int64 = 10
+	number_of_equilibration_sweeps::Int64 = 1000
 	output_generation_path::String = join((output_dir, "/", "output_generation.xml"))
 	
 	# Write input file for generation.
@@ -46,17 +46,18 @@ function run_generation_and_diffusion()
 
 	# Run generation.
 	program_generation_path::String = "../src/generation/wfrun_generation.jl"
-	cmd::Cmd = `julia $program_generation_path $input_generation_path`
+	cmd_generation::Cmd = `julia $program_generation_path $input_generation_path`
+	run(cmd_generation)
 	
 	# Diffusion parameters.
 	D0::Float64 = 1.0
 	deltat_coarse::Float64 = 10.0
 	number_of_time_points_coarse::Int64 = 2500
 	number_of_time_points_fine_per_coarse::Int64 = 10
-	number_of_diffusers::Int64 = 1500
+	number_of_diffusers::Int64 = 100000
 	number_of_cells_x::Int64 = 10
 	number_of_cells_y::Int64 = 10
-	number_of_cells_z::Int64 = 10
+	number_of_cells_z::Int64 = 20
 	output_diffusion_path::String = join((output_dir, "/", "output_diffusion.xml"))
 	
 	# Write input file for diffusion.
@@ -65,7 +66,8 @@ function run_generation_and_diffusion()
 	
 	# Run diffusion.
 	program_diffusion_path::String = "../src/diffusion/wfrun_diffusion.jl"
-	cmd::Cmd = `julia $program_diffusion_path $input_diffusion_path`
+	cmd_diffusion::Cmd = `julia $program_diffusion_path $input_diffusion_path`
+	run(cmd_diffusion)
 	
 	# Exit.
 	nothing
