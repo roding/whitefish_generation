@@ -1,4 +1,3 @@
-include("../io/get_version.jl")
 include("../io/print_header.jl")
 include("../io/read_xml_input_generation.jl")
 include("../io/print_simulation_stats_generation.jl")
@@ -38,19 +37,20 @@ function wfrun_generation()
 	# Error checking for input file specification.
 	if !input_file_specified
 		println("No input file specified or specified input does not exist. Aborting.")
+		return nothing
 	end
 
 	# Process input file.
 	if !silent_mode
 		println(join(("Reading input from file ", input_file_path, "...")))
 	end
-	#(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
+	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
 	
-	#println(Lx)
+	println(Lx)
 	# Print simulation stats.
-	#if !silent_mode
-	#	print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
-	#end
+	if !silent_mode
+		print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
+	end
 	
 	# Generate system.
 	#acceptance_probability_target::Float64 = 0.25
