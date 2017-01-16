@@ -53,18 +53,18 @@ function wfrun_generation()
 	end
 	
 	# Generate system.
-	#acceptance_probability_target::Float64 = 0.25
-	#number_of_iterations_overlap_criterion::Int64 = 20
-	#(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
+	acceptance_probability_target::Float64 = 0.25
+	number_of_iterations_overlap_criterion::Int64 = 20
+	(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
 	
 	# Write output.
-	#write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
+	write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
 	
 	# Print output information.
-	#if !silent_mode
-	#	println(join(("Output written to ", output_file_path, ".")))
-	#	println("Finished.")
-	#end
+	if !silent_mode
+		println(join(("Output written to ", output_file_path, ".")))
+		println("Finished.")
+	end
 	
 	nothing
 end

@@ -12,9 +12,6 @@
 	THETA2::Array{Float64,1} = zeros(number_of_particles)
 	THETA3::Array{Float64,1} = 2 * pi * rand(number_of_particles)
 	
-	if !silent
-		println("Precomputing values and preallocating variables...")
-	end
 	# Simulation parameters.
 	sigma_translation::Float64 = 0.05
 	sigma_rotation::Float64 = 0.50
