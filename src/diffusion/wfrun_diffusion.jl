@@ -1,12 +1,12 @@
-include("io/get_version.jl")
-include("io/print_header.jl")
-include("io/read_xml_system.jl")
-include("io/read_xml_input.jl")
-include("io/write_xml_output.jl")
-include("io/print_simulation_stats.jl")
-include("io/print_progress.jl")
+include("../io/get_version.jl")
+include("../io/print_header.jl")
+include("../io/read_xml_system.jl")
+include("../io/read_xml_input.jl")
+include("../io/write_xml_output.jl")
+include("../io/print_simulation_stats.jl")
+include("../io/print_progress.jl")
 
-include("diffusion/ellipticaldisk/simulate_diffusion.jl")
+include("ellipticaldisk/simulate_diffusion.jl")
 
 function wfrun_diffusion()
 	# Change current folder to the folder where this script lies.
