@@ -1,67 +1,24 @@
 include("write_xml_key.jl")
 
-function write_xml_input_diffusion(
+function write_xml_input_diffusion(file_path::String, output_generation_path::String, inherent_diffusion_coefficient::Float64, deltat_coarse::Float64, number_of_time_points_coarse::Int64, number_of_time_points_fine_per_coarse::Int64, number_of_diffusers::Int64, number_of_cells_x::Int64, number_of_cells_y::Int64, number_of_cells_z::Int64, output_diffusion_path::String)
+	file_stream::IOStream = open(file_path, "w")
+	
+	@printf(file_stream, "%s", "<input_diffusion>\n")
 
-
-
-
-
-
-
-file_name::String, D0::Float64, D0_empirical::Float64, deltat_coarse::Float64, number_of_time_points_coarse::Int64, msd_x::Array{Float64, 1}, msd_y::Array{Float64, 1}, msd_z::Array{Float64, 1})
+	write_xml_key(file_stream, "output_generation_path", output_generation_path)
+	write_xml_key(file_stream, "inherent_diffusion_coefficient", inherent_diffusion_coefficient)
+	write_xml_key(file_stream, "deltat_coarse", deltat_coarse)
+	write_xml_key(file_stream, "number_of_time_points_coarse", number_of_time_points_coarse)
+	write_xml_key(file_stream, "number_of_time_points_fine_per_coarse", number_of_time_points_fine_per_coarse)
+	write_xml_key(file_stream, "number_of_diffusers", number_of_diffusers)
+	write_xml_key(file_stream, "number_of_cells_x", number_of_cells_x)
+	write_xml_key(file_stream, "number_of_cells_y", number_of_cells_y)
+	write_xml_key(file_stream, "number_of_cells_z", number_of_cells_z)
+	write_xml_key(file_stream, "output_diffusion_path", output_diffusion_path)
 	
-	file_stream::IOStream = open(file_name, "w")
-		
-	t::Array{Float64, 1} = 0.0:deltat_coarse:(convert(Float64, number_of_time_points_coarse-1) * deltat_coarse)
-	
-	@printf(file_stream, "%s", "<output>\n")
-	
-	@printf(file_stream, "%s", "\u0009")
-	@printf(file_stream, "%s", "<diagnostic_diffusion_coefficient_ratio>")
-	@printf(file_stream, "%0.3f", D0_empirical/D0) 
-	@printf(file_stream, "%s", "</diagnostic_diffusion_coefficient_ratio>\n")
-	
-	@printf(file_stream, "%s", "\u0009")
-	@printf(file_stream, "%s", "<time>")
-	for i = 1:length(t)-1
-		@printf(file_stream, "%0.3f", t[i])
-		@printf(file_stream, "%s", ",")
-	end
-	@printf(file_stream, "%0.3f", t[end])
-	@printf(file_stream, "%s", "</time>\n")
-	
-	@printf(file_stream, "%s", "\u0009")
-	@printf(file_stream, "%s", "<mean_square_displacement_x>")
-	for i = 1:length(t)-1
-		@printf(file_stream, "%0.3f", msd_x[i])
-		@printf(file_stream, "%s", ",")
-	end
-	@printf(file_stream, "%0.3f", msd_x[end])
-	@printf(file_stream, "%s", "</mean_square_displacement_x>\n")
-	
-	@printf(file_stream, "%s", "\u0009")
-	@printf(file_stream, "%s", "<mean_square_displacement_y>")
-	for i = 1:length(t)-1
-		@printf(file_stream, "%0.3f", msd_y[i])
-		@printf(file_stream, "%s", ",")
-	end
-	@printf(file_stream, "%0.3f", msd_y[end])
-	@printf(file_stream, "%s", "</mean_square_displacement_y>\n")
-	
-	@printf(file_stream, "%s", "\u0009")
-	@printf(file_stream, "%s", "<mean_square_displacement_z>")
-	for i = 1:length(t)-1
-		@printf(file_stream, "%0.3f", msd_z[i])
-		@printf(file_stream, "%s", ",")
-	end
-	@printf(file_stream, "%0.3f", msd_z[end])
-	@printf(file_stream, "%s", "</mean_square_displacement_z>\n")
-	
-	@printf(file_stream, "%s", "</output>\n")
+	@printf(file_stream, "%s", "</input_diffusion>")
 	
 	close(file_stream)
-	
+
 	nothing
 end
-
-#read_xml_system("particle_system.xml")
