@@ -13,13 +13,13 @@ function run_generation_and_diffusion()
 	cd(program_file_dir)
 	
 	# Main output directory.
-	main_output_dir::String = join((pwd(), "/../../", "output_layer"))
+	main_output_dir::String = abspath(joinpath(program_file_dir, "../../output_layer"))
 	if !isdir(main_output_dir)
         mkdir(main_output_dir)
     end
 	
 	# Output directory.
-	output_dir::String = join((main_output_dir, "/", "output_", string(random_seed)))
+	output_dir::String = abspath(joinpath(main_output_dir, join(("output_", string(random_seed)))))
 	if !isdir(output_dir)
 		mkdir(output_dir)
 	end
