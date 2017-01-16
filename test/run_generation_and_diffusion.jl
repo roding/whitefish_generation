@@ -14,13 +14,15 @@ function run_generation_and_diffusion()
 	end
 	
 	# Main output directory.
-	main_output_dir = join((pwd(), "../../../", "output_layer"))
+	main_output_dir::String = join((pwd(), "/../../", "output_layer"))
+	println(main_output_dir)
 	if !isdir(main_output_dir)
         mkdir(main_output_dir)
     end
+	return 0
 	
 	# Output directory.
-	output_dir = join((main_output_dir, "/", "output_", string(random_seed)))
+	output_dir::String = join((main_output_dir, "/", "output_", string(random_seed)))
 	if !isdir(output_dir)
 		mkdir(output_dir)
 	end
