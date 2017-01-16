@@ -1,4 +1,4 @@
-function write_xml_input_generation(file_path::String, Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64, 1}, R2::Array{Float64, 1})
+function write_xml_input_generation(file_path::String, Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64, 1}, R2::Array{Float64, 1}, number_of_equilibration_sweeps::Int64, output_file_path::String)
 	file_stream::IOStream = open(file_path, "w")
 	
 	@printf(file_stream, "%s", "<input_generation>\n")
