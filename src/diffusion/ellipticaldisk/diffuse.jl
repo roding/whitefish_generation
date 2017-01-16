@@ -268,11 +268,11 @@ include("cell_lists.jl")
 		
 		t_elapsed_diffusion = convert(Float64, time_ns()) / 1e9 - t_start_diffusion
 		if !silent_mode && convert(Int64, floor(t_elapsed_diffusion / 10.0)) > chunk
-			print_progress(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
+			print_progress_diffusion(t_elapsed_diffusion, current_diffuser, number_of_diffusers)
 		end
 		chunk = convert(Int64, floor(t_elapsed_diffusion / 10.0))
 	end
-	print_progress(t_elapsed_diffusion, number_of_diffusers, number_of_diffusers)
+	print_progress_diffusion(t_elapsed_diffusion, number_of_diffusers, number_of_diffusers)
 	
 	msd_x = msd_x ./ convert(Float64, number_of_diffusers)
 	msd_y = msd_y ./ convert(Float64, number_of_diffusers)

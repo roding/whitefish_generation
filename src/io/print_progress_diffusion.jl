@@ -1,4 +1,4 @@
-function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, number_of_diffusers::Int64)
+function print_progress_diffusion(t_elapsed_diffusion::Float64, current_diffuser::Int64, number_of_diffusers::Int64)
 	time_elapsed_seconds::Int64 = convert(Int64, floor(t_elapsed_diffusion))
 	
 	time_elapsed_hours::Int64 = fld(time_elapsed_seconds, 3600)
@@ -61,7 +61,7 @@ function print_progress(t_elapsed_diffusion::Float64, current_diffuser::Int64, n
 	output_str::String = join(("   ", time_elapsed_string, "                  ", percent_done_string, "     ", time_remaining_string))
 	println(output_str)
 	
-	
+	nothing
 	#percent_done::Float64 = 100.0 * fraction_done
 	
 			
