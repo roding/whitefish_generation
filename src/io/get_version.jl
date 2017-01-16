@@ -1,5 +1,5 @@
 function get_version()
-	file_name_version = "version"
+	file_name_version = "../version"
 	file_stream_version = open(file_name_version, "r")
 	version::Array{Int64, 1} = read(file_stream_version, Int64, 3)
 	close(file_stream_version)
