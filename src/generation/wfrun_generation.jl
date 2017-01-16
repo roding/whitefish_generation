@@ -1,15 +1,10 @@
-include("io/get_version.jl")
-include("io/print_header.jl")
-include("io/read_xml_input_generation.jl")
-include("io/print_simulation_stats_generation.jl")
+include("../io/get_version.jl")
+include("../io/print_header.jl")
+include("../io/read_xml_input_generation.jl")
+include("../io/print_simulation_stats_generation.jl")
+include("../io/write_xml_output_generation.jl")
 
-include("io/write_xml_output_generation.jl")
-
-#include("io/read_xml_system.jl")
-#include("io/write_xml_output.jl")
-#include("io/print_progress.jl")
-
-include("generation/ellipticaldisk/generate.jl")
+include("ellipticaldisk/generate.jl")
 
 function wfrun_generation()
 	# Change current folder to the folder where this script lies.
@@ -49,26 +44,27 @@ function wfrun_generation()
 	if !silent_mode
 		println(join(("Reading input from file ", input_file_path, "...")))
 	end
-	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
+	#(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input_generation(input_file_path)
 	
+	#println(Lx)
 	# Print simulation stats.
-	if !silent_mode
-		print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
-	end
+	#if !silent_mode
+	#	print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
+	#end
 	
 	# Generate system.
-	acceptance_probability_target::Float64 = 0.25
-	number_of_iterations_overlap_criterion::Int64 = 20
-	(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
+	#acceptance_probability_target::Float64 = 0.25
+	#number_of_iterations_overlap_criterion::Int64 = 20
+	#(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
 	
 	# Write output.
-	write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
+	#write_xml_output_generation(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2)
 	
 	# Print output information.
-	if !silent_mode
-		println(join(("Output written to ", output_file_path, ".")))
-		println("Finished.")
-	end
+	#if !silent_mode
+	#	println(join(("Output written to ", output_file_path, ".")))
+	#	println("Finished.")
+	#end
 	
 	nothing
 end
