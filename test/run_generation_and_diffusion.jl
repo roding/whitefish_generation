@@ -9,17 +9,14 @@ function run_generation_and_diffusion()
 	
 	# Change current folder to the folder where this script lies.
 	(program_file_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
-	if program_file_dir != ""
-		cd(program_file_dir)
-	end
+	program_file_dir = abspath(program_file_dir)
+	cd(program_file_dir)
 	
 	# Main output directory.
 	main_output_dir::String = join((pwd(), "/../../", "output_layer"))
-	println(main_output_dir)
 	if !isdir(main_output_dir)
         mkdir(main_output_dir)
     end
-	return 0
 	
 	# Output directory.
 	output_dir::String = join((main_output_dir, "/", "output_", string(random_seed)))

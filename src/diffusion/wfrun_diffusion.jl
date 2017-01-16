@@ -1,3 +1,4 @@
+
 include("../io/read_xml_key.jl")
 include("../io/write_xml_key.jl")
 
@@ -18,9 +19,8 @@ function wfrun_diffusion()
 	
 	# Change current folder to the folder where this script lies.
 	(program_file_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
-	if program_file_dir != ""
-		cd(program_file_dir)
-	end
+	program_file_dir = abspath(program_file_dir)
+	cd(program_file_dir)
 	
 	# Process input arguments.
 	silent_mode::Bool = false
