@@ -1,5 +1,3 @@
-include("write_xml_key.jl")
-
 function write_xml_input_diffusion(file_path::String, output_generation_path::String, inherent_diffusion_coefficient::Float64, deltat_coarse::Float64, number_of_time_points_coarse::Int64, number_of_time_points_fine_per_coarse::Int64, number_of_diffusers::Int64, number_of_cells_x::Int64, number_of_cells_y::Int64, number_of_cells_z::Int64, output_diffusion_path::String)
 	file_stream::IOStream = open(file_path, "w")
 	

@@ -1,5 +1,3 @@
-include("write_xml_key.jl")
-
 function write_xml_output_generation(file_path::String, Lx::Float64, Ly::Float64, Lz::Float64, number_of_particles::Int64, X::Array{Float64, 1}, Y::Array{Float64, 1}, Z::Array{Float64, 1}, THETA1::Array{Float64, 1}, THETA2::Array{Float64, 1}, THETA3::Array{Float64, 1}, R1::Array{Float64, 1}, R2::Array{Float64, 1})
 	file_stream::IOStream = open(file_path, "w")
 	

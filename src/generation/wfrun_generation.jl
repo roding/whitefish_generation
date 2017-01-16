@@ -1,15 +1,19 @@
-include("../io/print_header.jl")
+include("../io/read_xml_key.jl")
+include("../io/write_xml_key.jl")
+
 include("../io/read_xml_input_generation.jl")
-include("../io/print_simulation_stats_generation.jl")
 include("../io/write_xml_output_generation.jl")
+
+include("../io/print_header.jl")
+include("../io/print_simulation_stats_generation.jl")
 
 include("ellipticaldisk/generate.jl")
 
 function wfrun_generation()
 	# Change current folder to the folder where this script lies.
-	(program_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
-	if program_dir != ""
-		cd(program_dir)
+	(program_file_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
+	if program_file_dir != ""
+		cd(program_file_dir)
 	end
 	
 	# Process input arguments.
