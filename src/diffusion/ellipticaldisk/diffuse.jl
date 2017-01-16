@@ -1,6 +1,6 @@
 include("cell_lists.jl")
 
-@inbounds function simulate_diffusion(	X::Array{Float64,1},
+@inbounds function diffuse(	X::Array{Float64,1},
 							Y::Array{Float64,1},
 							Z::Array{Float64,1},
 							THETA1::Array{Float64,1},
