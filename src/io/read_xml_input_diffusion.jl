@@ -19,4 +19,4 @@ function read_xml_input_diffusion(file_path::String)
 	return (output_generation_path, inherent_diffusion_coefficient, deltat_coarse, number_of_time_points_coarse, number_of_time_points_fine_per_coarse, number_of_diffusers, number_of_cells_x, number_of_cells_y, number_of_cells_z, output_diffusion_path)
 end
 
-read_xml_input_diffusion("../io_test_files/input_diffusion.xml")
+#read_xml_input_diffusion("../io_test_files/input_diffusion.xml")
