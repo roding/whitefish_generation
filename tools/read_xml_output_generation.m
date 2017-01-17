@@ -1,6 +1,6 @@
-function [Lx, Ly, Lz, particle_type, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, t_exec] = read_xml_output_generation(file_path)
+function [Lx, Ly, Lz, particle_type, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, t_exec_generation] = read_xml_output_generation(file_path)
 
-file_string = fileread(file_path)
+file_string = fileread(file_path);
 
 Lx = read_xml_key(file_string, 'domain_size_x', 'scalar');
 Ly = read_xml_key(file_string, 'domain_size_y', 'scalar');
@@ -15,7 +15,7 @@ THETA2 = read_xml_key(file_string, 'THETA2', 'array');
 THETA3 = read_xml_key(file_string, 'THETA2', 'array');
 R1 = read_xml_key(file_string, 'R1', 'array');
 R2 = read_xml_key(file_string, 'R1', 'array');
-t_exec = read_xml_key(file_string, 'execution_time', 'scalar');
+t_exec_generation = read_xml_key(file_string, 'execution_time', 'scalar');
 
 end
 
