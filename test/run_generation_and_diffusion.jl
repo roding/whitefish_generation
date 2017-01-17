@@ -73,4 +73,6 @@ function run_generation_and_diffusion()
 	
 end
 
-run_generation_and_diffusion()
+while true
+	run_generation_and_diffusion()
+end
