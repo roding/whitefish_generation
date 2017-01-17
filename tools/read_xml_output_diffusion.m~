@@ -1,0 +1,7 @@
+function [a,b,c] = read_xml_output_diffusion()
+%READ_XML_OUTPUT_DIFFUSION Summary of this function goes here
+%   Detailed explanation goes here
+
+
+end
+
