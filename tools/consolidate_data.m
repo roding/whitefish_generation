@@ -50,7 +50,7 @@ msd_z = msd_z(~is_failed);
 t_exec_generation = t_exec_generation(~is_failed);
 t_exec_diffusion = t_exec_diffusion(~is_failed);
 
-clear *_ main_folder folders current_folder number_of_folders file_path
+clear *_ main_folder folders current_folder number_of_folders file_path is_failed
 
 save('consolidated_data.mat')
 
