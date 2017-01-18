@@ -29,7 +29,7 @@ function run_generation_and_diffusion()
 	Ly::Float64 = 100.0 # µm.
 	Lz::Float64 = 200.0 # µm.
 	particle_type::String = "ellipticaldisk"
-	number_of_particles::Int64 = 500
+	number_of_particles::Int64 = 100
 	thickness::Float64 = 50.0 + (Lz - 50.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
@@ -50,9 +50,9 @@ function run_generation_and_diffusion()
 	
 	# Diffusion parameters.
 	D0::Float64 = 1.0
-	deltat_coarse::Float64 = 10.0
+	deltat_coarse::Float64 = 5.0
 	number_of_time_points_coarse::Int64 = 5000
-	number_of_time_points_fine_per_coarse::Int64 = 250
+	number_of_time_points_fine_per_coarse::Int64 = 100
 	number_of_diffusers::Int64 = 500000
 	number_of_cells_x::Int64 = 10
 	number_of_cells_y::Int64 = 10
