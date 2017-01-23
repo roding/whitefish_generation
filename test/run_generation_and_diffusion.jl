@@ -25,12 +25,12 @@ function run_generation_and_diffusion()
 	end
 	
 	# Generation parameters.
-	Lx::Float64 = 75.0 # µm.
-	Ly::Float64 = 125.0 # µm.
-	Lz::Float64 = 175.0 # µm.
+	Lx::Float64 = 100.0 # µm.
+	Ly::Float64 = 100.0 # µm.
+	Lz::Float64 = 100.0 # µm.
 	particle_type::String = "ellipticaldisk"
 	number_of_particles::Int64 = 500
-	thickness::Float64 = 50.0 + (Lz - 50.0) * rand() # µm.
+	thickness::Float64 = 25.0 + (Lz - 25.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
 	ubangle::Float64 = pi # Radians.
@@ -53,10 +53,10 @@ function run_generation_and_diffusion()
 	deltat_coarse::Float64 = 5.0
 	number_of_time_points_coarse::Int64 = 10000
 	number_of_time_points_fine_per_coarse::Int64 = 250
-	number_of_diffusers::Int64 = 500000
-	number_of_cells_x::Int64 = 9#10
-	number_of_cells_y::Int64 = 15#10
-	number_of_cells_z::Int64 = 21#20
+	number_of_diffusers::Int64 = 50000
+	number_of_cells_x::Int64 = 10
+	number_of_cells_y::Int64 = 10
+	number_of_cells_z::Int64 = 10
 	output_diffusion_path::String = join((output_dir, "/", "output_diffusion.xml"))
 	
 	# Write input file for diffusion.
