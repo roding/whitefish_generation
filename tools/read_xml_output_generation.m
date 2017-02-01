@@ -14,7 +14,7 @@ THETA1 = read_xml_key(file_string, 'THETA1', 'array');
 THETA2 = read_xml_key(file_string, 'THETA2', 'array');
 THETA3 = read_xml_key(file_string, 'THETA2', 'array');
 R1 = read_xml_key(file_string, 'R1', 'array');
-R2 = read_xml_key(file_string, 'R1', 'array');
+R2 = read_xml_key(file_string, 'R2', 'array');
 t_exec_generation = read_xml_key(file_string, 'execution_time', 'scalar');
 
 end
