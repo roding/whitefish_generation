@@ -1,2 +1,4 @@
 # whitefish
-Simulation engine for obstructed diffusion, based on random walk particle tracking.
+# generation module
+
+Granular material structures generation engine
