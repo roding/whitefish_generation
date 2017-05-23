@@ -1,4 +1,3 @@
-# whitefish
-# generation module
+# whitefish - generation module
 
 Granular material structures generation engine
