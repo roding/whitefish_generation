@@ -1,4 +1,4 @@
-function read_xml_input_generation(file_path::String)
+function read_xml_input(file_path::String)
 	file_stream::IOStream = open(file_path, "r")
 	file_string::String = readstring(file_stream)
 	close(file_stream)
