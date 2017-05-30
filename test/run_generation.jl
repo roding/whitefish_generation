@@ -12,7 +12,7 @@ function run_generation()
 	cd(program_file_dir)
 	
 	# Main output directory.
-	main_output_dir::String = abspath(joinpath(program_file_dir, "output"))
+	main_output_dir::String = abspath(joinpath(program_file_dir, "../../output"))
 	if !isdir(main_output_dir)
         mkdir(main_output_dir)
     end

@@ -22,8 +22,8 @@ function wfrun_generation()
 	# Process input arguments.
 	silent_mode::Bool = false
 	
-	input_generation_path::String = ""
-	input_generation_specified::Bool = false
+	input_file_path::String = ""
+	input_file_specified::Bool = false
 	
 	number_of_arguments::Int64 = length(ARGS)
 	
@@ -31,8 +31,8 @@ function wfrun_generation()
 		if ARGS[current_argument] == "-silent"
 			silent_mode = true
 		elseif isfile(ARGS[current_argument])
-			input_generation_path = ARGS[current_argument]
-			input_generation_specified = true
+			input_file_path = ARGS[current_argument]
+			input_file_specified = true
 		end
 	end
 	
@@ -42,20 +42,20 @@ function wfrun_generation()
 	end
 	
 	# Error checking for input file specification.
-	if !input_generation_specified
+	if !input_file_specified
 		println("No input file specified or specified input does not exist. Aborting.")
 		return nothing
 	end
 
 	# Process input file.
 	if !silent_mode
-		println(join(("Reading input from file ", input_generation_path, "...")))
+		println(join(("Reading input from file ", input_file_path, "...")))
 	end
-	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_generation_path::String) = read_xml_input_generation(input_generation_path)
+	(Lx::Float64, Ly::Float64, Lz::Float64, particle_type::String, number_of_particles::Int64, lbz::Float64, ubz::Float64, ubangle::Float64, R1::Array{Float64,1}, R2::Array{Float64,1}, number_of_equilibration_sweeps::Int64, output_file_path::String) = read_xml_input(input_file_path)
 	
 	# Print simulation stats.
 	if !silent_mode
-		print_simulation_stats_generation(particle_type, number_of_particles, Lx, Ly, Lz)
+		print_simulation_stats(particle_type, number_of_particles, Lx, Ly, Lz)
 	end
 	
 	# Generate system.
@@ -67,11 +67,11 @@ function wfrun_generation()
 	t_exec::Float64 = convert(Float64, t_finish_ns - t_start_ns) / 1e9
 	
 	# Write output.
-	write_xml_output_generation(output_generation_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, t_exec)
+	write_xml_output(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, t_exec)
 	
 	# Print output information.
 	if !silent_mode
-		println(join(("Output written to ", output_generation_path, ".")))
+		println(join(("Output written to ", output_file_path, ".")))
 		println("Finished.")
 	end
 	
