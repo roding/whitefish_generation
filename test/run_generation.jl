@@ -35,7 +35,7 @@ function run_generation()
 	ubangle::Float64 = pi # Radians.
 	R1::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
 	R2::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
-	number_of_equilibration_sweeps::Int64 = 1000
+	number_of_equilibration_sweeps::Int64 = 10
 	
 	# Write input file for generation.
 	output_file_path::String = join((output_dir, "/", "output_generation.xml"))
