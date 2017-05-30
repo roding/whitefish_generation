@@ -38,8 +38,8 @@ function run_generation()
 	number_of_equilibration_sweeps::Int64 = 10
 	
 	# Write input file for generation.
-	output_file_path::String = join((output_dir, "/", "output_generation.xml"))
-	input_file_path::String = join((output_dir, "/", "input_generation.xml"))
+	output_file_path::String = abspath(joinpath(output_dir, "output_generation.xml"))
+	input_file_path::String = abspath(joinpath(output_dir, "input_generation.xml"))
 	write_xml_input(input_file_path, Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2,number_of_equilibration_sweeps, output_file_path)
 
 	# Run generation.
