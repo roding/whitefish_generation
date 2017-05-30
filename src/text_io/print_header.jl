@@ -1,4 +1,4 @@
-include("../../ver/get_version.jl")
+include("get_version.jl")
 
 function print_header()
 	version_string::String = get_version()
