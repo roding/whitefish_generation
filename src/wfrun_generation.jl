@@ -1,11 +1,11 @@
-include("../io/read_xml_key.jl")
-include("../io/write_xml_key.jl")
+include("file_io/read_xml_key.jl")
+include("file_io/write_xml_key.jl")
 
-include("../io/read_xml_input_generation.jl")
-include("../io/write_xml_output_generation.jl")
+include("file_io/read_xml_input.jl")
+include("file_io/write_xml_output.jl")
 
-include("../io/print_header.jl")
-include("../io/print_simulation_stats_generation.jl")
+include("text_io/print_header.jl")
+include("text_io/print_simulation_stats.jl")
 
 include("ellipticaldisk/generate.jl")
 

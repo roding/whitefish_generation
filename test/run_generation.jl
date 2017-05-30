@@ -44,7 +44,7 @@ function run_generation()
 
 	# Run generation.
 	program_path::String = "../src/wfrun_generation.jl"
-	cmd::Cmd = `julia $program_generation_path $input_generation_path`
+	cmd::Cmd = `julia $program_path $input_file_path`
 	run(cmd)
 
 	# Exit.
