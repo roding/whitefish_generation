@@ -65,7 +65,7 @@ function wfrun_generation()
 	(X::Array{Float64,1}, Y::Array{Float64,1}, Z::Array{Float64,1}, THETA1::Array{Float64,1}, THETA2::Array{Float64,1}, THETA3::Array{Float64,1}) = generate(R1, R2, Lx, Ly, Lz, lbz, ubz, ubangle, number_of_equilibration_sweeps, acceptance_probability_target, number_of_iterations_overlap_criterion, silent_mode)
 	t_finish_ns::Int64 = convert(Int64, time_ns())
 	t_exec::Float64 = convert(Float64, t_finish_ns - t_start_ns) / 1e9
-	
+		
 	# Write output.
 	write_xml_output(output_file_path, Lx, Ly, Lz, number_of_particles, X, Y, Z, THETA1, THETA2, THETA3, R1, R2, t_exec)
 	

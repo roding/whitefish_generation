@@ -789,5 +789,10 @@
 		
     end
 	
+	# Translate angles to 0 <= theta < 2*pi.
+	THETA1 = mod2pi(THETA1)
+	THETA2 = mod2pi(THETA2)
+	THETA3 = mod2pi(THETA3)
+	
 	return (X, Y, Z, THETA1, THETA2, THETA3)
 end
