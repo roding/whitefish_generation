@@ -40,10 +40,10 @@ function run_generation()
 	# Write input file for generation.
 	output_file_path::String = abspath(joinpath(output_dir, "output_generation.xml"))
 	input_file_path::String = abspath(joinpath(output_dir, "input_generation.xml"))
-	write_xml_input(input_file_path, Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2,number_of_equilibration_sweeps, output_file_path)
+	write_xml_input(input_file_path, Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2, number_of_equilibration_sweeps, output_file_path)
 
 	# Run generation.
-	program_path::String = "../src/wfrun_generation.jl"
+	program_path::String = abspath("../src/wfrun_generation.jl")
 	cmd::Cmd = `julia $program_path $input_file_path`
 	run(cmd)
 
