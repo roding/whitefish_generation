@@ -3,7 +3,7 @@ include("../src/file_io/write_xml_input.jl")
 
 function run_generation()
 	# Inititalization of random number generation device.
-	const random_seed::Int64 = convert(Int64, time_ns())
+	random_seed::Int64 = convert(Int64, time_ns())
 	srand(random_seed)
 	
 	# Change current folder to the folder where this script lies.
