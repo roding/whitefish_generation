@@ -11,17 +11,11 @@ function run_generation()
 	program_file_dir = abspath(program_file_dir)
 	cd(program_file_dir)
 	
-	# Main output directory.
-	main_output_dir::String = abspath(joinpath(program_file_dir, "../../output"))
-	if !isdir(main_output_dir)
-        mkdir(main_output_dir)
-    end
-	
 	# Output directory.
-	output_dir::String = abspath(joinpath(main_output_dir, join(("output_", string(random_seed)))))
+	output_dir::String = abspath(joinpath(program_file_dir, "../../output"))
 	if !isdir(output_dir)
-		mkdir(output_dir)
-	end
+        mkdir(output_dir)
+    end
 	
 	# Generation parameters.
 	Lx::Float64 = 100.0 # µm.
