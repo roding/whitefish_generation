@@ -22,14 +22,19 @@ function run_generation()
 	Ly::Float64 = 100.0 # µm.
 	Lz::Float64 = 100.0 # µm.
 	particle_type::String = "ellipticaldisk"
-	number_of_particles::Int64 = 50
-	thickness::Float64 = 25.0#Lz#25.0 + (Lz - 25.0) * rand() # µm.
+	number_of_particles::Int64 = 500
+	thickness::Float64 = Lz#25.0 + (Lz - 25.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
 	ubangle::Float64 = pi # Radians.
-	R1::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
-	R2::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
-	number_of_equilibration_sweeps::Int64 = 1#000
+	#R1::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
+	#R2::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
+	alpha::Float64 = 1.0 # Semi-axis ratio.
+	r1::Float64 = sqrt(7.5^2 / alpha)
+	r2::Float64 = alpha * r1
+	R1::Array{Float64,1} = r1 * ones(number_of_particles) # µm.
+	R2::Array{Float64,1} = r2 * ones(number_of_particles) # µm.
+	number_of_equilibration_sweeps::Int64 = 1000
 
 	# Write input file for generation.
 	output_file_path::String = abspath(joinpath(output_dir, "output_generation.xml"))

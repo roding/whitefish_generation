@@ -35,7 +35,7 @@
 
 	# Simulation parameters.
 	sigma_translation::Float64 = 0.05
-	sigma_rotation::Float64 = 0.05
+	sigma_rotation::Float64 = 0.01
 
 	# Stored coefficients.
 	const RMAX = Array(Float64,number_of_particles)
@@ -459,9 +459,38 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.05)
+			sigma_rotation = min(sigma_rotation, 0.01)
 		end
 
+		m1x = 0.0
+		m2x = 0.0
+		m1y = 0.0
+		m2y = 0.0
+		m1z = 0.0
+		m2z = 0.0
+		for currentA = 1:number_of_particles
+			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
+			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
+			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
+
+			m1x += angle_to_x_axis
+			m2x += angle_to_x_axis^2
+			m1y += angle_to_y_axis
+			m2y += angle_to_y_axis^2
+			m1z += angle_to_z_axis
+			m2z += angle_to_z_axis^2
+
+		end
+		m1x /= number_of_particles
+		m2x /= number_of_particles
+		m1y /= number_of_particles
+		m2y /= number_of_particles
+		m1z /= number_of_particles
+		m2z /= number_of_particles
+		sx = sqrt(m2x - m1x^2)
+		sy = sqrt(m2y - m1y^2)
+		sz = sqrt(m2z - m1z^2)
+		println((sx, sy, sz))
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
 		#	angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
@@ -811,9 +840,38 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.05)
+			sigma_rotation = min(sigma_rotation, 0.01)
 		end
 
+		m1x = 0.0
+		m2x = 0.0
+		m1y = 0.0
+		m2y = 0.0
+		m1z = 0.0
+		m2z = 0.0
+		for currentA = 1:number_of_particles
+			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
+			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
+			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
+
+			m1x += angle_to_x_axis
+			m2x += angle_to_x_axis^2
+			m1y += angle_to_y_axis
+			m2y += angle_to_y_axis^2
+			m1z += angle_to_z_axis
+			m2z += angle_to_z_axis^2
+
+		end
+		m1x /= number_of_particles
+		m2x /= number_of_particles
+		m1y /= number_of_particles
+		m2y /= number_of_particles
+		m1z /= number_of_particles
+		m2z /= number_of_particles
+		sx = sqrt(m2x - m1x^2)
+		sy = sqrt(m2y - m1y^2)
+		sz = sqrt(m2z - m1z^2)
+		println((sx, sy, sz))
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
 		#	angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + #abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
