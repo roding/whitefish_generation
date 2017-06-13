@@ -8,9 +8,30 @@
 	X::Array{Float64,1} = Lx * rand(number_of_particles)
 	Y::Array{Float64,1} = Ly * rand(number_of_particles)
 	Z::Array{Float64,1} = lbz + (ubz - lbz) * rand(number_of_particles)
+
 	THETA1::Array{Float64,1} = zeros(number_of_particles)
 	THETA2::Array{Float64,1} = zeros(number_of_particles)
-	THETA3::Array{Float64,1} = 2.0 * pi * rand(number_of_particles)
+	THETA3::Array{Float64,1} = zeros(number_of_particles)
+	angle_is_ok::Bool = false
+	if ubangle < pi # Angular constraint.
+		for current_particle = 1:number_of_particles
+			angle_is_ok = false
+			while !angle_is_ok
+					THETA1[current_particle] = 2.0 * pi * rand()
+					THETA2[current_particle] = 2.0 * pi * rand()
+					THETA3[current_particle] = 2.0 * pi * rand()
+					angle_to_z_axis = acos((cos(THETA1[current_particle])*cos(THETA2[current_particle]))/(abs(sin(THETA2[current_particle]))^2 + abs(cos(THETA1[current_particle])*cos(THETA2[current_particle]))^2 + abs(cos(THETA2[current_particle])*sin(THETA1[current_particle]))^2)^(1/2))
+					if angle_to_z_axis <= ubangle
+						angle_is_ok = true
+					end
+				end
+			end
+	else # No angular constraint, the angles can be what they want.
+		THETA1 = 2.0 * pi * rand(number_of_particles)
+		THETA2 = 2.0 * pi * rand(number_of_particles)
+		THETA3 = 2.0 * pi * rand(number_of_particles)
+	end
+
 
 	# Simulation parameters.
 	sigma_translation::Float64 = 0.05
@@ -438,10 +459,8 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.10)
+			sigma_rotation = min(sigma_rotation, 0.05)
 		end
-
-		println(sigma_rotation)
 
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
@@ -792,10 +811,8 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.10)
+			sigma_rotation = min(sigma_rotation, 0.05)
 		end
-
-		println(sigma_rotation)
 
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
