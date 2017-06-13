@@ -26,9 +26,9 @@ function run_generation()
 	thickness::Float64 = Lz#25.0 + (Lz - 25.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
-	ubangle::Float64 = 0.05 # Radians.
-	R1::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
-	R2::Array{Float64,1} = 10.0 * ones(number_of_particles) # µm.
+	ubangle::Float64 = pi # Radians.
+	R1::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
+	R2::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
 	number_of_equilibration_sweeps::Int64 = 1000
 
 	# Write input file for generation.

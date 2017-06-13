@@ -14,7 +14,7 @@
 
 	# Simulation parameters.
 	sigma_translation::Float64 = 0.05
-	sigma_rotation::Float64 = 0.50
+	sigma_rotation::Float64 = 0.05
 
 	# Stored coefficients.
 	const RMAX = Array(Float64,number_of_particles)
@@ -438,8 +438,10 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 1.0)
+			sigma_rotation = min(sigma_rotation, 0.10)
 		end
+
+		println(sigma_rotation)
 
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
@@ -790,8 +792,10 @@
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 1.0)
+			sigma_rotation = min(sigma_rotation, 0.10)
 		end
+
+		println(sigma_rotation)
 
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
