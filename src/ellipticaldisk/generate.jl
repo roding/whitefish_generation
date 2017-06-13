@@ -390,7 +390,7 @@
 			
 			angle_to_z_axis = acos((cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))/(abs(sin(THETA2_star[currentA]))^2 + abs(cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))^2 + abs(cos(THETA2_star[currentA])*sin(THETA1_star[currentA]))^2)^(1/2))
 			if angle_to_z_axis > ubangle
-				energy_particle_star = energy_particle + 1.0
+				energy_particle_star = energy_particle + 1000000000.0 # NB: Just a large value that prevents the rotation.
 			end
 			
 			if energy_particle_star <= energy_particle
