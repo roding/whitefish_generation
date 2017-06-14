@@ -20,7 +20,7 @@
 					THETA1[current_particle] = 2.0 * pi * rand()
 					THETA2[current_particle] = 2.0 * pi * rand()
 					THETA3[current_particle] = 2.0 * pi * rand()
-					angle_to_z_axis = acos((cos(THETA1[current_particle])*cos(THETA2[current_particle]))/(abs(sin(THETA2[current_particle]))^2 + abs(cos(THETA1[current_particle])*cos(THETA2[current_particle]))^2 + abs(cos(THETA2[current_particle])*sin(THETA1[current_particle]))^2)^(1/2))
+					angle_to_z_axis = acos(sin(THETA1[current_particle])*sin(THETA3[current_particle]) - cos(THETA1[current_particle])*cos(THETA3[current_particle])*sin(THETA2[current_particle]))
 					if angle_to_z_axis <= ubangle
 						angle_is_ok = true
 					end
@@ -413,10 +413,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos((cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))/(abs(sin(THETA2_star[currentA]))^2 + abs(cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))^2 + abs(cos(THETA2_star[currentA])*sin(THETA1_star[currentA]))^2)^(1/2))
-			#if angle_to_z_axis > ubangle
-			#	energy_particle_star = energy_particle + 1.0 # Just a value that prevents the rotation.
-			#end
+			angle_to_z_axis = acos(sin(THETA1_star[currentA])*sin(THETA3_star[currentA]) - cos(THETA1_star[currentA])*cos(THETA3_star[currentA])*sin(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]
@@ -466,35 +463,35 @@
 			sigma_rotation = min(sigma_rotation, sigma_rotation_max)
 		end
 
-		m1x = 0.0
-		m2x = 0.0
-		m1y = 0.0
-		m2y = 0.0
-		m1z = 0.0
-		m2z = 0.0
-		for currentA = 1:number_of_particles
-			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
-			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
-			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
-
-			m1x += angle_to_x_axis
-			m2x += angle_to_x_axis^2
-			m1y += angle_to_y_axis
-			m2y += angle_to_y_axis^2
-			m1z += angle_to_z_axis
-			m2z += angle_to_z_axis^2
-
-		end
-		m1x /= number_of_particles
-		m2x /= number_of_particles
-		m1y /= number_of_particles
-		m2y /= number_of_particles
-		m1z /= number_of_particles
-		m2z /= number_of_particles
-		sx = sqrt(m2x - m1x^2)
-		sy = sqrt(m2y - m1y^2)
-		sz = sqrt(m2z - m1z^2)
-		println((sx, sy, sz))
+#		m1x = 0.0
+#		m2x = 0.0
+#		m1y = 0.0
+#		m2y = 0.0
+#		m1z = 0.0
+#		m2z = 0.0
+#		for currentA = 1:number_of_particles
+#			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
+#			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
+#			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
+#
+#			m1x += angle_to_x_axis
+#			m2x += angle_to_x_axis^2
+#			m1y += angle_to_y_axis
+#			m2y += angle_to_y_axis^2
+#			m1z += angle_to_z_axis
+#			m2z += angle_to_z_axis^2
+#
+#		end
+#		m1x /= number_of_particles
+#		m2x /= number_of_particles
+#		m1y /= number_of_particles
+#		m2y /= number_of_particles
+#		m1z /= number_of_particles
+#		m2z /= number_of_particles
+#		sx = sqrt(m2x - m1x^2)
+#		sy = sqrt(m2y - m1y^2)
+#		sz = sqrt(m2z - m1z^2)
+#		println((sx, sy, sz))
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
 		#	angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
@@ -795,10 +792,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos((cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))/(abs(sin(THETA2_star[currentA]))^2 + abs(cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))^2 + abs(cos(THETA2_star[currentA])*sin(THETA1_star[currentA]))^2)^(1/2))
-			#if angle_to_z_axis > ubangle
-			#	energy_particle_star = energy_particle + 1.0 # Just a  value that prevents the rotation.
-			#end
+			angle_to_z_axis = acos(sin(THETA1_star[currentA])*sin(THETA3_star[currentA]) - cos(THETA1_star[currentA])*cos(THETA3_star[currentA])*sin(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]
@@ -847,35 +841,35 @@
 			sigma_rotation = min(sigma_rotation, sigma_rotation_max)
 		end
 
-		m1x = 0.0
-		m2x = 0.0
-		m1y = 0.0
-		m2y = 0.0
-		m1z = 0.0
-		m2z = 0.0
-		for currentA = 1:number_of_particles
-			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
-			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
-			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
-
-			m1x += angle_to_x_axis
-			m2x += angle_to_x_axis^2
-			m1y += angle_to_y_axis
-			m2y += angle_to_y_axis^2
-			m1z += angle_to_z_axis
-			m2z += angle_to_z_axis^2
-
-		end
-		m1x /= number_of_particles
-		m2x /= number_of_particles
-		m1y /= number_of_particles
-		m2y /= number_of_particles
-		m1z /= number_of_particles
-		m2z /= number_of_particles
-		sx = sqrt(m2x - m1x^2)
-		sy = sqrt(m2y - m1y^2)
-		sz = sqrt(m2z - m1z^2)
-		println((sx, sy, sz))
+#		m1x = 0.0
+#		m2x = 0.0
+#		m1y = 0.0
+#		m2y = 0.0
+#		m1z = 0.0
+#		m2z = 0.0
+#		for currentA = 1:number_of_particles
+#			angle_to_x_axis = acos((cos(THETA2[currentA])*cos(THETA3[currentA]))/(abs(sin(THETA3[currentA]))^2 + abs(cos(THETA2[currentA])*cos(THETA3[currentA]))^2 + abs(cos(THETA3[currentA])*sin(THETA2[currentA]))^2)^(1/2))
+#			angle_to_y_axis = acos((cos(THETA3[currentA])*cos(THETA1[currentA]))/(abs(sin(THETA1[currentA]))^2 + abs(cos(THETA3[currentA])*cos(THETA1[currentA]))^2 + abs(cos(THETA1[currentA])*sin(THETA3[currentA]))^2)^(1/2))
+#			angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
+#
+#			m1x += angle_to_x_axis
+#			m2x += angle_to_x_axis^2
+#			m1y += angle_to_y_axis
+#			m2y += angle_to_y_axis^2
+#			m1z += angle_to_z_axis
+#			m2z += angle_to_z_axis^2
+#
+#		end
+#		m1x /= number_of_particles
+#		m2x /= number_of_particles
+#		m1y /= number_of_particles
+#		m2y /= number_of_particles
+#		m1z /= number_of_particles
+#		m2z /= number_of_particles
+#		sx = sqrt(m2x - m1x^2)
+#		sy = sqrt(m2y - m1y^2)
+#		sz = sqrt(m2z - m1z^2)
+#		println((sx, sy, sz))
 		#max_val = 0.0
 		#for currentA = 1:number_of_particles
 		#	angle_to_z_axis = acos((cos(THETA1[currentA])*cos(THETA2[currentA]))/(abs(sin(THETA2[currentA]))^2 + #abs(cos(THETA1[currentA])*cos(THETA2[currentA]))^2 + abs(cos(THETA2[currentA])*sin(THETA1[currentA]))^2)^(1/2))
