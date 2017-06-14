@@ -23,7 +23,7 @@ function run_generation()
 	Lz::Float64 = 100.0 # µm.
 	particle_type::String = "ellipticaldisk"
 	number_of_particles::Int64 = 500
-	thickness::Float64 = 25.0#Lz#25.0 + (Lz - 25.0) * rand() # µm.
+	thickness::Float64 = 25.0#25.0 + (Lz - 25.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
 	ubangle::Float64 = pi # Radians.

@@ -34,8 +34,12 @@
 
 
 	# Simulation parameters.
-	sigma_translation::Float64 = 0.05
-	sigma_rotation::Float64 = 0.01
+	sigma_translation_max::Float64 = 0.05
+	sigma_rotation_max::Float64 = 0.01
+
+	sigma_translation::Float64 = sigma_translation_max
+	sigma_rotation::Float64 = sigma_rotation_max
+
 
 	# Stored coefficients.
 	const RMAX = Array(Float64,number_of_particles)
@@ -452,14 +456,14 @@
 			sigma_translation *= 0.95
 		else
 			sigma_translation *= 1.05
-			sigma_translation = min(sigma_translation, 1.0)
+			sigma_translation = min(sigma_translation, sigma_translation_max)
 		end
 
 		if acceptance_probability_rotation <= acceptance_probability_target
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.01)
+			sigma_rotation = min(sigma_rotation, sigma_rotation_max)
 		end
 
 		m1x = 0.0
@@ -833,14 +837,14 @@
 			sigma_translation *= 0.95
 		else
 			sigma_translation *= 1.05
-			sigma_translation = min(sigma_translation, 1.0)
+			sigma_translation = min(sigma_translation, sigma_translation_max)
 		end
 
 		if acceptance_probability_rotation <= acceptance_probability_target
 			sigma_rotation *= 0.95
 		else
 			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 0.01)
+			sigma_rotation = min(sigma_rotation, sigma_rotation_max)
 		end
 
 		m1x = 0.0
