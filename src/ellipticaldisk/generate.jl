@@ -20,7 +20,7 @@
 				THETA1[current_particle] = 2.0 * pi * rand()
 				THETA2[current_particle] = 2.0 * pi * rand()
 				THETA3[current_particle] = 2.0 * pi * rand()
-				angle_to_z_axis = acos(sin(THETA1[current_particle])*cos(THETA2[current_particle]))
+				angle_to_z_axis = acos(cos(THETA1[current_particle])*cos(THETA2[current_particle]))
 				if angle_to_z_axis <= ubangle
 					angle_is_ok = true
 				end
@@ -412,7 +412,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos(sin(THETA1_star[currentA])*cos(THETA2_star[currentA]))
+			angle_to_z_axis = acos(cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]
@@ -791,7 +791,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos(sin(THETA1_star[currentA])*cos(THETA2_star[currentA]))
+			angle_to_z_axis = acos(cos(THETA1_star[currentA])*cos(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]

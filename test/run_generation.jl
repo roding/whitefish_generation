@@ -26,7 +26,7 @@ function run_generation()
 	thickness::Float64 = Lz#25.0 + (Lz - 25.0) * rand() # µm.
 	lbz::Float64 = 0.5 * (Lz - thickness) # µm.
 	ubz::Float64 = 0.5 * (Lz + thickness) # µm.
-	ubangle::Float64 = 0.10 # Radians.
+	ubangle::Float64 = pi # Radians.
 	#R1::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
 	#R2::Array{Float64,1} = 7.5 * ones(number_of_particles) # µm.
 	alpha::Float64 = 1.0 # Semi-axis ratio.
