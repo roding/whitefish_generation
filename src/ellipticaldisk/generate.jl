@@ -17,21 +17,20 @@
 		for current_particle = 1:number_of_particles
 			angle_is_ok = false
 			while !angle_is_ok
-					THETA1[current_particle] = 2.0 * pi * rand()
-					THETA2[current_particle] = 2.0 * pi * rand()
-					THETA3[current_particle] = 2.0 * pi * rand()
-					angle_to_z_axis = acos(sin(THETA1[current_particle])*sin(THETA3[current_particle]) - cos(THETA1[current_particle])*cos(THETA3[current_particle])*sin(THETA2[current_particle]))
-					if angle_to_z_axis <= ubangle
-						angle_is_ok = true
-					end
+				THETA1[current_particle] = 2.0 * pi * rand()
+				THETA2[current_particle] = 2.0 * pi * rand()
+				THETA3[current_particle] = 2.0 * pi * rand()
+				angle_to_z_axis = acos(sin(THETA1[current_particle])*cos(THETA2[current_particle]))
+				if angle_to_z_axis <= ubangle
+					angle_is_ok = true
 				end
 			end
+		end
 	else # No angular constraint, the angles can be what they want.
 		THETA1 = 2.0 * pi * rand(number_of_particles)
 		THETA2 = 2.0 * pi * rand(number_of_particles)
 		THETA3 = 2.0 * pi * rand(number_of_particles)
 	end
-
 
 	# Simulation parameters.
 	sigma_translation_max::Float64 = 0.05
@@ -413,7 +412,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos(sin(THETA1_star[currentA])*sin(THETA3_star[currentA]) - cos(THETA1_star[currentA])*cos(THETA3_star[currentA])*sin(THETA2_star[currentA]))
+			angle_to_z_axis = acos(sin(THETA1_star[currentA])*cos(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]
@@ -792,7 +791,7 @@
 				end
 			end
 
-			angle_to_z_axis = acos(sin(THETA1_star[currentA])*sin(THETA3_star[currentA]) - cos(THETA1_star[currentA])*cos(THETA3_star[currentA])*sin(THETA2_star[currentA]))
+			angle_to_z_axis = acos(sin(THETA1_star[currentA])*cos(THETA2_star[currentA]))
 
 			if energy_particle_star <= energy_particle && angle_to_z_axis <= ubangle
 				THETA1[currentA] = THETA1_star[currentA]
