@@ -11,11 +11,11 @@ include("quaternion_mult.jl")
 
 function run_ellipsoids()
 
-	Lx::Float64 = 10.0
-	Ly::Float64 = 10.0
-	Lz::Float64 = 10.0
+	Lx::Float64 = 100.0
+	Ly::Float64 = 100.0
+	Lz::Float64 = 100.0
 	
-	number_of_particles::Int64 = 125
+	number_of_particles::Int64 = 1000
 	
 	# Radii.
 	R1::Array{Float64, 1} = 1.5 * ones(number_of_particles)
