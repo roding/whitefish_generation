@@ -1,4 +1,4 @@
-function overlap_function(	xAB::Float64,
+function overlap_ellipse(	xAB::Float64,
 						yAB::Float64,
 						zAB::Float64,
 						a11::Float64,
@@ -18,8 +18,7 @@ function overlap_function(	xAB::Float64,
 						b23::Float64,
 						b31::Float64,
 						b32::Float64,
-						b33::Float64,
-						const0na::Float64)
+						b33::Float64)
 
 	number_of_iterations_overlap_criterion::Int64 = 20
 	
@@ -42,7 +41,7 @@ function overlap_function(	xAB::Float64,
 
 	b = 0.5
 
-	fb = (((const4t * b + const3t) * b + const2t) * b + const1t) * b/(((const3n * b + const2n) * b + const1n) * b + const0na)
+	fb = (((const4t * b + const3t) * b + const2t) * b + const1t) * b/(((const3n * b + const2n) * b + const1n) * b)
 	if fb >= 1.0
 		overlapfun = 1.0
 	else
@@ -52,7 +51,7 @@ function overlap_function(	xAB::Float64,
 		while fb < 1 && iter < number_of_iterations_overlap_criterion
 			# Pick point in upper half.
 			x = 0.5 * (b + c)
-			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x + const0na)
+			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x)
 			if fx < fb
 				c = x
 			else
@@ -61,7 +60,7 @@ function overlap_function(	xAB::Float64,
 			end
 			# Pick point in lower half.
 			x = 0.5 * (a + b)
-			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x + const0na)
+			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x)
 		
 			if fx < fb
 				a = x

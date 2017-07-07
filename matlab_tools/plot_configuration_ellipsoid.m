@@ -4,20 +4,23 @@ close all hidden
 
 file_name = '../src/output.dat';
 file_data = dlmread(file_name, ',');
-Lx = file_data(1, 1);
-Ly = file_data(1, 2);
-Lz = file_data(1, 3);
 
-R1 = file_data(2:end, 1);
-R2 = file_data(2:end, 2);
-R3 = file_data(2:end, 3);
-X = file_data(2:end, 4);
-Y = file_data(2:end, 5);
-Z = file_data(2:end, 6);
-Q0 = file_data(2:end, 7);
-Q1 = file_data(2:end, 8);
-Q2 = file_data(2:end, 9);
-Q3 = file_data(2:end, 10);
+particle_type_index = file_data(1, 1);
+
+Lx = file_data(2, 1);
+Ly = file_data(3, 2);
+Lz = file_data(4, 3);
+
+R1 = file_data(3:end, 1);
+R2 = file_data(3:end, 2);
+R3 = file_data(3:end, 3);
+X = file_data(3:end, 4);
+Y = file_data(3:end, 5);
+Z = file_data(3:end, 6);
+Q0 = file_data(3:end, 7);
+Q1 = file_data(3:end, 8);
+Q2 = file_data(3:end, 9);
+Q3 = file_data(3:end, 10);
 
 number_of_particles = numel(R1);
 
