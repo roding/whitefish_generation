@@ -69,40 +69,18 @@ function relax_system(		Lx::Float64,
 		current_sweep += 1
 		println(join(["   Sweep ", string(current_sweep)]))
 		
-		# Generate random proposal rotations.
-		Q0_star::Array{Float64, 1} = zeros(number_of_particles)
-		Q1_star::Array{Float64, 1} = zeros(number_of_particles)
-		Q2_star::Array{Float64, 1} = zeros(number_of_particles)
-		Q3_star::Array{Float64, 1} = zeros(number_of_particles)
-	
-		
-		energy_system = 0.0
 		acceptance_probability_translation = 0.0
 		acceptance_probability_rotation = 0.0
+		
+		energy_system = 0.0
+		
 		for currentA = 1:number_of_particles
 			# Compute current local energy.
 			energy_particle = 0.0
 			for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
-				xAB = X[currentB] - X[currentA]
-				if xAB < -0.5*Lx
-					xAB += Lx
-				elseif xAB > 0.5*Lx
-					xAB -= Lx
-				end
-
-				yAB = Y[currentB] - Y[currentA]
-				if yAB < -0.5*Ly
-					yAB += Ly
-				elseif yAB > 0.5*Ly
-					yAB -= Ly
-				end
-
-				zAB = Z[currentB] - Z[currentA]
-				if zAB < -0.5*Lz
-					zAB += Lz
-				elseif zAB > 0.5*Lz
-					zAB -= Lz
-				end
+				xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+				yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+				zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
 
 				if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
 					overlapfun = overlap_function(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R1[currentA]^2 * R2[currentA]^2 * R3[currentA]^2)
@@ -115,29 +93,11 @@ function relax_system(		Lx::Float64,
 
 			# Generate random proposal position and compute new local energy with translation.
 			(x_star, y_star, z_star) = generate_proposal_position(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
-		
 			energy_particle_star = 0.0
 			for currentB = [1:currentA-1;currentA+1:number_of_particles]
-				xAB = X[currentB] - x_star
-				if xAB < -0.5*Lx
-					xAB += Lx
-				elseif xAB > 0.5*Lx
-					xAB -= Lx
-				end
-
-				yAB = Y[currentB] - y_star
-				if yAB < -0.5*Ly
-					yAB += Ly
-				elseif yAB > 0.5*Ly
-					yAB -= Ly
-				end
-
-				zAB = Z[currentB] - z_star
-				if zAB < -0.5*Lz
-					zAB += Lz
-				elseif zAB > 0.5*Lz
-					zAB -= Lz
-				end
+				xAB = signed_distance_mod(x_star, X[currentB], Lx)
+				yAB = signed_distance_mod(y_star, Y[currentB], Ly)
+				zAB = signed_distance_mod(z_star, Z[currentB], Lz)
 
 				if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
 					overlapfun = overlap_function(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R1[currentA]^2 * R2[currentA]^2 * R3[currentA]^2)
@@ -156,8 +116,41 @@ function relax_system(		Lx::Float64,
 				energy_particle = energy_particle_star
 			end
 			
+			# Generate random proposal orientation and compute new local energy with rotation.
+			(x_star, y_star, z_star) = generate_proposal_orientation(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
+			
+			
+			
+			
+			
 			energy_system += energy_particle
+		
 		end
+		
+		
+		
+		
+				
+				
+				
+		acceptance_probability_translation /= number_of_particles
+		acceptance_probability_rotation /= number_of_particles
+				
+		################# REDO WITH MAX LIMITS!!!!
+		if acceptance_probability_translation <= acceptance_probability_target
+			sigma_translation *= 0.95
+		else
+			sigma_translation *= 1.05
+			sigma_translation = min(sigma_translation, 10.0)
+			#println(sigma_translation)
+		end
+		
+		if acceptance_probability_rotation <= acceptance_probability_target
+			sigma_rotation *= 0.95
+		else
+			sigma_rotation *= 1.05
+			sigma_rotation = min(sigma_rotation, 1.0)
+		end	
 	end
 	
 	return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)

@@ -2,9 +2,12 @@ workspace()
 
 include("generate_random_unit_quaternion.jl")
 include("characteristic_matrix_ellipsoid.jl")
-include("generate_proposal_positions.jl")
 include("relax_system.jl")
+include("generate_proposal_position.jl")
+include("generate_proposal_orientation.jl")
 include("overlap_function.jl")
+include("signed_distance_mod.jl")
+include("quaternion_mult.jl")
 
 function run_ellipsoids()
 
