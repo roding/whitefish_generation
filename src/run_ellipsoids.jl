@@ -1,48 +1,44 @@
+workspace()
+
+include("generate_random_unit_quaternion.jl")
 include("characteristic_matrix_ellipsoid.jl")
+include("generate_proposal_positions.jl")
+include("relax_system.jl")
+include("overlap_function.jl")
 
 function run_ellipsoids()
 
-	Lx::Float64 = 100.0
-	Ly::Float64 = 100.0
-	Lz::Float64 = 100.0
+	Lx::Float64 = 10.0
+	Ly::Float64 = 10.0
+	Lz::Float64 = 10.0
 	
-	number_of_particles::Int64 = 10
-	
-	# Positions.
-	X::Array{Float64, 1} = Lx * rand(number_of_particles)
-	Y::Array{Float64, 1} = Ly * rand(number_of_particles)
-	Z::Array{Float64, 1} = Lz * rand(number_of_particles)
+	number_of_particles::Int64 = 100
 	
 	# Radii.
 	R1::Array{Float64, 1} = ones(number_of_particles)
 	R2::Array{Float64, 1} = ones(number_of_particles)
 	R3::Array{Float64, 1} = ones(number_of_particles)
+		
+	# Positions.
+	X::Array{Float64, 1} = Lx * rand(number_of_particles)
+	Y::Array{Float64, 1} = Ly * rand(number_of_particles)
+	Z::Array{Float64, 1} = Lz * rand(number_of_particles)
 	
-	# Pre-computed max radii.
-	RMAX = Array(Float64, number_of_particles)
-	for current_particle = 1:number_of_particles
-		RMAX[current_particle] = maximum( (R1[current_particle], R2[current_particle], R3[current_particle]) )
-	end
-	
-	# Quaternions.
+	# Quaternions. Generate random orientations.
 	Q0::Array{Float64, 1} = zeros(number_of_particles)
 	Q1::Array{Float64, 1} = zeros(number_of_particles)
 	Q2::Array{Float64, 1} = zeros(number_of_particles)
 	Q3::Array{Float64, 1} = zeros(number_of_particles)
-	
-	q_norm::Float64 = 0.0
-	
-	# Generate random orientations.
+	q0::Float64 = 0.0
+	q1::Float64 = 0.0
+	q2::Float64 = 0.0
+	q3::Float64 = 0.0
 	for current_particle = 1:number_of_particles
-		Q0[current_particle] = randn()
-		Q1[current_particle] = randn()
-		Q2[current_particle] = randn()
-		Q3[current_particle] = randn()
-		q_norm = sqrt( Q0[current_particle]^2 + Q1[current_particle]^2 + Q2[current_particle]^2 + Q3[current_particle]^2 )
-		Q0[current_particle] /= q_norm
-		Q1[current_particle] /= q_norm
-		Q2[current_particle] /= q_norm
-		Q3[current_particle] /= q_norm
+		(q0, q1, q2, q3) = generate_random_unit_quaternion()
+		Q0[current_particle] = q0
+		Q1[current_particle] = q1
+		Q2[current_particle] = q2
+		Q3[current_particle] = q3
 	end
 	
 	# Simulation parameters.
@@ -52,7 +48,7 @@ function run_ellipsoids()
 	sigma_rotation::Float64 = sigma_rotation_max
 	
 	# Ellipsoid characteristic matrix entries.
-	A33::Array{Float64, 1} = zeros(number_of_particles)
+	A11::Array{Float64, 1} = zeros(number_of_particles)
 	A12::Array{Float64, 1} = zeros(number_of_particles)
 	A13::Array{Float64, 1} = zeros(number_of_particles)
 	A21::Array{Float64, 1} = zeros(number_of_particles)
@@ -62,8 +58,18 @@ function run_ellipsoids()
 	A32::Array{Float64, 1} = zeros(number_of_particles)
 	A33::Array{Float64, 1} = zeros(number_of_particles)
 	
+	a11::Float64 = 0.0
+	a12::Float64 = 0.0
+	a13::Float64 = 0.0
+	a21::Float64 = 0.0
+	a22::Float64 = 0.0
+	a23::Float64 = 0.0
+	a31::Float64 = 0.0
+	a32::Float64 = 0.0
+	a33::Float64 = 0.0
 	for current_particle = 1:number_of_particles
-		(a11, a12, a13, a21, a22, a23, a31, a32, a33) = characteristic_matrix_ellipsoid(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle], R1[current_particle], R2[current_particle], R3[current_particle])
+		(a11, a12, a13, a21, a22, a23, a31, a32, a33) = 
+			characteristic_matrix_ellipsoid(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle], R1[current_particle], R2[current_particle], R3[current_particle])
 		A11[current_particle] = a11
 		A12[current_particle] = a12
 		A13[current_particle] = a13
@@ -75,9 +81,12 @@ function run_ellipsoids()
 		A33[current_particle] = a33
 	end
 	
+	# Relax system until zero energy is reached.
+	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
+		relax_system(	Lx, Ly, Lz, R1, R2, R3, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
 	
 	
-	
+	nothing
 end
 
 run_ellipsoids()
