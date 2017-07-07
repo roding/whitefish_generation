@@ -42,7 +42,7 @@ function overlap_function(	xAB::Float64,
 
 	b = 0.5
 
-	fb = (((const4t * b+const3t) * b+const2t) * b+const1t) * b/(((const3n * b+const2n) * b+const1n) * b+const0na)
+	fb = (((const4t * b + const3t) * b + const2t) * b + const1t) * b/(((const3n * b + const2n) * b + const1n) * b + const0na)
 	if fb >= 1.0
 		overlapfun = 1.0
 	else
@@ -51,8 +51,8 @@ function overlap_function(	xAB::Float64,
 		c = 1.0
 		while fb < 1 && iter < number_of_iterations_overlap_criterion
 			# Pick point in upper half.
-			x = 0.5 * (b+c)
-			fx = (((const4t * x+const3t) * x+const2t) * x+const1t) * x/(((const3n * x+const2n) * x+const1n) * x+const0na)
+			x = 0.5 * (b + c)
+			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x + const0na)
 			if fx < fb
 				c = x
 			else
@@ -60,8 +60,8 @@ function overlap_function(	xAB::Float64,
 				fb = fx
 			end
 			# Pick point in lower half.
-			x = 0.5 * (a+b)
-			fx = (((const4t * x+const3t) * x+const2t) * x+const1t) * x/(((const3n * x+const2n) * x+const1n) * x+const0na)
+			x = 0.5 * (a + b)
+			fx = (((const4t * x + const3t) * x + const2t) * x + const1t) * x/(((const3n * x + const2n) * x + const1n) * x + const0na)
 		
 			if fx < fb
 				a = x

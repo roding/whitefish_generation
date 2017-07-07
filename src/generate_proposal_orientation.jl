@@ -19,12 +19,9 @@ function generate_proposal_orientation(	q0::Float64,
 	q2_rot::Float64 = uy_rot * sin(0.5 * theta_rot)
 	q3_rot::Float64 = uz_rot * sin(0.5 * theta_rot)
 	
-	q0_star::Float64 = 0.0
-	q1_star::Float64 = 0.0
-	q2_star::Float64 = 0.0
-	q3_star::Float64 = 0.0
+	(q0_star::Float64, q1_star::Float64, q2_star::Float64, q3_star::Float64) = quaternion_mult(q0_rot, q1_rot, q2_rot, q3_rot, q0, q1, q2, q3)
 	
-	# Normalize proposal quaternion.
+	# Normalize proposal quaternion to avoid numerical problems.
 	q_norm::Float64 = sqrt( q0_star^2 + q1_star^2 + q2_star^2 + q3_star^2 )
 	q0_star /= q_norm
 	q1_star /= q_norm

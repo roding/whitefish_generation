@@ -21,9 +21,13 @@ function relax_system(		Lx::Float64,
 						A32::Array{Float64, 1},
 						A33::Array{Float64, 1},
 						sigma_translation::Float64,
-						sigma_rotation::Float64)
+						sigma_translation_ub::Float64,
+						sigma_rotation::Float64,
+						sigma_rotation_ub::Float64)
 
 	number_of_particles::Int64 = length(R1)
+	
+	acceptance_probability_target::Float64 = 0.25
 
 	# Pre-computed max radii.
 	RMAX::Array{Float64, 1} = zeros(number_of_particles)
@@ -32,26 +36,22 @@ function relax_system(		Lx::Float64,
 	end
 	
 	# Preallocation.
-	#X_star::Array{Float64, 1} = zeros(number_of_particles)
-	#Y_star::Array{Float64, 1} = zeros(number_of_particles)
-	#Z_star::Array{Float64, 1} = zeros(number_of_particles)
-	Q0_star::Array{Float64, 1} = zeros(number_of_particles)
-	Q1_star::Array{Float64, 1} = zeros(number_of_particles)
-	Q2_star::Array{Float64, 1} = zeros(number_of_particles)
-	Q3_star::Array{Float64, 1} = zeros(number_of_particles)
-	A11_star::Array{Float64, 1} = zeros(number_of_particles)
-	A12_star::Array{Float64, 1} = zeros(number_of_particles)
-	A13_star::Array{Float64, 1} = zeros(number_of_particles)
-	A21_star::Array{Float64, 1} = zeros(number_of_particles)
-	A22_star::Array{Float64, 1} = zeros(number_of_particles)
-	A23_star::Array{Float64, 1} = zeros(number_of_particles)
-	A31_star::Array{Float64, 1} = zeros(number_of_particles)
-	A32_star::Array{Float64, 1} = zeros(number_of_particles)
-	A33_star::Array{Float64, 1} = zeros(number_of_particles)
-	
 	x_star::Float64 = 0.0
 	y_star::Float64 = 0.0
 	z_star::Float64 = 0.0
+	q0_star::Float64 = 0.0
+	q1_star::Float64 = 0.0
+	q2_star::Float64 = 0.0
+	q3_star::Float64 = 0.0
+	a11_star::Float64 = 0.0
+	a12_star::Float64 = 0.0
+	a13_star::Float64 = 0.0
+	a21_star::Float64 = 0.0
+	a22_star::Float64 = 0.0
+	a23_star::Float64 = 0.0
+	a31_star::Float64 = 0.0
+	a32_star::Float64 = 0.0
+	a33_star::Float64 = 0.0
 	
 	energy_system::Float64 = 0.0
 	energy_particle::Float64 = 0.0
@@ -65,7 +65,7 @@ function relax_system(		Lx::Float64,
 	overlapfun::Float64 = 0.0
 	
 	energy_system = 1.0
-	while energy_system > 0.0
+	while energy_system > 0.0 || current_sweep < 1000
 		current_sweep += 1
 		println(join(["   Sweep ", string(current_sweep)]))
 		
@@ -86,7 +86,7 @@ function relax_system(		Lx::Float64,
 					overlapfun = overlap_function(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R1[currentA]^2 * R2[currentA]^2 * R3[currentA]^2)
 					
 					if overlapfun < 1.0
-						energy_particle += (1.0-overlapfun)^2
+						energy_particle += (1.0 - overlapfun)^2
 					end
 				end
 			end
@@ -103,7 +103,7 @@ function relax_system(		Lx::Float64,
 					overlapfun = overlap_function(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R1[currentA]^2 * R2[currentA]^2 * R3[currentA]^2)
 					
 					if overlapfun < 1.0
-						energy_particle_star += (1.0-overlapfun)^2
+						energy_particle_star += (1.0 - overlapfun)^2
 					end
 				end
 			end
@@ -112,44 +112,68 @@ function relax_system(		Lx::Float64,
 				X[currentA] = x_star
 				Y[currentA] = y_star
 				Z[currentA] = z_star
+				
 				acceptance_probability_translation += 1.0
 				energy_particle = energy_particle_star
 			end
 			
 			# Generate random proposal orientation and compute new local energy with rotation.
-			(x_star, y_star, z_star) = generate_proposal_orientation(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
+			(q0_star, q1_star, q2_star, q3_star) = generate_proposal_orientation(Q0[currentA], Q1[currentA], Q2[currentA], Q3[currentA], sigma_rotation)
+			(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipsoid(q0_star, q1_star, q2_star, q3_star, R1[currentA], R2[currentA], R3[currentA])
 			
+			energy_particle_star = 0.0
+			for currentB = [1:currentA-1;currentA+1:number_of_particles]
+				xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+				yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+				zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+
+				if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
+					overlapfun = overlap_function(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R1[currentA]^2 * R2[currentA]^2 * R3[currentA]^2)
+					
+					if overlapfun < 1.0
+						energy_particle_star += (1.0 - overlapfun)^2
+					end
+				end
+			end
 			
-			
-			
+			if energy_particle_star <= energy_particle
+				Q0[currentA] = q0_star
+				Q1[currentA] = q1_star
+				Q2[currentA] = q2_star
+				Q3[currentA] = q3_star
+				
+				A11[currentA] = a11_star
+				A12[currentA] = a12_star
+				A13[currentA] = a13_star
+				A21[currentA] = a21_star
+				A22[currentA] = a22_star
+				A23[currentA] = a23_star
+				A31[currentA] = a31_star
+				A32[currentA] = a32_star
+				A33[currentA] = a33_star
+				
+				acceptance_probability_rotation += 1.0
+				energy_particle = energy_particle_star
+			end
 			
 			energy_system += energy_particle
 		
 		end
-		
-		
-		
-		
-				
-				
-				
+			
+		# Update sigma_translation and sigma_rotation based on acceptance probabilities.
 		acceptance_probability_translation /= number_of_particles
 		acceptance_probability_rotation /= number_of_particles
 				
-		################# REDO WITH MAX LIMITS!!!!
 		if acceptance_probability_translation <= acceptance_probability_target
 			sigma_translation *= 0.95
 		else
-			sigma_translation *= 1.05
-			sigma_translation = min(sigma_translation, 10.0)
-			#println(sigma_translation)
+			sigma_translation = min(1.05 * sigma_translation, sigma_translation_ub)
 		end
 		
 		if acceptance_probability_rotation <= acceptance_probability_target
 			sigma_rotation *= 0.95
 		else
-			sigma_rotation *= 1.05
-			sigma_rotation = min(sigma_rotation, 1.0)
+			sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_ub)
 		end	
 	end
 	
