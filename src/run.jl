@@ -45,7 +45,10 @@ function run()
 	end
 	
 	R::Array{Float64, 2} = zeros(number_of_particles, number_of_properties)
-	R = 0.5 * ones(number_of_particles, number_of_properties)
+	#R = 0.5 * ones(number_of_particles, number_of_properties)
+	R[:, 1] = 0.5 * ones(number_of_particles, 1)
+	R[:, 2] = 1.0 * ones(number_of_particles, 1)
+	#R[:, 3] = 1.5 * ones(number_of_particles, 1)
 	
 	# Positions.
 	X::Array{Float64, 1} = Lx * rand(number_of_particles)

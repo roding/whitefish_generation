@@ -11,17 +11,15 @@ Lz = file_data(1, 3);
 
 R1 = file_data(2:end, 1);
 R2 = file_data(2:end, 2);
-R3 = file_data(2:end, 3);
-X = file_data(2:end, 4);
-Y = file_data(2:end, 5);
-Z = file_data(2:end, 6);
-Q0 = file_data(2:end, 7);
-Q1 = file_data(2:end, 8);
-Q2 = file_data(2:end, 9);
-Q3 = file_data(2:end, 10);
+X = file_data(2:end, 3);
+Y = file_data(2:end, 4);
+Z = file_data(2:end, 5);
+Q0 = file_data(2:end, 6);
+Q1 = file_data(2:end, 7);
+Q2 = file_data(2:end, 8);
+Q3 = file_data(2:end, 9);
 
 number_of_particles = numel(R1);
-
 
 fig = figure();
 
@@ -42,10 +40,9 @@ for current_particle = 1:number_of_particles
     q3 = Q3(current_particle);
     r1 = R1(current_particle);
     r2 = R2(current_particle);
-    r3 = R3(current_particle);
     
     Rq = rotation_matrix(q0, q1, q2, q3);
-    XSI = Rq * [r1*xsi(:)' ; r2*eta(:)' ; r3*zeta(:)'];
+    XSI = Rq * [r1*xsi(:)' ; r2*eta(:)' ; 0.01*zeta(:)'];
     
     xsi_sc_rot = reshape(XSI(1,:), [n+1 n+1]);
     eta_sc_rot = reshape(XSI(2,:), [n+1 n+1]);
