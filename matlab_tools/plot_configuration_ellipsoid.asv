@@ -32,7 +32,7 @@ n = 100;
 [xsi,eta,zeta] = sphere(n);
 
 count = 0;
-for current_particle = 1:number_of_particles
+for current_particle = [4 5]%1:number_of_particles
     x = X(current_particle);
     y = Y(current_particle);
     z = Z(current_particle);
@@ -86,8 +86,8 @@ h.Box = 'on';
 h.BoxStyle = 'full';
 
 h.Projection = 'perspective';
-h.View = [60, 20];
-% h.View = [-70, 15];
+% h.View = [60, 20];
+h.View = [-70, 15];
 
 
 axis vis3d tight
