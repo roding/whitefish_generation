@@ -19,7 +19,7 @@ Q0 = file_data(2:end, 7);
 Q1 = file_data(2:end, 8);
 Q2 = file_data(2:end, 9);
 Q3 = file_data(2:end, 10);
-
+% 
 % R1 = R1([14 18]);
 % R2 = R2([14 18]);
 % R3 = R3([14 18]);
