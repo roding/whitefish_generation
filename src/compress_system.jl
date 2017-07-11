@@ -119,19 +119,19 @@ function compress_system(	Lx::Float64,
 		Y_prim = Ly_prim / Ly * Y
 		Z_prim = Lz_prim / Lz * Z
 		
-		Q0_prim = Q0
-		Q1_prim = Q1
-		Q2_prim = Q2
-		Q3_prim = Q3
-		A11_prim = A11
-		A12_prim = A12
-		A13_prim = A13
-		A21_prim = A21
-		A22_prim = A22
-		A23_prim = A23
-		A31_prim = A31
-		A32_prim = A32
-		A33_prim = A33
+		Q0_prim = deepcopy(Q0)
+		Q1_prim = deepcopy(Q1)
+		Q2_prim = deepcopy(Q2)
+		Q3_prim = deepcopy(Q3)
+		A11_prim = deepcopy(A11)
+		A12_prim = deepcopy(A12)
+		A13_prim = deepcopy(A13)
+		A21_prim = deepcopy(A21)
+		A22_prim = deepcopy(A22)
+		A23_prim = deepcopy(A23)
+		A31_prim = deepcopy(A31)
+		A32_prim = deepcopy(A32)
+		A33_prim = deepcopy(A33)
 	
 		energy_system = 1.0
 		current_sweep = 0
@@ -171,10 +171,10 @@ function compress_system(	Lx::Float64,
 						elseif particle_type == "cuboid"
 							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 							#println(overlapfun)
-							if overlapfun == 1.0
-								overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+							#if overlapfun > 0.0
+								#overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
 								energy_particle += overlapfun
-							end
+							#end
 						end
 						
 					end
@@ -208,10 +208,10 @@ function compress_system(	Lx::Float64,
 						elseif particle_type == "cuboid"
 							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 							#println(overlapfun)
-							if overlapfun == 1.0
-								overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+							#if overlapfun > 0.0
+								#overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
 								energy_particle_star += overlapfun
-							end
+							#end
 						end
 						
 					end
@@ -261,10 +261,10 @@ function compress_system(	Lx::Float64,
 							elseif particle_type == "cuboid"
 								overlapfun = overlap_cuboid(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 								#println(overlapfun)
-								if overlapfun == 1.0
-									overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+								#if overlapfun > 0.0
+									#overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
 									energy_particle_star += overlapfun
-								end
+								#end
 							end
 							
 						end
@@ -293,7 +293,7 @@ function compress_system(	Lx::Float64,
 				
 				energy_system += energy_particle
 			
-			end
+			end		
 			
 			# Update sigma_translation and sigma_rotation based on acceptance probabilities.
 			acceptance_probability_translation /= number_of_particles		
@@ -314,33 +314,55 @@ function compress_system(	Lx::Float64,
 			
 		end
 		
+		test_energy = 0
+		for currentA = 1:number_of_particles
+			for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+				xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+				yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+				zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+				overlapfun = overlap_cuboid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+				#if overlapfun > 0.0
+				#	println((currentA, currentB))
+				#end
+				#overlapfun = overlap_ellipsoid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1]^2 * R[currentA, 2]^2 * R[currentA, 3]^2)
+				test_energy += overlapfun
+			end
+		end
+		println("-----------------")
+		println(energy_system)
+		println(test_energy)
+		println("-----------------")
+			
+		
 		if energy_system == 0.0
 			phi = phi_prim
 			Lx = Lx_prim
 			Ly = Ly_prim
 			Lz = Lz_prim
 			
-			X = X_prim
-			Y = Y_prim
-			Z = Z_prim
+			X = deepcopy(X_prim)
+			Y = deepcopy(Y_prim)
+			Z = deepcopy(Z_prim)
 			
-			Q0 = Q0_prim
-			Q1 = Q1_prim
-			Q2 = Q2_prim
-			Q3 = Q3_prim
-			A11 = A11_prim
-			A12 = A12_prim
-			A13 = A13_prim
-			A21 = A21_prim
-			A22 = A22_prim
-			A23 = A23_prim
-			A31 = A31_prim
-			A32 = A32_prim
-			A33 = A33_prim
+			Q0 = deepcopy(Q0_prim)
+			Q1 = deepcopy(Q1_prim)
+			Q2 = deepcopy(Q2_prim)
+			Q3 = deepcopy(Q3_prim)
+			A11 = deepcopy(A11_prim)
+			A12 = deepcopy(A12_prim)
+			A13 = deepcopy(A13_prim)
+			A21 = deepcopy(A21_prim)
+			A22 = deepcopy(A22_prim)
+			A23 = deepcopy(A23_prim)
+			A31 = deepcopy(A31_prim)
+			A32 = deepcopy(A32_prim)
+			A33 = deepcopy(A33_prim)
+			
+			println(join(["   Current volume fraction: ", string(phi)]))
 		else
 			is_converged = true
 		end
-		println(join(["   Current volume fraction: ", string(phi)]))
+		
 	end
 	
 	return (Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)

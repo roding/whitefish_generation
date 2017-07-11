@@ -234,6 +234,7 @@ function relax_system(		Lx::Float64,
 			
 			energy_system += energy_particle
 		end
+
 		println(energy_system)
 			
 		# Update sigma_translation and sigma_rotation based on acceptance probabilities.

@@ -27,22 +27,24 @@ for i = 1:number_of_particles
         for k = 1:3
             cA = RA(:, k)' * PA;
             cB = RA(:, k)' * PB;
-            if min(cA) > max(cB) || max(cA) < min(cB)
+            if min(cA) >= max(cB) || max(cA) <= min(cB)
         %         disp('yeay')
                 is_intersecting = false;
             else
-        %         disp('nooo')
+%                 min(cA) - max(cB)
+%                 max(cA) - min(cB)
             end
         end
 
         for k = 1:3
             cA = RB(:, k)' * PA;
             cB = RB(:, k)' * PB;
-            if min(cA) > max(cB) || max(cA) < min(cB)
+            if min(cA) >= max(cB) || max(cA) <= min(cB)
         %         disp('yeay')
                 is_intersecting = false;
             else
-        %         disp('nooo')
+%                 min(cA) - max(cB)
+%                 max(cA) - min(cB)
             end
         end
 
@@ -52,11 +54,12 @@ for i = 1:number_of_particles
                 cross_prod = cross_prod / sqrt(cross_prod(1)^2 + cross_prod(2)^2 + cross_prod(3)^2);
                 cA = cross_prod' * PA;
                 cB = cross_prod' * PB;
-                if min(cA) > max(cB) || max(cA) < min(cB)
+                if min(cA) >= max(cB) || max(cA) <= min(cB)
         %             disp('yeay')
                     is_intersecting = false;
                 else
-        %             disp('nooo')
+%                     min(cA) - max(cB)
+%                     max(cA) - min(cB)
                 end
             end
         end
