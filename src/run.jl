@@ -3,6 +3,7 @@ workspace()
 include("generate_random_unit_quaternion.jl")
 include("characteristic_matrix_ellipsoid.jl")
 include("characteristic_matrix_ellipse.jl")
+include("rotation_matrix.jl")
 include("relax_system.jl")
 include("equilibrate_system.jl")
 include("compress_system.jl")
@@ -10,6 +11,7 @@ include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
 include("overlap_ellipse.jl")
+include("overlap_cube.jl")
 include("signed_distance_mod.jl")
 include("quaternion_mult.jl")
 
@@ -27,6 +29,7 @@ function run()
 	#particle_type::String = "sphere"
 	#particle_type::String = "ellipse"
 	particle_type::String = "ellipsoid"
+	particle_type::String = "cube"
 	
 	particle_type_index::Int64 = 0
 	if particle_type == "sphere"
@@ -35,6 +38,8 @@ function run()
 		particle_type_index = 2
 	elseif particle_type == "ellipsoid"
 		particle_type_index = 3
+	elseif particle_type == "cube"
+		particle_type_index = 4
 	end
 	
 	# Number of particles.
@@ -47,6 +52,8 @@ function run()
 	elseif particle_type == "ellipse"
 		number_of_properties = 2
 	elseif particle_type == "ellipsoid"
+		number_of_properties = 3
+	elseif particle_type == "cube"
 		number_of_properties = 3
 	end
 	
@@ -86,7 +93,7 @@ function run()
 	sigma_translation::Float64 = sigma_translation_ub
 	sigma_rotation::Float64 = sigma_rotation_ub
 	
-	# Characteristic matrix entries.
+	# Characteristic/rotation matrix entries.
 	A11::Array{Float64, 1} = zeros(number_of_particles)
 	A12::Array{Float64, 1} = zeros(number_of_particles)
 	A13::Array{Float64, 1} = zeros(number_of_particles)
@@ -132,6 +139,19 @@ function run()
 			A32[current_particle] = a32
 			A33[current_particle] = a33
 		end
+	elseif particle_type == "cube"
+		for current_particle = 1:number_of_particles
+			(a11, a12, a13, a21, a22, a23, a31, a32, a33) = rotation_matrix(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle])
+			A11[current_particle] = a11
+			A12[current_particle] = a12
+			A13[current_particle] = a13
+			A21[current_particle] = a21
+			A22[current_particle] = a22
+			A23[current_particle] = a23
+			A31[current_particle] = a31
+			A32[current_particle] = a32
+			A33[current_particle] = a33
+		end
 	end
 
 	# Relax system until zero energy is reached.
@@ -141,20 +161,17 @@ function run()
 	println((sigma_translation, sigma_rotation))
 	
 	# Equilibrate system.
-	number_of_equlibration_sweeps::Int64 = 100
-	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
-		equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
+#	number_of_equlibration_sweeps::Int64 = 100
+#	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
+#		equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
 
 	# Compress system.
-	delta_phi::Float64 = 5e-6
-	phi_target::Float64 = 1.0
-	number_of_sweeps_ub::Int64 = 1000
-	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
-		compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
+#	delta_phi::Float64 = 5e-6
+#	phi_target::Float64 = 1.0
+#	number_of_sweeps_ub::Int64 = 1000
+#	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
+#		compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
 
-	
-	
-	
 
 	# Write result to file.
 	file_name_output::String = "output.dat"
