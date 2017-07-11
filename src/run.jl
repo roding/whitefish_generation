@@ -11,7 +11,7 @@ include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
 include("overlap_ellipse.jl")
-include("overlap_cube.jl")
+include("overlap_cuboid.jl")
 include("signed_distance_mod.jl")
 include("quaternion_mult.jl")
 
@@ -29,7 +29,7 @@ function run()
 	#particle_type::String = "sphere"
 	#particle_type::String = "ellipse"
 	#particle_type::String = "ellipsoid"
-	particle_type::String = "cube"
+	particle_type::String = "cuboid"
 	
 	particle_type_index::Int64 = 0
 	if particle_type == "sphere"
@@ -38,7 +38,7 @@ function run()
 		particle_type_index = 2
 	elseif particle_type == "ellipsoid"
 		particle_type_index = 3
-	elseif particle_type == "cube"
+	elseif particle_type == "cuboid"
 		particle_type_index = 4
 	end
 	
@@ -53,15 +53,15 @@ function run()
 		number_of_properties = 2
 	elseif particle_type == "ellipsoid"
 		number_of_properties = 3
-	elseif particle_type == "cube"
+	elseif particle_type == "cuboid"
 		number_of_properties = 3
 	end
 	
 	R::Array{Float64, 2} = zeros(number_of_particles, number_of_properties)
 	#R = 0.5 * ones(number_of_particles, number_of_properties)
-	R[:, 1] = 1.0 * ones(number_of_particles, 1)
-	R[:, 2] = 1.0 * ones(number_of_particles, 1)
-	R[:, 3] = 1.0 * ones(number_of_particles, 1)
+	R[:, 1] = 0.75 * ones(number_of_particles, 1)
+	R[:, 2] = 0.75 * ones(number_of_particles, 1)
+	R[:, 3] = 1.5 * ones(number_of_particles, 1)
 	
 	# Positions.
 	X::Array{Float64, 1} = Lx * rand(number_of_particles)
@@ -139,7 +139,7 @@ function run()
 			A32[current_particle] = a32
 			A33[current_particle] = a33
 		end
-	elseif particle_type == "cube"
+	elseif particle_type == "cuboid"
 		for current_particle = 1:number_of_particles
 			(a11, a12, a13, a21, a22, a23, a31, a32, a33) = rotation_matrix(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle])
 			A11[current_particle] = a11

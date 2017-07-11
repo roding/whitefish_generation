@@ -41,6 +41,10 @@ function compress_system(	Lx::Float64,
 		for current_particle = 1:number_of_particles
 			RMAX[current_particle] = maximum( R[current_particle, 1:3] )
 		end
+	elseif particle_type == "cuboid"
+		for current_particle = 1:number_of_particles
+			RMAX[current_particle] = sqrt(R[current_particle, 1]^2 + R[current_particle, 2]^2 + R[current_particle, 3]^2)
+		end
 	end
 	
 	# Preallocation.
@@ -77,6 +81,8 @@ function compress_system(	Lx::Float64,
 		phi = sum(4.0 * pi / 3.0 * R[:, 1].^3) / (Lx * Ly * Lz)
 	elseif particle_type == "ellipsoid"
 		phi = sum(4.0 * pi / 3.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
+	elseif particle_type == "cuboid"
+		phi = sum(8.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
 	end
 	
 	is_converged::Bool = false
@@ -163,6 +169,10 @@ function compress_system(	Lx::Float64,
 							if overlapfun < 1.0
 								energy_particle += (1.0 - overlapfun)^2
 							end
+						elseif particle_type == "cuboid"
+							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+
+							energy_particle += overlapfun
 						end
 						
 					end
@@ -193,6 +203,10 @@ function compress_system(	Lx::Float64,
 							if overlapfun < 1.0
 								energy_particle_star += (1.0 - overlapfun)^2
 							end
+						elseif particle_type == "cuboid"
+							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+							
+							energy_particle_star += overlapfun
 						end
 						
 					end
@@ -216,6 +230,8 @@ function compress_system(	Lx::Float64,
 						(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipse(q0_star, q1_star, q2_star, q3_star, R[currentA, 1], R[currentA, 2])
 					elseif particle_type == "ellipsoid"
 						(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipsoid(q0_star, q1_star, q2_star, q3_star, R[currentA, 1], R[currentA, 2], R[currentA, 3])
+					elseif particle_type == "cuboid"
+						(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = rotation_matrix(q0_star, q1_star, q2_star, q3_star)
 					end
 					
 					energy_particle_star = 0.0
@@ -237,6 +253,10 @@ function compress_system(	Lx::Float64,
 								if overlapfun < 1.0
 									energy_particle_star += (1.0 - overlapfun)^2
 								end
+							elseif particle_type == "cuboid"
+								overlapfun = overlap_cuboid(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+							
+								energy_particle_star += overlapfun
 							end
 							
 						end
