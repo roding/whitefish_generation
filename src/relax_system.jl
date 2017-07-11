@@ -42,6 +42,10 @@ function relax_system(		Lx::Float64,
 		for current_particle = 1:number_of_particles
 			RMAX[current_particle] = maximum( R[current_particle, 1:3] )
 		end
+	elseif particle_type == "cube"
+		for current_particle = 1:number_of_particles
+			RMAX[current_particle] = sqrt(R[current_particle, 1]^2 + R[current_particle, 2]^2 + R[current_particle, 3]^2)
+		end
 	end
 	
 	# Preallocation.
@@ -107,6 +111,10 @@ function relax_system(		Lx::Float64,
 						if overlapfun < 1.0
 							energy_particle += (1.0 - overlapfun)^2
 						end
+					elseif particle_type == "cube"
+						overlapfun = overlap_cube(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+
+						energy_particle += overlapfun
 					end
 					
 				end
@@ -136,6 +144,10 @@ function relax_system(		Lx::Float64,
 						if overlapfun < 1.0
 							energy_particle_star += (1.0 - overlapfun)^2
 						end
+					elseif particle_type == "cube"
+						overlapfun = overlap_cube(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+						
+						energy_particle_star += overlapfun
 					end
 					
 				end
@@ -158,6 +170,8 @@ function relax_system(		Lx::Float64,
 					(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipse(q0_star, q1_star, q2_star, q3_star, R[currentA, 1], R[currentA, 2])
 				elseif particle_type == "ellipsoid"
 					(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipsoid(q0_star, q1_star, q2_star, q3_star, R[currentA, 1], R[currentA, 2], R[currentA, 3])
+				elseif particle_type == "cube"
+					(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = rotation_matrix(q0_star, q1_star, q2_star, q3_star)
 				end
 				
 				energy_particle_star = 0.0
@@ -179,6 +193,10 @@ function relax_system(		Lx::Float64,
 							if overlapfun < 1.0
 								energy_particle_star += (1.0 - overlapfun)^2
 							end
+						elseif particle_type == "cube"
+							overlapfun = overlap_cube(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+							
+							energy_particle_star += overlapfun
 						end
 						
 					end
@@ -206,7 +224,6 @@ function relax_system(		Lx::Float64,
 			end
 			
 			energy_system += energy_particle
-		
 		end
 			
 		# Update sigma_translation and sigma_rotation based on acceptance probabilities.

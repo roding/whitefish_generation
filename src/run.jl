@@ -21,14 +21,14 @@ function run()
 	srand(random_seed)
 	
 	# Simulation domain dimensions.
-	Lx::Float64 = 24.0
-	Ly::Float64 = 24.0
-	Lz::Float64 = 24.0
+	Lx::Float64 = 32.0
+	Ly::Float64 = 32.0
+	Lz::Float64 = 32.0
 	
 	# Type of particles.
 	#particle_type::String = "sphere"
 	#particle_type::String = "ellipse"
-	particle_type::String = "ellipsoid"
+	#particle_type::String = "ellipsoid"
 	particle_type::String = "cube"
 	
 	particle_type_index::Int64 = 0
@@ -43,7 +43,7 @@ function run()
 	end
 	
 	# Number of particles.
-	number_of_particles::Int64 = 1000
+	number_of_particles::Int64 = 512
 
 	# Particle property matrix (i.e. radii).
 	number_of_properties::Int64 = 0
@@ -61,7 +61,7 @@ function run()
 	#R = 0.5 * ones(number_of_particles, number_of_properties)
 	R[:, 1] = 1.0 * ones(number_of_particles, 1)
 	R[:, 2] = 1.0 * ones(number_of_particles, 1)
-	R[:, 3] = 1.5 * ones(number_of_particles, 1)
+	R[:, 3] = 1.0 * ones(number_of_particles, 1)
 	
 	# Positions.
 	X::Array{Float64, 1} = Lx * rand(number_of_particles)

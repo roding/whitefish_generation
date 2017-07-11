@@ -22,14 +22,14 @@ Q3 = file_data(2:end, 10);
 
 number_of_particles = numel(R1);
 
+xsi = 2 * [0 1 1 0 0 0 ; 1 1 0 0 1 1 ; 1 1 0 0 1 1 ; 0 1 1 0 0 0] - 1;
+eta = 2 * [0 0 1 1 0 0 ; 0 1 1 0 0 0 ; 0 1 1 0 1 1 ; 0 0 1 1 1 1] - 1;
+zeta = 2 * [0 0 0 0 0 1 ; 0 0 0 0 0 1 ; 1 1 1 1 0 1 ; 1 1 1 1 0 1] - 1;
 
 fig = figure();
 
 h = axes();
 hold on
-
-n = 100;
-[xsi,eta,zeta] = sphere(n);
 
 count = 0;
 for current_particle = 1:number_of_particles
@@ -47,9 +47,9 @@ for current_particle = 1:number_of_particles
     Rq = rotation_matrix(q0, q1, q2, q3);
     XSI = Rq * [r1*xsi(:)' ; r2*eta(:)' ; r3*zeta(:)'];
     
-    xsi_sc_rot = reshape(XSI(1,:), [n+1 n+1]);
-    eta_sc_rot = reshape(XSI(2,:), [n+1 n+1]);
-    zeta_sc_rot = reshape(XSI(3,:), [n+1 n+1]);
+    xsi_sc_rot = reshape(XSI(1,:), [4, 6]);
+    eta_sc_rot = reshape(XSI(2,:), [4, 6]);
+    zeta_sc_rot = reshape(XSI(3,:), [4, 6]);
     
     rmax = max([r1, r2, r3]);
     for i = -1:1
@@ -58,10 +58,10 @@ for current_particle = 1:number_of_particles
                 if (i*Lx + x >= - rmax) && (i*Lx + x <= Lx + rmax) && ...
                    (j*Ly + y >= - rmax) && (j*Ly + y <= Ly + rmax) && ...
                    (k*Lz + z >= - rmax) && (k*Lz + z <= Lz + rmax)
-                    hs = surf(i*Lx + x + xsi_sc_rot, j*Ly + y + eta_sc_rot, k*Lz + z + zeta_sc_rot);
-                    hs.LineStyle = 'none';
-                    hs.SpecularExponent = .7;
-                    hs.SpecularStrength = .5;
+                    
+                   for current_facet = 1:6
+                       hp = patch(x + xsi_sc_rot(:, current_facet), y + eta_sc_rot(:, current_facet), z + zeta_sc_rot(:, current_facet), [.5 .5 .5]);
+                   end
                     
                     count = count + 1;
                     disp(count)
