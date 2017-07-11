@@ -20,6 +20,17 @@ Q1 = file_data(2:end, 8);
 Q2 = file_data(2:end, 9);
 Q3 = file_data(2:end, 10);
 
+% R1 = R1([14 18]);
+% R2 = R2([14 18]);
+% R3 = R3([14 18]);
+% X = X([14 18]);
+% Y = Y([14 18]);
+% Z = Z([14 18]);
+% Q0 = Q0([14 18]);
+% Q1 = Q1([14 18]);
+% Q2 = Q2([14 18]);
+% Q3 = Q3([14 18]);
+
 number_of_particles = numel(R1);
 
 xsi = 2 * [0 1 1 0 0 0 ; 1 1 0 0 1 1 ; 1 1 0 0 1 1 ; 0 1 1 0 0 0] - 1;
@@ -60,9 +71,9 @@ for current_particle = 1:number_of_particles
                    (k*Lz + z >= - rmax) && (k*Lz + z <= Lz + rmax)
                     
                    for current_facet = 1:6
-                       hp = patch(x + xsi_sc_rot(:, current_facet), y + eta_sc_rot(:, current_facet), z + zeta_sc_rot(:, current_facet), [.5 .5 .5]);
+                       hp = patch(i * Lx + x + xsi_sc_rot(:, current_facet), j * Ly + y + eta_sc_rot(:, current_facet), k * Lz + z + zeta_sc_rot(:, current_facet), [.5 .5 .5]);
                    end
-                    
+
                     count = count + 1;
                     disp(count)
                 end
@@ -74,9 +85,9 @@ end
 map = repmat([.2 .2 .8],[64 1]);
 colormap(map)
 
-h.XLim = [0 Lx];
-h.YLim = [0 Ly];
-h.ZLim = [0 Lz];
+% h.XLim = [0 Lx];
+% h.YLim = [0 Ly];
+% h.ZLim = [0 Lz];
 
 h.XTick = [];
 h.YTick = [];
@@ -95,4 +106,4 @@ camlight left;
 lighting flat
 
 axis 'equal'
-axis([0 Lx 0 Ly 0 Lz])
+% axis([0 Lx 0 Ly 0 Lz])

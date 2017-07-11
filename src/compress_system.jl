@@ -110,7 +110,6 @@ function compress_system(	Lx::Float64,
 	
 	while !is_converged && phi < phi_target
 		phi_prim = phi + delta_phi
-		println(phi_prim)
 
 		Lx_prim = (phi / phi_prim)^(1/3) * Lx
 		Ly_prim = (phi / phi_prim)^(1/3) * Ly
@@ -171,8 +170,11 @@ function compress_system(	Lx::Float64,
 							end
 						elseif particle_type == "cuboid"
 							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
-
-							energy_particle += overlapfun
+							#println(overlapfun)
+							if overlapfun == 1.0
+								overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+								energy_particle += overlapfun
+							end
 						end
 						
 					end
@@ -205,8 +207,11 @@ function compress_system(	Lx::Float64,
 							end
 						elseif particle_type == "cuboid"
 							overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
-							
-							energy_particle_star += overlapfun
+							#println(overlapfun)
+							if overlapfun == 1.0
+								overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+								energy_particle_star += overlapfun
+							end
 						end
 						
 					end
@@ -255,8 +260,11 @@ function compress_system(	Lx::Float64,
 								end
 							elseif particle_type == "cuboid"
 								overlapfun = overlap_cuboid(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
-							
-								energy_particle_star += overlapfun
+								#println(overlapfun)
+								if overlapfun == 1.0
+									overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+									energy_particle_star += overlapfun
+								end
 							end
 							
 						end
@@ -286,7 +294,7 @@ function compress_system(	Lx::Float64,
 				energy_system += energy_particle
 			
 			end
-				
+			
 			# Update sigma_translation and sigma_rotation based on acceptance probabilities.
 			acceptance_probability_translation /= number_of_particles		
 			if acceptance_probability_translation <= acceptance_probability_target
@@ -303,6 +311,7 @@ function compress_system(	Lx::Float64,
 					sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_ub)
 				end
 			end
+			
 		end
 		
 		if energy_system == 0.0

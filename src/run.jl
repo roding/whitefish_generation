@@ -21,9 +21,9 @@ function run()
 	srand(random_seed)
 	
 	# Simulation domain dimensions.
-	Lx::Float64 = 32.0
-	Ly::Float64 = 32.0
-	Lz::Float64 = 32.0
+	Lx::Float64 = 10.0
+	Ly::Float64 = 10.0
+	Lz::Float64 = 10.0
 	
 	# Type of particles.
 	#particle_type::String = "sphere"
@@ -43,7 +43,7 @@ function run()
 	end
 	
 	# Number of particles.
-	number_of_particles::Int64 = 512
+	number_of_particles::Int64 = 27
 
 	# Particle property matrix (i.e. radii).
 	number_of_properties::Int64 = 0
@@ -59,9 +59,9 @@ function run()
 	
 	R::Array{Float64, 2} = zeros(number_of_particles, number_of_properties)
 	#R = 0.5 * ones(number_of_particles, number_of_properties)
-	R[:, 1] = 0.75 * ones(number_of_particles, 1)
-	R[:, 2] = 0.75 * ones(number_of_particles, 1)
-	R[:, 3] = 1.5 * ones(number_of_particles, 1)
+	R[:, 1] = 1.0 * ones(number_of_particles, 1)
+	R[:, 2] = 1.0 * ones(number_of_particles, 1)
+	R[:, 3] = 1.0 * ones(number_of_particles, 1)
 	
 	# Positions.
 	X::Array{Float64, 1} = Lx * rand(number_of_particles)
@@ -88,7 +88,7 @@ function run()
 	end
 	
 	# Simulation parameters.
-	sigma_translation_ub::Float64 = 0.5#0.05
+	sigma_translation_ub::Float64 = 5.0#0.05
 	sigma_rotation_ub::Float64 = 0.5#0.1
 	sigma_translation::Float64 = sigma_translation_ub
 	sigma_rotation::Float64 = sigma_rotation_ub
@@ -161,17 +161,16 @@ function run()
 	println((sigma_translation, sigma_rotation))
 	
 	# Equilibrate system.
-#	number_of_equlibration_sweeps::Int64 = 100
+	number_of_equlibration_sweeps::Int64 = 1000
 #	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
 #		equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
 
 	# Compress system.
-#	delta_phi::Float64 = 5e-6
-#	phi_target::Float64 = 1.0
-#	number_of_sweeps_ub::Int64 = 1000
+	delta_phi::Float64 = 1e-5
+	phi_target::Float64 = 0.5
+	number_of_sweeps_ub::Int64 = 1000
 #	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = 
 #		compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
-
 
 	# Write result to file.
 	file_name_output::String = "output.dat"
