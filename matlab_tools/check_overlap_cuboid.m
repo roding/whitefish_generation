@@ -1,6 +1,6 @@
 
 for i = 1:number_of_particles
-    for j = i+1:number_of_particles
+    for j = [1:i-1 i+1:number_of_particles]
 %         disp([i j])
         RA = rotation_matrix(Q0(i), Q1(i), Q2(i), Q3(i));
         PA = 2 * [0 0 0 0 1 1 1 1 ; 0 0 1 1 0 0 1 1 ; 0 1 0 1 0 1 0 1] - 1;
@@ -8,19 +8,35 @@ for i = 1:number_of_particles
         PA(2, :) = R2(i) * PA(2, :);
         PA(3, :) = R3(i) * PA(3, :);
         PA = RA * PA;
-        PA(1, :) = X(i) + PA(1, :);
-        PA(2, :) = Y(i) + PA(2, :);
-        PA(3, :) = Z(i) + PA(3, :);
-
+        
+        xAB = X(j) - X(i);
+        if xAB < -0.5 * Lx
+            xAB = xAB + Lx;
+        elseif xAB > 0.5 * Lx
+            xAB = xAB - Lx;
+        end
+        yAB = Y(j) - Y(i);
+        if yAB < -0.5 * Ly
+            yAB = yAB + Ly;
+        elseif yAB > 0.5 * Ly
+            yAB = yAB - Ly;
+        end
+        zAB = Z(j) - Z(i);
+        if zAB < -0.5 * Lz
+            zAB = zAB + Lz;
+        elseif zAB > 0.5 * Lz
+            zAB = zAB - Lz;
+        end
+%         disp([xAB, yAB, zAB])
         RB = rotation_matrix(Q0(j), Q1(j), Q2(j), Q3(j));
         PB = 2 * [0 0 0 0 1 1 1 1 ; 0 0 1 1 0 0 1 1 ; 0 1 0 1 0 1 0 1] - 1;
         PB(1, :) = R1(j) * PB(1, :);
         PB(2, :) = R2(j) * PB(2, :);
         PB(3, :) = R3(j) * PB(3, :);
         PB = RB * PB;
-        PB(1, :) = X(j) + PB(1, :);
-        PB(2, :) = Y(j) + PB(2, :);
-        PB(3, :) = Z(j) + PB(3, :);
+        PB(1, :) = xAB + PB(1, :);
+        PB(2, :) = yAB + PB(2, :);
+        PB(3, :) = zAB + PB(3, :);
 
         % First axis.
         is_intersecting = true;

@@ -115,23 +115,25 @@ function compress_system(	Lx::Float64,
 		Ly_prim = (phi / phi_prim)^(1/3) * Ly
 		Lz_prim = (phi / phi_prim)^(1/3) * Lz
 		
-		X_prim = Lx_prim / Lx * deepcopy(X)
-		Y_prim = Ly_prim / Ly * deepcopy(Y)
-		Z_prim = Lz_prim / Lz * deepcopy(Z)
-		
-		Q0_prim = deepcopy(Q0)
-		Q1_prim = deepcopy(Q1)
-		Q2_prim = deepcopy(Q2)
-		Q3_prim = deepcopy(Q3)
-		A11_prim = deepcopy(A11)
-		A12_prim = deepcopy(A12)
-		A13_prim = deepcopy(A13)
-		A21_prim = deepcopy(A21)
-		A22_prim = deepcopy(A22)
-		A23_prim = deepcopy(A23)
-		A31_prim = deepcopy(A31)
-		A32_prim = deepcopy(A32)
-		A33_prim = deepcopy(A33)
+		for current_particle = 1:number_of_particles
+			X_prim[current_particle] = Lx_prim / Lx * X[current_particle]
+			Y_prim[current_particle] = Ly_prim / Ly * Y[current_particle]
+			Z_prim[current_particle] = Lz_prim / Lz * Z[current_particle]
+			
+			Q0_prim[current_particle] = Q0[current_particle]
+			Q1_prim[current_particle] = Q1[current_particle]
+			Q2_prim[current_particle] = Q2[current_particle]
+			Q3_prim[current_particle] = Q3[current_particle]
+			A11_prim[current_particle] = A11[current_particle]
+			A12_prim[current_particle] = A12[current_particle]
+			A13_prim[current_particle] = A13[current_particle]
+			A21_prim[current_particle] = A21[current_particle]
+			A22_prim[current_particle] = A22[current_particle]
+			A23_prim[current_particle] = A23[current_particle]
+			A31_prim[current_particle] = A31[current_particle]
+			A32_prim[current_particle] = A32[current_particle]
+			A33_prim[current_particle] = A33[current_particle]
+		end
 	
 		energy_system = 1.0
 		current_sweep = 0
@@ -152,7 +154,7 @@ function compress_system(	Lx::Float64,
 					yAB = signed_distance_mod(Y_prim[currentA], Y_prim[currentB], Ly_prim)
 					zAB = signed_distance_mod(Z_prim[currentA], Z_prim[currentB], Lz_prim)
 
-					if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
+					if xAB^2 + yAB^2 + zAB^2 <= (RMAX[currentA] + RMAX[currentB])^2
 						if particle_type == "sphere"
 							overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
 							energy_particle += overlapfun
@@ -189,7 +191,7 @@ function compress_system(	Lx::Float64,
 					yAB = signed_distance_mod(y_star, Y_prim[currentB], Ly_prim)
 					zAB = signed_distance_mod(z_star, Z_prim[currentB], Lz_prim)
 
-					if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
+					if xAB^2 + yAB^2 + zAB^2 <= (RMAX[currentA] + RMAX[currentB])^2
 						if particle_type == "sphere"
 							overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
 							energy_particle_star += overlapfun
@@ -217,7 +219,6 @@ function compress_system(	Lx::Float64,
 					end
 				end
 				#println(energy_particle_star)
-				
 				if energy_particle_star <= energy_particle
 					X_prim[currentA] = x_star
 					Y_prim[currentA] = y_star
@@ -245,7 +246,7 @@ function compress_system(	Lx::Float64,
 						yAB = signed_distance_mod(Y_prim[currentA], Y_prim[currentB], Ly_prim)
 						zAB = signed_distance_mod(Z_prim[currentA], Z_prim[currentB], Lz_prim)
 
-						if xAB^2 + yAB^2 + zAB^2 < (RMAX[currentA] + RMAX[currentB])^2
+						if xAB^2 + yAB^2 + zAB^2 <= (RMAX[currentA] + RMAX[currentB])^2
 							if particle_type == "ellipse"
 								overlapfun = overlap_ellipse(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB])
 							
@@ -295,18 +296,6 @@ function compress_system(	Lx::Float64,
 				
 			end
 			
-			#test_energy = 0.0
-			#for currentA = 1:number_of_particles
-			#	for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
-			#		xAB = signed_distance_mod(X_prim[currentA], X_prim[currentB], Lx_prim)
-			#		yAB = signed_distance_mod(Y_prim[currentA], Y_prim[currentB], Ly_prim)
-			#		zAB = signed_distance_mod(Z_prim[currentA], Z_prim[currentB], Lz_prim)
-			#		overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
-			#		test_energy += overlapfun
-			#	end
-			#end
-			#energy_system = test_energy
-			
 			# Update sigma_translation and sigma_rotation based on acceptance probabilities.
 			acceptance_probability_translation /= number_of_particles		
 			if acceptance_probability_translation <= acceptance_probability_target
@@ -326,45 +315,48 @@ function compress_system(	Lx::Float64,
 			
 		end
 		
-		#test_energy = 0.0
-		#for currentA = 1:number_of_particles
-		#	for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
-		#		xAB = signed_distance_mod(X_prim[currentA], X_prim[currentB], Lx_prim)
-		#		yAB = signed_distance_mod(Y_prim[currentA], Y_prim[currentB], Ly_prim)
-		#		zAB = signed_distance_mod(Z_prim[currentA], Z_prim[currentB], Lz_prim)
-		#		overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
-		#		test_energy += overlapfun
-		#	end
-		#end
-		#println("-----------------")
-		#println(energy_system)
-		#println(test_energy)
-		#println("-----------------")
+		if particle_type == "---------------cuboid"
+			energy_system_final = 0.0
+			for currentA = 1:number_of_particles
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+					xAB = signed_distance_mod(X_prim[currentA], X_prim[currentB], Lx_prim)
+					yAB = signed_distance_mod(Y_prim[currentA], Y_prim[currentB], Ly_prim)
+					zAB = signed_distance_mod(Z_prim[currentA], Z_prim[currentB], Lz_prim)
+					overlapfun = overlap_cuboid(xAB, yAB, zAB, A11_prim[currentA], A12_prim[currentA], A13_prim[currentA], A21_prim[currentA], A22_prim[currentA], A23_prim[currentA], A31_prim[currentA], A32_prim[currentA], A33_prim[currentA], A11_prim[currentB], A12_prim[currentB], A13_prim[currentB], A21_prim[currentB], A22_prim[currentB], A23_prim[currentB], A31_prim[currentB], A32_prim[currentB], A33_prim[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+					energy_system_final += overlapfun
+				end
+			end
+			println("-----------------")
+			println((energy_system, energy_system_final))
+			println("-----------------")
+			energy_system = energy_system_final
+		end
 			
-		
-		if energy_system == 0.0
+		if energy_system == 0.0		
 			phi = phi_prim
 			Lx = Lx_prim
 			Ly = Ly_prim
 			Lz = Lz_prim
 			
-			X = deepcopy(X_prim)
-			Y = deepcopy(Y_prim)
-			Z = deepcopy(Z_prim)
-			
-			Q0 = deepcopy(Q0_prim)
-			Q1 = deepcopy(Q1_prim)
-			Q2 = deepcopy(Q2_prim)
-			Q3 = deepcopy(Q3_prim)
-			A11 = deepcopy(A11_prim)
-			A12 = deepcopy(A12_prim)
-			A13 = deepcopy(A13_prim)
-			A21 = deepcopy(A21_prim)
-			A22 = deepcopy(A22_prim)
-			A23 = deepcopy(A23_prim)
-			A31 = deepcopy(A31_prim)
-			A32 = deepcopy(A32_prim)
-			A33 = deepcopy(A33_prim)
+			for current_particle = 1:number_of_particles
+				X[current_particle] = X_prim[current_particle]
+				Y[current_particle] = Y_prim[current_particle]
+				Z[current_particle] = Z_prim[current_particle]
+				
+				Q0[current_particle] = Q0_prim[current_particle]
+				Q1[current_particle] = Q1_prim[current_particle]
+				Q2[current_particle] = Q2_prim[current_particle]
+				Q3[current_particle] = Q3_prim[current_particle]
+				A11[current_particle] = A11_prim[current_particle]
+				A12[current_particle] = A12_prim[current_particle]
+				A13[current_particle] = A13_prim[current_particle]
+				A21[current_particle] = A21_prim[current_particle]
+				A22[current_particle] = A22_prim[current_particle]
+				A23[current_particle] = A23_prim[current_particle]
+				A31[current_particle] = A31_prim[current_particle]
+				A32[current_particle] = A32_prim[current_particle]
+				A33[current_particle] = A33_prim[current_particle]
+			end
 			
 			println(join(["   Current volume fraction: ", string(phi)]))
 		else

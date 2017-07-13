@@ -19,17 +19,48 @@ Q0 = file_data(2:end, 7);
 Q1 = file_data(2:end, 8);
 Q2 = file_data(2:end, 9);
 Q3 = file_data(2:end, 10);
+
+%%%%%%%%%%%%%%%%%%%
+R1 = R1([21 25]);
+R2 = R2([21 25]);
+R3 = R3([21 25]);
+X = X([21 25]);
+Y = Y([21 25]);
+Z = Z([21 25]);
+Q0 = Q0([21 25]);
+Q1 = Q1([21 25]);
+Q2 = Q2([21 25]);
+Q3 = Q3([21 25]);
 % 
-% R1 = R1([14 18]);
-% R2 = R2([14 18]);
-% R3 = R3([14 18]);
-% X = X([14 18]);
-% Y = Y([14 18]);
-% Z = Z([14 18]);
-% Q0 = Q0([14 18]);
-% Q1 = Q1([14 18]);
-% Q2 = Q2([14 18]);
-% Q3 = Q3([14 18]);
+% xAB = X(2) - X(1);
+% if xAB < -0.5 * Lx
+%     xAB = xAB + Lx;
+% elseif xAB > 0.5 * Lx
+%     xAB = xAB - Lx;
+% end
+% yAB = Y(2) - Y(1);
+% if yAB < -0.5 * Ly
+%     yAB = yAB + Ly;
+% elseif yAB > 0.5 * Ly
+%     yAB = yAB - Ly;
+% end
+% zAB = Z(2) - Z(1);
+% if zAB < -0.5 * Lz
+%     zAB = zAB + Lz;
+% elseif zAB > 0.5 * Lz
+%     zAB = zAB - Lz;
+% end
+% X(1) = 0;
+% Y(1) = 0;
+% Z(1) = 0;
+% X(2) = xAB;
+% Y(2) = yAB;
+% Z(2) = zAB;
+
+% Y(2) = Y(2) + 0.01;
+% 
+
+%%%%%%%%%%%%%
 
 number_of_particles = numel(R1);
 
@@ -63,9 +94,9 @@ for current_particle = 1:number_of_particles
     zeta_sc_rot = reshape(XSI(3,:), [4, 6]);
     
     rmax = max([r1, r2, r3]);
-    for i = -1:1
-        for j = -1:1
-            for k = -1:1
+    for i = 0%-1:1
+        for j = 0%-1:1
+            for k = 0%-1:1
                 if (i*Lx + x >= - rmax) && (i*Lx + x <= Lx + rmax) && ...
                    (j*Ly + y >= - rmax) && (j*Ly + y <= Ly + rmax) && ...
                    (k*Lz + z >= - rmax) && (k*Lz + z <= Lz + rmax)
@@ -107,3 +138,5 @@ lighting flat
 
 axis 'equal'
 % axis([0 Lx 0 Ly 0 Lz])
+
+check_overlap_cuboid()
