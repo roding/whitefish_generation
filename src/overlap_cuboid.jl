@@ -136,6 +136,7 @@ function overlap_cuboid(	xAB::Float64,
 		return overlapfun
 	end
 	
+	overlapfun = (max(r1a, r2a, r3a) + max(r1b, r2b, r3b))^2 - (xAB^2 + yAB^2 + zAB^2)
 	return overlapfun
 end
 
