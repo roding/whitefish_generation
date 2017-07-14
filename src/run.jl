@@ -109,7 +109,7 @@ function run()
 	end
 	
 	# Simulation parameters.
-	sigma_translation_ub::Float64 = 0.01#1.0
+	sigma_translation_ub::Float64 = 0.05#1.0
 	sigma_rotation_ub::Float64 = 0.01#5#0.01
 	sigma_translation::Float64 = sigma_translation_ub
 	sigma_rotation::Float64 = sigma_rotation_ub
@@ -224,4 +224,4 @@ function run()
 	nothing
 end
 
-run()
+@time run()
