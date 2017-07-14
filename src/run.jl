@@ -17,7 +17,7 @@ include("quaternion_mult.jl")
 
 function run()
 	# Inititalization of random number generation device.
-	random_seed::Int64 = convert(Int64, time_ns())
+	random_seed::Int64 = 1#convert(Int64, time_ns())
 	srand(random_seed)
 	
 	# Type of particles.
@@ -38,7 +38,7 @@ function run()
 	end
 	
 	# Number of particles.
-	number_of_particles::Int64 = 27
+	number_of_particles::Int64 = 125
 
 	# Particle property matrix (i.e. radii).
 	number_of_properties::Int64 = 0
@@ -109,8 +109,8 @@ function run()
 	end
 	
 	# Simulation parameters.
-	sigma_translation_ub::Float64 = 10.0
-	sigma_rotation_ub::Float64 = 100.0#0.01
+	sigma_translation_ub::Float64 = 0.01#1.0
+	sigma_rotation_ub::Float64 = 0.01#5#0.01
 	sigma_translation::Float64 = sigma_translation_ub
 	sigma_rotation::Float64 = sigma_rotation_ub
 	
@@ -183,7 +183,7 @@ function run()
 	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
 
 	# Compress system.
-	delta_phi::Float64 = 1e-4
+	delta_phi::Float64 = 1e-3
 	phi_target::Float64 = 1.0
 	number_of_sweeps_ub::Int64 = 1000#1000
 	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
