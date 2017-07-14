@@ -114,10 +114,7 @@ function relax_system(		Lx::Float64,
 					elseif particle_type == "cuboid"
 						overlapfun = overlap_cuboid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 						
-						if overlapfun == 1.0
-							overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
-							energy_particle += overlapfun
-						end
+						energy_particle += overlapfun
 					end
 					
 				end
@@ -126,7 +123,7 @@ function relax_system(		Lx::Float64,
 			# Generate random proposal position and compute new local energy with translation.
 			(x_star, y_star, z_star) = generate_proposal_position(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
 			energy_particle_star = 0.0
-			for currentB = [1:currentA-1;currentA+1:number_of_particles]
+			for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
 				xAB = signed_distance_mod(x_star, X[currentB], Lx)
 				yAB = signed_distance_mod(y_star, Y[currentB], Ly)
 				zAB = signed_distance_mod(z_star, Z[currentB], Lz)
@@ -150,10 +147,7 @@ function relax_system(		Lx::Float64,
 					elseif particle_type == "cuboid"
 						overlapfun = overlap_cuboid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 						
-						if overlapfun == 1.0
-							overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
-							energy_particle_star += overlapfun
-						end
+						energy_particle_star += overlapfun
 					end
 					
 				end
@@ -181,7 +175,7 @@ function relax_system(		Lx::Float64,
 				end
 				
 				energy_particle_star = 0.0
-				for currentB = [1:currentA-1;currentA+1:number_of_particles]
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
 					xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
 					yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
 					zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
@@ -202,12 +196,8 @@ function relax_system(		Lx::Float64,
 						elseif particle_type == "cuboid"
 							overlapfun = overlap_cuboid(xAB, yAB, zAB, a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star, A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
 							
-							if overlapfun == 1.0
-								overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
-								energy_particle_star += overlapfun
-							end
+							energy_particle_star += overlapfun
 						end
-						
 					end
 				end
 				
@@ -234,8 +224,6 @@ function relax_system(		Lx::Float64,
 			
 			energy_system += energy_particle
 		end
-
-		println(energy_system)
 			
 		# Update sigma_translation and sigma_rotation based on acceptance probabilities.
 		acceptance_probability_translation /= number_of_particles		
@@ -253,6 +241,9 @@ function relax_system(		Lx::Float64,
 				sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_ub)
 			end
 		end
+		
+		println((energy_system,sigma_translation,sigma_rotation))
+		
 	end
 	
 	return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)

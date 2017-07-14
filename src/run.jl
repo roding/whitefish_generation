@@ -17,8 +17,6 @@ include("quaternion_mult.jl")
 
 function run()
 	# Inititalization of random number generation device.
-	#random_seed::Int64 = 15757834840440#convert(Int64, time_ns())
-	#random_seed::Int64 = 16718261323174#convert(Int64, time_ns())
 	random_seed::Int64 = convert(Int64, time_ns())
 	srand(random_seed)
 	
@@ -40,7 +38,7 @@ function run()
 	end
 	
 	# Number of particles.
-	number_of_particles::Int64 = 125
+	number_of_particles::Int64 = 27
 
 	# Particle property matrix (i.e. radii).
 	number_of_properties::Int64 = 0
@@ -58,9 +56,12 @@ function run()
 	R[:, 1] = 1.0 * ones(number_of_particles, 1)
 	R[:, 2] = 1.0 * ones(number_of_particles, 1)
 	R[:, 3] = 1.0 * ones(number_of_particles, 1)
+	#R[:, 1] = 0.5 + 1.0 * rand(number_of_particles, 1)
+	#R[:, 2] = 0.5 + 1.0 * rand(number_of_particles, 1)
+	#R[:, 3] = 0.5 + 1.0 * rand(number_of_particles, 1)
 	
 	# Simulation domain dimensions.
-	phi_start::Float64 = 0.20#0.40
+	phi_start::Float64 = 0.30#0.40
 	Lx::Float64 = ( sum(8.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / phi_start )^(1/3)
 	#Lx::Float64 = ( sum(4.0 * pi / 3.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / phi_start )^(1/3)
 	Ly::Float64 = Lx
@@ -70,9 +71,26 @@ function run()
 	X::Array{Float64, 1} = Lx * rand(number_of_particles)
 	Y::Array{Float64, 1} = Ly * rand(number_of_particles)
 	Z::Array{Float64, 1} = Lz * rand(number_of_particles)
+	# X::Array{Float64, 1} = zeros(number_of_particles)
+	# Y::Array{Float64, 1} = zeros(number_of_particles)
+	# Z::Array{Float64, 1} = zeros(number_of_particles)
+	# count::Int64 = 0
+	# for i = 1:8
+		# for j = 1:8
+			# for k = 1:8
+				# count += 1
+				# x = Lx/8*(i-1) + Lx/16
+				# y = Ly/8*(j-1) + Ly/16
+				# z = Lz/8*(k-1) + Lz/16
+				# X[count] = x
+				# Y[count] = y
+				# Z[count] = z
+			# end
+		# end
+	# end	
 	
 	# Quaternions. Generate random orientations.
-	Q0::Array{Float64, 1} = zeros(number_of_particles)
+	Q0::Array{Float64, 1} = zeros(number_of_particles)#zeros(number_of_particles)
 	Q1::Array{Float64, 1} = zeros(number_of_particles)
 	Q2::Array{Float64, 1} = zeros(number_of_particles)
 	Q3::Array{Float64, 1} = zeros(number_of_particles)
@@ -91,8 +109,8 @@ function run()
 	end
 	
 	# Simulation parameters.
-	sigma_translation_ub::Float64 = 0.5#0.05
-	sigma_rotation_ub::Float64 = 0.1#0.1
+	sigma_translation_ub::Float64 = 10.0
+	sigma_rotation_ub::Float64 = 100.0#0.01
 	sigma_translation::Float64 = sigma_translation_ub
 	sigma_rotation::Float64 = sigma_rotation_ub
 	
@@ -159,15 +177,15 @@ function run()
 
 	# Relax system until zero energy is reached.
 	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = relax_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub)
-	
+
 	# Equilibrate system.
-	number_of_equlibration_sweeps::Int64 = 100
+	number_of_equlibration_sweeps::Int64 = 1000
 	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
 
 	# Compress system.
-	delta_phi::Float64 = 1e-5
+	delta_phi::Float64 = 1e-4
 	phi_target::Float64 = 1.0
-	number_of_sweeps_ub::Int64 = 1000
+	number_of_sweeps_ub::Int64 = 1000#1000
 	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
 		
 	# Verify non-overlap.
@@ -183,7 +201,7 @@ function run()
 			if overlapfun > 0.0
 				println((currentA, currentB))
 			end
-			#test_energy += overlapfun
+			test_energy += overlapfun
 			#overlapfun = overlap_ellipsoid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1]^2 * R[currentA, 2]^2 * R[currentA, 3]^2)
 			#if overlapfun < 1.0
 			#	println((currentA, currentB))
