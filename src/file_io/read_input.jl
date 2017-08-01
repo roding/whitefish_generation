@@ -2,19 +2,54 @@ function read_input(file_path::String)
 	file_stream::IOStream = open(file_path, "r")
 	file_string::String = readstring(file_stream)
 	close(file_stream)
-			
-	Lx::Float64 = read_xml_key(file_string, "domain_size_x", Float64)
-	Ly::Float64 = read_xml_key(file_string, "domain_size_y", Float64)
-	Lz::Float64 = read_xml_key(file_string, "domain_size_z", Float64)
-	particle_type::String = read_xml_key(file_string, "particle_type", String)
-	number_of_particles::Int64 = read_xml_key(file_string, "number_of_particles", Int64)
-	lbz::Float64 = read_xml_key(file_string, "lower_bound_z", Float64)
-	ubz::Float64 = read_xml_key(file_string, "upper_bound_z", Float64)
-	ubangle::Float64 = read_xml_key(file_string, "upper_bound_angle_to_z_axis", Float64)
-	R1::Array{Float64,1} = read_xml_key(file_string, "R1", Array{Float64, 1})
-	R2::Array{Float64,1} = read_xml_key(file_string, "R2", Array{Float64, 1})
-	number_of_equilibration_sweeps::Int64 = read_xml_key(file_string, "number_of_equilibration_sweeps", Int64)
-	output_file_path::String = read_xml_key(file_string, "output_file_path", String)
 	
-	return (Lx, Ly, Lz, particle_type, number_of_particles, lbz, ubz, ubangle, R1, R2, number_of_equilibration_sweeps, output_file_path)
+	# Read particle data.
+	particle_type::String = read_key(file_string, "particle_type", String)
+	
+	number_of_particles::Int64 = read_key(file_string, "number_of_particles", Int64)
+	
+	R_temp::Array{Float64, 1} = read_key(file_string, "R", Array{Float64, 1})
+	number_of_properties::Int64 = length(R_temp) / number_of_particles
+	R::Array{Float64, 2} = reshape(R_temp, number_of_particles, number_of_properties)
+	
+	# Read input on initial system size.
+	Lx::Float64 = read_key(file_string, "domain_size_x_initial", Float64)
+	Ly::Float64 = read_key(file_string, "domain_size_y_initial", Float64)
+	Lz::Float64 = read_key(file_string, "domain_size_z_initial", Float64)
+	phi_initial::Float64 = read_key(file_string, "phi_initial", Float64)
+	
+	# Read input on target system size.
+	phi_target::Float64 = read_key(file_string, "phi_target", Float64)
+	
+	# Position constraint.
+	position_constraint_axis::String = read_key(file_string, "position_constraint_axis", String)
+	position_constraint_lower::Float64 = read_key(file_string, "position_constraint_lower", Float64)
+	position_constraint_upper::Float64 = read_key(file_string, "position_constraint_upper", Float64)
+
+	# Orientation constraint.	
+	orientation_constraint_axis::Array{Float64, 1} = read_key(file_string, "orientation_constraint_axis", Array{Float64, 1})
+	orientation_constraint_lower::Float64 = read_key(file_string, "orientation_constraint_lower", Float64)
+	orientation_constraint_upper::Float64 = read_key(file_string, "orientation_constraint_upper", Float64)
+	
+	# Other input.
+	number_of_equilibration_sweeps::Int64 = read_key(file_string, "number_of_equilibration_sweeps", Int64)
+	output_file_path::String = read_key(file_string, "output_file_path", String)
+	
+	return (
+		particle_type, 
+		number_of_particles, 
+		R, 
+		Lx, 
+		Ly, 
+		Lz, 
+		phi_initial, 
+		phi_target, 
+		position_constraint_axis, 
+		position_constraint_lower, 
+		position_constraint_upper, 
+		orientation_constraint_axis, 
+		orientation_constraint_lower, 
+		orientation_constraint_upper, 
+		number_of_equilibration_sweeps, 
+		output_file_path)
 end
