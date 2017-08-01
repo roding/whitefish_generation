@@ -23,6 +23,9 @@ include("overlap_cuboid.jl")
 include("signed_distance_mod.jl")
 include("quaternion_mult.jl")
 
+include("vtk/voxel_structure.jl")
+include("vtk/write_vtk.jl")
+
 function run_generation()
 	# Inititalization of random number generation device.
 	random_seed::Int64 = convert(Int64, time_ns())
@@ -298,6 +301,32 @@ function run_generation()
 				Q2, 
 				Q3,
 				t_exec)
+	
+	# Generate voxel structure and write VTK file.
+	voxel_size::Float64 = 1.0 # a.u.
+	M::Array{Bool, 3} = voxel_structure(	particle_type, 
+										R, 
+										Lx, 
+										Ly, 
+										Lz,
+										X, 
+										Y, 
+										Z, 
+										Q0, 
+										Q1, 
+										Q2, 
+										Q3, 
+										A11, 
+										A12, 
+										A13, 
+										A21, 
+										A22, 
+										A23, 
+										A31, 
+										A32, 
+										A33, 
+										voxel_size)
+	
 	
 	return 0
 	
