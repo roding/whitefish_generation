@@ -60,6 +60,7 @@ function run_generation()
 		sigma_translation_max::Float64,
 		sigma_rotation_max::Float64,
 		number_of_equilibration_sweeps::Int64, 
+		delta_phi::Float64,
 		output_file_path::String) = read_input(input_file_path)
 	
 	println((Lx,Ly,Lz))
@@ -128,7 +129,7 @@ function run_generation()
 	sigma_translation::Float64 = sigma_translation_max
 	sigma_rotation::Float64 = sigma_rotation_max
 	
-	# Relax system until zero energy is reached.
+	# Relax system.
 	(	X, 
 		Y, 
 		Z, 
@@ -172,8 +173,118 @@ function run_generation()
 										sigma_rotation, 
 										sigma_rotation_max)
 	
+	# Equilibrate system.
+	(	X, 
+		Y, 
+		Z, 
+		Q0, 
+		Q1, 
+		Q2, 
+		Q3, 
+		A11, 
+		A12, 
+		A13, 
+		A21, 
+		A22, 
+		A23, 
+		A31, 
+		A32, 
+		A33, 
+		sigma_translation, 
+		sigma_rotation) = equilibrate_system(	particle_type, 
+											R, 
+											Lx, 
+											Ly, 
+											Lz,
+											X, 
+											Y, 
+											Z, 
+											Q0, 
+											Q1, 
+											Q2, 
+											Q3, 
+											A11, 
+											A12, 
+											A13, 
+											A21, 
+											A22, 
+											A23, 
+											A31, 
+											A32, 
+											A33, 
+											sigma_translation, 
+											sigma_translation_max, 
+											sigma_rotation, 
+											sigma_rotation_max,
+											number_of_equilibration_sweeps)
+	
+	# Compress system.
+	number_of_sweeps_max::Int64 = 1000
+	phi::Float64 = 0.0
+	if particle_type != "ellipse" 
+		if phi_target > phi_initial
+			(	Lx, 
+				Ly, 
+				Lz, 
+				phi,
+				X, 
+				Y, 
+				Z, 
+				Q0, 
+				Q1, 
+				Q2, 
+				Q3, 
+				A11, 
+				A12, 
+				A13, 
+				A21, 
+				A22, 
+				A23, 
+				A31, 
+				A32, 
+				A33, 
+				sigma_translation, 
+				sigma_rotation) = compress_system(	particle_type, 
+												R,
+												Lx, 
+												Ly, 
+												Lz,
+												phi_initial,
+												phi_target,
+												X,
+												Y, 
+												Z, 
+												Q0, 
+												Q1, 
+												Q2, 
+												Q3, 
+												A11, 
+												A12, 
+												A13, 
+												A21, 
+												A22, 
+												A23, 
+												A31, 
+												A32, 
+												A33, 
+												sigma_translation, 
+												sigma_translation_max, 
+												sigma_rotation, 
+												sigma_rotation_max, 
+												delta_phi, 
+												number_of_sweeps_max)
+		else
+			phi = phi_initial
+			println("Target volume fraction not larger than initial volume fraction. Not compressing system.")
+		end
+	else
+		phi = phi_initial
+		if phi_target > phi_initial
+			println("System with particle type 'ellipse' not eligible for compression. Not compressing system.")
+		end
+	end										
+	
 	# Write output.
-	phi::Float64 = phi_initial
 	t_exec::Float64 = 77777.0
 	write_output(	output_file_path, 
 				particle_type, 

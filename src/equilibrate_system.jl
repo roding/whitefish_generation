@@ -1,8 +1,8 @@
-function equilibrate_system(	Lx::Float64, 
+function equilibrate_system(	particle_type::String,
+							R::Array{Float64, 2},
+							Lx::Float64, 
 							Ly::Float64, 
 							Lz::Float64,
-							particle_type::String,
-							R::Array{Float64, 2},
 							X::Array{Float64, 1}, 
 							Y::Array{Float64, 1}, 
 							Z::Array{Float64, 1}, 
@@ -23,7 +23,7 @@ function equilibrate_system(	Lx::Float64,
 							sigma_translation_max::Float64,
 							sigma_rotation::Float64,
 							sigma_rotation_max::Float64,
-							number_of_equlibration_sweeps::Int64)
+							number_of_equilibration_sweeps::Int64)
 
 	number_of_particles::Int64 = size(R, 1)
 	
@@ -76,7 +76,7 @@ function equilibrate_system(	Lx::Float64,
 	zAB::Float64 = 0.0
 	overlapfun::Float64 = 0.0
 
-	for current_sweep = 1:number_of_equlibration_sweeps
+	for current_sweep = 1:number_of_equilibration_sweeps
 		println(join(["   Sweep ", string(current_sweep)]))
 		
 		acceptance_probability_translation = 0.0

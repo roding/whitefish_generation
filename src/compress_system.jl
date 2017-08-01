@@ -1,8 +1,10 @@
-function compress_system(	Lx::Float64, 
+function compress_system(	particle_type::String,
+						R::Array{Float64, 2},
+						Lx::Float64, 
 						Ly::Float64, 
 						Lz::Float64,
-						particle_type::String,
-						R::Array{Float64, 2},
+						phi_initial::Float64,
+						phi_target::Float64,
 						X::Array{Float64, 1}, 
 						Y::Array{Float64, 1}, 
 						Z::Array{Float64, 1}, 
@@ -24,8 +26,7 @@ function compress_system(	Lx::Float64,
 						sigma_rotation::Float64,
 						sigma_rotation_max::Float64,
 						delta_phi::Float64,
-						phi_target::Float64,
-						number_of_sweeps_ub::Int64)
+						number_of_sweeps_max::Int64)
 			
 	number_of_particles::Int64 = size(R, 1)
 	
@@ -138,7 +139,7 @@ function compress_system(	Lx::Float64,
 		energy_system = 1.0
 		current_sweep = 0
 		current_equilibration_sweep = 0
-		while energy_system > 0.0 && current_sweep < number_of_sweeps_ub
+		while energy_system > 0.0 && current_sweep < number_of_sweeps_max
 			current_sweep += 1
 			#println(join(["   Sweep ", string(current_sweep)]))
 			
@@ -347,5 +348,5 @@ function compress_system(	Lx::Float64,
 		end
 	end
 	
-	return (Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
+	return (Lx, Ly, Lz, phi, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
 end

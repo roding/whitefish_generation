@@ -39,9 +39,10 @@ function read_input(file_path::String)
 	orientation_constraint_upper::Float64 = read_key(file_string, "orientation_constraint_upper", Float64)
 	
 	# Other input.
-	number_of_equilibration_sweeps::Int64 = read_key(file_string, "number_of_equilibration_sweeps", Int64)
 	sigma_translation_max::Float64 = read_key(file_string, "sigma_translation_max", Float64)
 	sigma_rotation_max::Float64 = read_key(file_string, "sigma_rotation_max", Float64)
+	number_of_equilibration_sweeps::Int64 = read_key(file_string, "number_of_equilibration_sweeps", Int64)
+	delta_phi::Float64 = read_key(file_string, "delta_phi", Float64)
 	
 	output_file_path::String = read_key(file_string, "output_file_path", String)
 	
@@ -61,6 +62,7 @@ function read_input(file_path::String)
 		orientation_constraint_upper,
 		sigma_translation_max,
 		sigma_rotation_max,
-		number_of_equilibration_sweeps, 
+		number_of_equilibration_sweeps,
+		delta_phi,
 		output_file_path)
 end
