@@ -40,6 +40,9 @@ function read_input(file_path::String)
 	
 	# Other input.
 	number_of_equilibration_sweeps::Int64 = read_key(file_string, "number_of_equilibration_sweeps", Int64)
+	sigma_translation_max::Float64 = read_key(file_string, "sigma_translation_max", Float64)
+	sigma_rotation_max::Float64 = read_key(file_string, "sigma_rotation_max", Float64)
+	
 	output_file_path::String = read_key(file_string, "output_file_path", String)
 	
 	return (
@@ -55,7 +58,9 @@ function read_input(file_path::String)
 		position_constraint_upper, 
 		orientation_constraint_axis, 
 		orientation_constraint_lower, 
-		orientation_constraint_upper, 
+		orientation_constraint_upper,
+		sigma_translation_max,
+		sigma_rotation_max,
 		number_of_equilibration_sweeps, 
 		output_file_path)
 end

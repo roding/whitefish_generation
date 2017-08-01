@@ -1,15 +1,20 @@
 include("file_io/read_input.jl")
 include("file_io/read_key.jl")
+include("file_io/write_output.jl")
+include("file_io/write_key.jl")
 
 include("initialize_system.jl")
+include("relax_system.jl")
+include("equilibrate_system.jl")
+include("compress_system.jl")
+
 
 include("generate_random_unit_quaternion.jl")
 include("characteristic_matrix_ellipsoid.jl")
 include("characteristic_matrix_ellipse.jl")
 include("rotation_matrix.jl")
-include("relax_system.jl")
-include("equilibrate_system.jl")
-include("compress_system.jl")
+
+
 include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
@@ -52,6 +57,8 @@ function run_generation()
 		orientation_constraint_axis::Array{Float64, 1},
 		orientation_constraint_lower::Float64,
 		orientation_constraint_upper::Float64,
+		sigma_translation_max::Float64,
+		sigma_rotation_max::Float64,
 		number_of_equilibration_sweeps::Int64, 
 		output_file_path::String) = read_input(input_file_path)
 	
@@ -117,11 +124,73 @@ function run_generation()
 	println(A32)
 	println(A33)
 	
+	# Translation and rotation speeds.
+	sigma_translation::Float64 = sigma_translation_max
+	sigma_rotation::Float64 = sigma_rotation_max
 	
+	# Relax system until zero energy is reached.
+	(	X, 
+		Y, 
+		Z, 
+		Q0, 
+		Q1, 
+		Q2, 
+		Q3, 
+		A11, 
+		A12, 
+		A13, 
+		A21, 
+		A22, 
+		A23, 
+		A31, 
+		A32, 
+		A33, 
+		sigma_translation, 
+		sigma_rotation) = relax_system(	particle_type, 
+										R, 
+										Lx, 
+										Ly, 
+										Lz,
+										X, 
+										Y, 
+										Z, 
+										Q0, 
+										Q1, 
+										Q2, 
+										Q3, 
+										A11, 
+										A12, 
+										A13, 
+										A21, 
+										A22, 
+										A23, 
+										A31, 
+										A32, 
+										A33, 
+										sigma_translation, 
+										sigma_translation_max, 
+										sigma_rotation, 
+										sigma_rotation_max)
 	
+	# Write output.
+	phi::Float64 = phi_initial
+	t_exec::Float64 = 77777.0
+	write_output(	output_file_path, 
+				particle_type, 
+				R, 
+				Lx, 
+				Ly, 
+				Lz,
+				phi,
+				X, 
+				Y, 
+				Z, 
+				Q0, 
+				Q1, 
+				Q2, 
+				Q3,
+				t_exec)
 	
-	
-		
 	return 0
 	
 	nothing

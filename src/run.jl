@@ -109,10 +109,10 @@ function run()
 	end
 	
 	# Simulation parameters.
-	sigma_translation_ub::Float64 = 0.05#1.0
-	sigma_rotation_ub::Float64 = 0.01#5#0.01
-	sigma_translation::Float64 = sigma_translation_ub
-	sigma_rotation::Float64 = sigma_rotation_ub
+	sigma_translation_max::Float64 = 0.05#1.0
+	sigma_rotation_max::Float64 = 0.01#5#0.01
+	sigma_translation::Float64 = sigma_translation_max
+	sigma_rotation::Float64 = sigma_rotation_max
 	
 	# Characteristic/rotation matrix entries.
 	A11::Array{Float64, 1} = zeros(number_of_particles)
@@ -176,17 +176,17 @@ function run()
 	end
 
 	# Relax system until zero energy is reached.
-	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = relax_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub)
+	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = relax_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_max, sigma_rotation, sigma_rotation_max)
 
 	# Equilibrate system.
 	number_of_equlibration_sweeps::Int64 = 1000
-	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, number_of_equlibration_sweeps)
+	(X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = equilibrate_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_max, sigma_rotation, sigma_rotation_max, number_of_equlibration_sweeps)
 
 	# Compress system.
 	delta_phi::Float64 = 1e-3
 	phi_target::Float64 = 1.0
 	number_of_sweeps_ub::Int64 = 1000#1000
-	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_ub, sigma_rotation, sigma_rotation_ub, delta_phi, phi_target, number_of_sweeps_ub)
+	(Lx, Ly, Lz, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation) = compress_system(Lx, Ly, Lz, particle_type, R, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_translation_max, sigma_rotation, sigma_rotation_max, delta_phi, phi_target, number_of_sweeps_ub)
 		
 	# Verify non-overlap.
 	println("OVERLAPS")

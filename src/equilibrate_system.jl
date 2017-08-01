@@ -20,9 +20,9 @@ function equilibrate_system(	Lx::Float64,
 							A32::Array{Float64, 1},
 							A33::Array{Float64, 1},
 							sigma_translation::Float64,
-							sigma_translation_ub::Float64,
+							sigma_translation_max::Float64,
 							sigma_rotation::Float64,
-							sigma_rotation_ub::Float64,
+							sigma_rotation_max::Float64,
 							number_of_equlibration_sweeps::Int64)
 
 	number_of_particles::Int64 = size(R, 1)
@@ -227,7 +227,7 @@ function equilibrate_system(	Lx::Float64,
 		if acceptance_probability_translation <= acceptance_probability_target
 			sigma_translation *= 0.95
 		else
-			sigma_translation = min(1.05 * sigma_translation, sigma_translation_ub)
+			sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
 		end
 		
 		if particle_type != "sphere"
@@ -235,7 +235,7 @@ function equilibrate_system(	Lx::Float64,
 			if acceptance_probability_rotation <= acceptance_probability_target
 				sigma_rotation *= 0.95
 			else
-				sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_ub)
+				sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_max)
 			end
 		end
 	end
