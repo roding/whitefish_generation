@@ -10,15 +10,6 @@ function voxel_structure(	particle_type::String,
 						Q1::Array{Float64, 1}, 
 						Q2::Array{Float64, 1}, 
 						Q3::Array{Float64, 1}, 
-						A11::Array{Float64, 1},
-						A12::Array{Float64, 1},
-						A13::Array{Float64, 1},
-						A21::Array{Float64, 1},
-						A22::Array{Float64, 1},
-						A23::Array{Float64, 1},
-						A31::Array{Float64, 1},
-						A32::Array{Float64, 1},
-						A33::Array{Float64, 1},
 						voxel_size::Float64)
 	
 	Nx::Int64 = convert(Int64, round(Lx/voxel_size))
@@ -64,6 +55,20 @@ function voxel_structure(	particle_type::String,
 	y_max::Int64 = 0
 	z_min::Int64 = 0
 	z_max::Int64 = 0
+	a11::Float64 = 0.0
+	a12::Float64 = 0.0
+	a13::Float64 = 0.0
+	a21::Float64 = 0.0
+	a22::Float64 = 0.0
+	a23::Float64 = 0.0
+	a31::Float64 = 0.0
+	a32::Float64 = 0.0
+	a33::Float64 = 0.0
+	f::Float64 = 0.0
+	
+	x_prim::Float64 = 0.0
+	y_prim::Float64 = 0.0
+	z_prim::Float64 = 0.0
 	
 	for current_particle = 1:number_of_particles
 		for i = -1:1
@@ -71,7 +76,7 @@ function voxel_structure(	particle_type::String,
 				for k = -1:1
 					x = X[current_particle] + convert(Float64, i) * Lx
 					y = Y[current_particle] + convert(Float64, j) * Ly
-					z = Z[current_particle] + convert(Float64, k) * Lz
+					z = Z[current_particle] + convert(Float64, k) * Lz						
 					if all([x, y, z] .< [Lx, Ly, Lz] + RMAX[current_particle]) && all([x, y, z] .> - RMAX[current_particle])
 						x_min = max(1, convert(Int64, floor(x - RMAX[current_particle])))
 						x_max = min(Nx, convert(Int64, ceil(x + RMAX[current_particle])))
@@ -84,7 +89,21 @@ function voxel_structure(	particle_type::String,
 							for yy =  y_min:y_max
 								for zz =  z_min:z_max
 									if particle_type == "sphere"
-										if (x - convert(Float64, xx))^2 + (y - convert(Float64, yy))^2 + (z - convert(Float64, zz))^2 <= R[current_particle]
+										if (x - convert(Float64, xx))^2 + (y - convert(Float64, yy))^2 + (z - convert(Float64, zz))^2 <= R[current_particle]^2
+											M[xx, yy, zz] = true
+										end
+									elseif particle_type == "ellipsoid"
+										(a11, a12, a13, a21, a22, a23, a31, a32, a33) = characteristic_matrix_ellipsoid(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle], R[current_particle, 1], R[current_particle, 2], R[current_particle, 3])
+										f = [x - convert(Float64, xx), y - convert(Float64, yy), z - convert(Float64, zz)]' * ([a11 a12 a13; a21 a22 a23; a31 a32 a33] \ [x - convert(Float64, xx), y - convert(Float64, yy), z - convert(Float64, zz)])
+										if f <= 1.0
+											M[xx, yy, zz] = true
+										end
+									elseif particle_type == "cuboid"
+										(a11, a12, a13, a21, a22, a23, a31, a32, a33) = rotation_matrix(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle])
+										x_prim = a11 * (x - convert(Float64, xx)) + a12 * (y - convert(Float64, yy)) + a13 * (z - convert(Float64, zz))
+										y_prim = a21 * (x - convert(Float64, xx)) + a22 * (y - convert(Float64, yy)) + a23 * (z - convert(Float64, zz))
+										z_prim = a31 * (x - convert(Float64, xx)) + a32 * (y - convert(Float64, yy)) + a33 * (z - convert(Float64, zz))
+										if abs(x_prim) <= R[current_particle, 1] && abs(y_prim) <= R[current_particle, 2] && abs(z_prim) <= R[current_particle, 3]
 											M[xx, yy, zz] = true
 										end
 									end

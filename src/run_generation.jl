@@ -303,7 +303,8 @@ function run_generation()
 				t_exec)
 	
 	# Generate voxel structure and write VTK file.
-	voxel_size::Float64 = 1.0 # a.u.
+	voxel_size::Float64 = 0.05 # a.u.
+	
 	M::Array{Bool, 3} = voxel_structure(	particle_type, 
 										R, 
 										Lx, 
@@ -316,18 +317,11 @@ function run_generation()
 										Q1, 
 										Q2, 
 										Q3, 
-										A11, 
-										A12, 
-										A13, 
-										A21, 
-										A22, 
-										A23, 
-										A31, 
-										A32, 
-										A33, 
 										voxel_size)
 	
-	
+	file_path_vtk::String = "../../test_files/output.vtk"
+	write_vtk(M, file_path_vtk)
+		
 	return 0
 	
 	nothing
