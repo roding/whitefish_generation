@@ -238,6 +238,56 @@ function equilibrate_system(	particle_type::String,
 				sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_max)
 			end
 		end
+		
+		# Final computation of system energy after finishing the sweep. This needs to be performed because only local optimization is performed when the particles translate and rotate.			
+		energy_system = 0.0
+		if particle_type == "sphere"
+			for currentA = 1:number_of_particles
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+					xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+					yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+					zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+					overlapfun = (RMAX[currentA] + RMAX[currentB])^2 - (xAB^2 + yAB^2 + zAB^2)
+					if xAB^2 + yAB^2 + zAB^2 <= (RMAX[currentA] + RMAX[currentB])^2
+						energy_system += overlapfun
+					end
+				end
+			end
+		elseif particle_type == "ellipse"
+			for currentA = 1:number_of_particles
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+					xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+					yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+					zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+					overlapfun = overlap_ellipse(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB])
+					if overlapfun < 1.0
+						energy_system += (1.0 - overlapfun)^2
+					end
+				end
+			end
+		elseif particle_type == "ellipsoid"
+			for currentA = 1:number_of_particles
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+					xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+					yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+					zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+					overlapfun = overlap_ellipsoid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1]^2 * R[currentA, 2]^2 * R[currentA, 3]^2)
+					if overlapfun < 1.0
+						energy_system += (1.0 - overlapfun)^2
+					end
+				end
+			end
+		elseif particle_type == "cuboid"
+			for currentA = 1:number_of_particles
+				for currentB = [1:currentA-1 ; currentA+1:number_of_particles]
+					xAB = signed_distance_mod(X[currentA], X[currentB], Lx)
+					yAB = signed_distance_mod(Y[currentA], Y[currentB], Ly)
+					zAB = signed_distance_mod(Z[currentA], Z[currentB], Lz)
+					overlapfun = overlap_cuboid(xAB, yAB, zAB, A11[currentA], A12[currentA], A13[currentA], A21[currentA], A22[currentA], A23[currentA], A31[currentA], A32[currentA], A33[currentA], A11[currentB], A12[currentB], A13[currentB], A21[currentB], A22[currentB], A23[currentB], A31[currentB], A32[currentB], A33[currentB], R[currentA, 1], R[currentA, 2], R[currentA, 3], R[currentB, 1], R[currentB, 2], R[currentB, 3])
+					energy_system += overlapfun
+				end
+			end
+		end
 	end
 	
 	return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
