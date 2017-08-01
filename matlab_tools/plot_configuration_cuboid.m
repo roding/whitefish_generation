@@ -2,67 +2,23 @@ clear
 clc
 close all hidden
 
-file_name = '../src/output.dat';
-file_data = dlmread(file_name, ',');
+file_path = '../../test_files/output_generation.xml';
+[   particle_type, ...
+    R, ...
+    Lx, ...
+    Ly, ...
+    Lz, ...
+    phi, ...
+    X, ...
+    Y, ...
+    Z, ...
+    Q0, ...
+    Q1, ...
+    Q2, ...
+    Q3, ...
+    execution_time] = read_output(file_path);
 
-Lx = file_data(1, 1);
-Ly = file_data(1, 2);
-Lz = file_data(1, 3);
-
-R1 = file_data(2:end, 1);
-R2 = file_data(2:end, 2);
-R3 = file_data(2:end, 3);
-X = file_data(2:end, 4);
-Y = file_data(2:end, 5);
-Z = file_data(2:end, 6);
-Q0 = file_data(2:end, 7);
-Q1 = file_data(2:end, 8);
-Q2 = file_data(2:end, 9);
-Q3 = file_data(2:end, 10);
-
-%%%%%%%%%%%%%%%%%%%
-% R1 = R1([62 104]);
-% R2 = R2([62 104]);
-% R3 = R3([62 104]);
-% X = X([62 104]);
-% Y = Y([62 104]);
-% Z = Z([62 104]);
-% Q0 = Q0([62 104]);
-% Q1 = Q1([62 104]);
-% Q2 = Q2([62 104]);
-% Q3 = Q3([62 104]);
-% 
-% xAB = X(2) - X(1);
-% if xAB < -0.5 * Lx
-%     xAB = xAB + Lx;
-% elseif xAB > 0.5 * Lx
-%     xAB = xAB - Lx;
-% end
-% yAB = Y(2) - Y(1);
-% if yAB < -0.5 * Ly
-%     yAB = yAB + Ly;
-% elseif yAB > 0.5 * Ly
-%     yAB = yAB - Ly;
-% end
-% zAB = Z(2) - Z(1);
-% if zAB < -0.5 * Lz
-%     zAB = zAB + Lz;
-% elseif zAB > 0.5 * Lz
-%     zAB = zAB - Lz;
-% end
-% X(1) = 0;
-% Y(1) = 0;
-% Z(1) = 0;
-% X(2) = xAB;
-% Y(2) = yAB;
-% Z(2) = zAB;
-
-% Y(2) = Y(2) + 0.01;
-% 
-
-%%%%%%%%%%%%%
-
-number_of_particles = numel(R1);
+number_of_particles = numel(X);
 
 xsi = 2 * [0 1 1 0 0 0 ; 1 1 0 0 1 1 ; 1 1 0 0 1 1 ; 0 1 1 0 0 0] - 1;
 eta = 2 * [0 0 1 1 0 0 ; 0 1 1 0 0 0 ; 0 1 1 0 1 1 ; 0 0 1 1 1 1] - 1;
@@ -82,9 +38,9 @@ for current_particle = 1:number_of_particles
     q1 = Q1(current_particle);
     q2 = Q2(current_particle);
     q3 = Q3(current_particle);
-    r1 = R1(current_particle);
-    r2 = R2(current_particle);
-    r3 = R3(current_particle);
+    r1 = R(current_particle, 1);
+    r2 = R(current_particle, 2);
+    r3 = R(current_particle, 3);
     
     Rq = rotation_matrix(q0, q1, q2, q3);
     XSI = Rq * [r1*xsi(:)' ; r2*eta(:)' ; r3*zeta(:)'];
@@ -138,5 +94,5 @@ lighting flat
 
 axis 'equal'
 % axis([0 Lx 0 Ly 0 Lz])
-
+% 
 check_overlap_cuboid()

@@ -2,24 +2,23 @@ clear
 clc
 close all hidden
 
-file_name = '../src/output.dat';
-file_data = dlmread(file_name, ',');
+file_path = '../../test_files/output_generation.xml';
+[   particle_type, ...
+    R, ...
+    Lx, ...
+    Ly, ...
+    Lz, ...
+    phi, ...
+    X, ...
+    Y, ...
+    Z, ...
+    Q0, ...
+    Q1, ...
+    Q2, ...
+    Q3, ...
+    execution_time] = read_output(file_path);
 
-Lx = file_data(1, 1);
-Ly = file_data(1, 2);
-Lz = file_data(1, 3);
-
-R1 = file_data(2:end, 1);
-R2 = file_data(2:end, 2);
-X = file_data(2:end, 3);
-Y = file_data(2:end, 4);
-Z = file_data(2:end, 5);
-Q0 = file_data(2:end, 6);
-Q1 = file_data(2:end, 7);
-Q2 = file_data(2:end, 8);
-Q3 = file_data(2:end, 9);
-
-number_of_particles = numel(R1);
+number_of_particles = numel(X);
 
 fig = figure();
 
@@ -38,8 +37,8 @@ for current_particle = 1:number_of_particles
     q1 = Q1(current_particle);
     q2 = Q2(current_particle);
     q3 = Q3(current_particle);
-    r1 = R1(current_particle);
-    r2 = R2(current_particle);
+    r1 = R(current_particle, 1);
+    r2 = R(current_particle, 2);
     
     Rq = rotation_matrix(q0, q1, q2, q3);
     XSI = Rq * [r1*xsi(:)' ; r2*eta(:)' ; 0.01*zeta(:)'];

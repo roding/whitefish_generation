@@ -20,10 +20,10 @@ function read_input(file_path::String)
 	R::Array{Float64, 2} = reshape(R_temp, number_of_particles, number_of_properties)
 	
 	# Read input on initial system size.
-	Lx::Float64 = read_key(file_string, "domain_size_x_initial", Float64)
-	Ly::Float64 = read_key(file_string, "domain_size_y_initial", Float64)
-	Lz::Float64 = read_key(file_string, "domain_size_z_initial", Float64)
-	phi_initial::Float64 = read_key(file_string, "phi_initial", Float64)
+	Lx::Float64 = read_key(file_string, "domain_size_x", Float64)
+	Ly::Float64 = read_key(file_string, "domain_size_y", Float64)
+	Lz::Float64 = read_key(file_string, "domain_size_z", Float64)
+	phi::Float64 = read_key(file_string, "phi", Float64)
 	
 	# Read input on target system size.
 	phi_target::Float64 = read_key(file_string, "phi_target", Float64)
@@ -52,7 +52,7 @@ function read_input(file_path::String)
 		Lx, 
 		Ly, 
 		Lz, 
-		phi_initial, 
+		phi, 
 		phi_target, 
 		position_constraint_axis, 
 		position_constraint_lower, 

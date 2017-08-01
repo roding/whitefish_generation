@@ -4,9 +4,9 @@ for i = 1:number_of_particles
 %         disp([i j])
         RA = rotation_matrix(Q0(i), Q1(i), Q2(i), Q3(i));
         PA = 2 * [0 0 0 0 1 1 1 1 ; 0 0 1 1 0 0 1 1 ; 0 1 0 1 0 1 0 1] - 1;
-        PA(1, :) = R1(i) * PA(1, :);
-        PA(2, :) = R2(i) * PA(2, :);
-        PA(3, :) = R3(i) * PA(3, :);
+        PA(1, :) = R(i, 1) * PA(1, :);
+        PA(2, :) = R(i, 2) * PA(2, :);
+        PA(3, :) = R(i, 3) * PA(3, :);
         PA = RA * PA;
         
         xAB = X(j) - X(i);
@@ -30,9 +30,9 @@ for i = 1:number_of_particles
 %         disp([xAB, yAB, zAB])
         RB = rotation_matrix(Q0(j), Q1(j), Q2(j), Q3(j));
         PB = 2 * [0 0 0 0 1 1 1 1 ; 0 0 1 1 0 0 1 1 ; 0 1 0 1 0 1 0 1] - 1;
-        PB(1, :) = R1(j) * PB(1, :);
-        PB(2, :) = R2(j) * PB(2, :);
-        PB(3, :) = R3(j) * PB(3, :);
+        PB(1, :) = R(j, 1) * PB(1, :);
+        PB(2, :) = R(j, 2) * PB(2, :);
+        PB(3, :) = R(j, 3) * PB(3, :);
         PB = RB * PB;
         PB(1, :) = xAB + PB(1, :);
         PB(2, :) = yAB + PB(2, :);

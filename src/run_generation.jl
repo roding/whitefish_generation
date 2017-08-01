@@ -49,7 +49,7 @@ function run_generation()
 		Lx::Float64, 
 		Ly::Float64, 
 		Lz::Float64, 
-		phi_initial::Float64, 
+		phi::Float64, 
 		phi_target::Float64,
 		position_constraint_axis::String, 
 		position_constraint_lower::Float64, 
@@ -79,7 +79,7 @@ function run_generation()
 	(	Lx, 
 		Ly, 
 		Lz, 
-		phi_initial, 
+		phi, 
 		X::Array{Float64, 1}, 
 		Y::Array{Float64, 1}, 
 		Z::Array{Float64, 1}, 
@@ -100,7 +100,7 @@ function run_generation()
 												Lx, 
 												Ly, 
 												Lz,
-												phi_initial,
+												phi,
 												position_constraint_axis, 
 												position_constraint_lower, 
 												position_constraint_upper, 
@@ -220,9 +220,8 @@ function run_generation()
 	
 	# Compress system.
 	number_of_sweeps_max::Int64 = 1000
-	phi::Float64 = 0.0
 	if particle_type != "ellipse" 
-		if phi_target > phi_initial
+		if phi_target > phi
 			(	Lx, 
 				Ly, 
 				Lz, 
@@ -249,7 +248,7 @@ function run_generation()
 												Lx, 
 												Ly, 
 												Lz,
-												phi_initial,
+												phi,
 												phi_target,
 												X,
 												Y, 
@@ -274,12 +273,10 @@ function run_generation()
 												delta_phi, 
 												number_of_sweeps_max)
 		else
-			phi = phi_initial
 			println("Target volume fraction not larger than initial volume fraction. Not compressing system.")
 		end
 	else
-		phi = phi_initial
-		if phi_target > phi_initial
+		if phi_target > phi
 			println("System with particle type 'ellipse' not eligible for compression. Not compressing system.")
 		end
 	end										
