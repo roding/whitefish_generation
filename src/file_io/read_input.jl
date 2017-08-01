@@ -5,11 +5,18 @@ function read_input(file_path::String)
 	
 	# Read particle data.
 	particle_type::String = read_key(file_string, "particle_type", String)
-	
-	number_of_particles::Int64 = read_key(file_string, "number_of_particles", Int64)
-	
 	R_temp::Array{Float64, 1} = read_key(file_string, "R", Array{Float64, 1})
-	number_of_properties::Int64 = length(R_temp) / number_of_particles
+	number_of_properties::Int64 = 0
+	if particle_type == "sphere"
+		number_of_properties = 1
+	elseif particle_type == "ellipse"
+		number_of_properties = 2
+	elseif particle_type == "ellipsoid"
+		number_of_properties = 3
+	elseif particle_type == "cuboid"
+		number_of_properties = 3
+	end
+	number_of_particles::Int64 = length(R_temp) / number_of_properties
 	R::Array{Float64, 2} = reshape(R_temp, number_of_particles, number_of_properties)
 	
 	# Read input on initial system size.
@@ -36,8 +43,7 @@ function read_input(file_path::String)
 	output_file_path::String = read_key(file_string, "output_file_path", String)
 	
 	return (
-		particle_type, 
-		number_of_particles, 
+		particle_type,
 		R, 
 		Lx, 
 		Ly, 

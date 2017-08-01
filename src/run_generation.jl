@@ -39,8 +39,7 @@ function run_generation()
 	
 	# Read input from file.
 	println(join(("Reading input from file ", input_file_path, "...")))
-	(	particle_type::String, 
-		number_of_particles::Int64, 
+	(	particle_type::String,
 		R::Array{Float64, 2},
 		Lx::Float64, 
 		Ly::Float64, 
@@ -58,7 +57,6 @@ function run_generation()
 	
 	println((Lx,Ly,Lz))
 	println(particle_type)
-	println(number_of_particles)
 	println(R)
 	println(position_constraint_axis)
 	println(position_constraint_lower)
@@ -68,6 +66,58 @@ function run_generation()
 	println(orientation_constraint_upper)
 	println(number_of_equilibration_sweeps)
 	println(output_file_path)
+	
+	# Initialize system.
+	(	Lx, 
+		Ly, 
+		Lz, 
+		phi_initial, 
+		X::Array{Float64, 1}, 
+		Y::Array{Float64, 1}, 
+		Z::Array{Float64, 1}, 
+		Q0::Array{Float64, 1}, 
+		Q1::Array{Float64, 1}, 
+		Q2::Array{Float64, 1}, 
+		Q3::Array{Float64, 1}, 
+		A11::Array{Float64, 1}, 
+		A12::Array{Float64, 1}, 
+		A13::Array{Float64, 1}, 
+		A21::Array{Float64, 1}, 
+		A22::Array{Float64, 1}, 
+		A23::Array{Float64, 1}, 
+		A31::Array{Float64, 1}, 
+		A32::Array{Float64, 1}, 
+		A33::Array{Float64, 1}) = initialize_system(	particle_type,
+												R,
+												Lx, 
+												Ly, 
+												Lz,
+												phi_initial,
+												position_constraint_axis, 
+												position_constraint_lower, 
+												position_constraint_upper, 
+												orientation_constraint_axis,
+												orientation_constraint_lower,
+												orientation_constraint_upper)
+	
+	println(X)
+	println(Y)
+	println(Z)
+	println(Q0)
+	println(Q1)
+	println(Q2)
+	println(Q3)
+	println(A11)
+	println(A12)
+	println(A13)
+	println(A21)
+	println(A22)
+	println(A23)
+	println(A31)
+	println(A32)
+	println(A33)
+	
+	
 	
 	
 	
