@@ -18,6 +18,14 @@ file_path = '../../test_files/output_generation.xml';
     Q3, ...
     execution_time] = read_output(file_path);
 
+% index = [    5 6];
+% X = X(index);
+% Y = Y(index);
+% Z = Z(index);
+% Q0 = Q0(index);
+% Q1 = Q1(index);
+% Q2 = Q2(index);
+% Q3 = Q3(index);
 % disp('mirrored')
 % X = Lx - X;
 % Y = Ly - Y;
@@ -76,10 +84,10 @@ end
                     
 map = repmat([.2 .2 .8],[64 1]);
 colormap(map)
-
- h.XLim = [0 Lx];
- h.YLim = [0 Ly];
- h.ZLim = [0 Lz];
+% 
+%  h.XLim = [0 Lx];
+%  h.YLim = [0 Ly];
+%  h.ZLim = [0 Lz];
 
 h.XTick = [];
 h.YTick = [];
@@ -91,7 +99,7 @@ h.BoxStyle = 'full';
 h.Projection = 'perspective';
 % h.View = [60, 20];
 
-h.View = [-34, 1];
+h.View = [48, 19];
 % h.View = [-70, 15];
 
 
@@ -100,6 +108,6 @@ camlight left;
 lighting flat
 
 axis 'equal'
-axis([0 Lx 0 Ly 0 Lz])
+% axis([0 Lx 0 Ly 0 Lz])
 % 
 check_overlap_cuboid()

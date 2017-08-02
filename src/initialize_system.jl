@@ -38,14 +38,27 @@ function initialize_system(	particle_type::String,
 		end
 	end
 
-	# Generate random positions.
-	warn("Ignoring position constraints.")
-	X::Array{Float64, 1} = Lx * rand(number_of_particles)
-	Y::Array{Float64, 1} = Ly * rand(number_of_particles)
-	Z::Array{Float64, 1} = Lz * rand(number_of_particles)
+	# Generate random positions. If there are position constraints, satisfy these.
+	X = Array{Float64}(number_of_particles)
+	Y = Array{Float64}(number_of_particles)
+	Z = Array{Float64}(number_of_particles)
+	if position_constraint_axis == "x"
+		X = position_constraint_lower * Lx + (position_constraint_upper - position_constraint_lower) * Lx * rand(number_of_particles)
+	else
+		X = Lx * rand(number_of_particles)
+	end
+	if position_constraint_axis == "y"
+		Y = position_constraint_lower * Ly + (position_constraint_upper - position_constraint_lower) * Ly * rand(number_of_particles)
+	else
+		Y = Ly * rand(number_of_particles)
+	end
+	if position_constraint_axis == "z"
+		Z = position_constraint_lower * Lz + (position_constraint_upper - position_constraint_lower) * Lz * rand(number_of_particles)
+	else
+		Z = Lz * rand(number_of_particles)
+	end
 	
 	# Generate random orientations.
-	warn("Ignoring orientation constraints.")
 	Q0::Array{Float64, 1} = zeros(number_of_particles)
 	Q1::Array{Float64, 1} = zeros(number_of_particles)
 	Q2::Array{Float64, 1} = zeros(number_of_particles)
@@ -55,12 +68,28 @@ function initialize_system(	particle_type::String,
 	q2::Float64 = 0.0
 	q3::Float64 = 0.0
 	if particle_type != "sphere"
+		orientation_axis::Array{Float64, 1} = [0.0, 0.0, 1.0]
+		orientation_axis_rotated::Array{Float64, 1} = zeros(3)
+		angle_to_orientation_constraint_axis::Float64 = 0.0
+		is_orientation_ok::Bool = false
+		
 		for current_particle = 1:number_of_particles
-			(q0, q1, q2, q3) = generate_random_unit_quaternion()
-			Q0[current_particle] = q0
-			Q1[current_particle] = q1
-			Q2[current_particle] = q2
-			Q3[current_particle] = q3
+			is_orientation_ok = false
+			while !is_orientation_ok
+				(q0, q1, q2, q3) = generate_random_unit_quaternion()
+				(a11, a12, a13, a21, a22, a23, a31, a32, a33) = rotation_matrix(q0, q1, q2, q3)
+				orientation_axis_rotated[1] = a11 * orientation_axis[1] + a12 * orientation_axis[2] + a13 * orientation_axis[3]
+				orientation_axis_rotated[2] = a21 * orientation_axis[1] + a22 * orientation_axis[2] + a23 * orientation_axis[3]
+				orientation_axis_rotated[3] = a31 * orientation_axis[1] + a32 * orientation_axis[2] + a33 * orientation_axis[3]
+				angle_to_orientation_constraint_axis = acos(orientation_axis_rotated[1] * orientation_constraint_axis[1] + orientation_axis_rotated[2] * orientation_constraint_axis[2] + orientation_axis_rotated[3] * orientation_constraint_axis[3])
+				if orientation_constraint_lower <= angle_to_orientation_constraint_axis <= orientation_constraint_upper
+					Q0[current_particle] = q0
+					Q1[current_particle] = q1
+					Q2[current_particle] = q2
+					Q3[current_particle] = q3
+					is_orientation_ok = true
+				end
+			end
 		end
 	end
 	

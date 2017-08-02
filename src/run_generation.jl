@@ -128,6 +128,26 @@ function run_generation()
 	println(A32)
 	println(A33)
 	
+	# Write output.
+	t_exec::Float64 = 77777.0
+	write_output(	output_file_path, 
+				particle_type, 
+				R, 
+				Lx, 
+				Ly, 
+				Lz,
+				phi,
+				X, 
+				Y, 
+				Z, 
+				Q0, 
+				Q1, 
+				Q2, 
+				Q3,
+				t_exec)
+				
+	return 0
+	
 	# Translation and rotation speeds.
 	sigma_translation::Float64 = sigma_translation_max
 	sigma_rotation::Float64 = sigma_rotation_max
@@ -171,6 +191,12 @@ function run_generation()
 										A31, 
 										A32, 
 										A33, 
+										position_constraint_axis, 
+										position_constraint_lower, 
+										position_constraint_upper, 
+										orientation_constraint_axis,
+										orientation_constraint_lower,
+										orientation_constraint_upper,
 										sigma_translation, 
 										sigma_translation_max, 
 										sigma_rotation, 
@@ -215,6 +241,12 @@ function run_generation()
 											A31, 
 											A32, 
 											A33, 
+											position_constraint_axis, 
+											position_constraint_lower, 
+											position_constraint_upper, 
+											orientation_constraint_axis,
+											orientation_constraint_lower,
+											orientation_constraint_upper,
 											sigma_translation, 
 											sigma_translation_max, 
 											sigma_rotation, 
@@ -269,6 +301,12 @@ function run_generation()
 												A31, 
 												A32, 
 												A33, 
+												position_constraint_axis, 
+												position_constraint_lower, 
+												position_constraint_upper, 
+												orientation_constraint_axis,
+												orientation_constraint_lower,
+												orientation_constraint_upper,
 												sigma_translation, 
 												sigma_translation_max, 
 												sigma_rotation, 
@@ -285,7 +323,7 @@ function run_generation()
 	end										
 	
 	# Write output.
-	t_exec::Float64 = 77777.0
+	#t_exec::Float64 = 77777.0
 	write_output(	output_file_path, 
 				particle_type, 
 				R, 
