@@ -22,6 +22,7 @@ function equilibrate_system(	particle_type::String,
 							position_constraint_axis::String, 
 							position_constraint_lower::Float64, 
 							position_constraint_upper::Float64, 
+							orientation_axis::Array{Float64, 1},
 							orientation_constraint_axis::Array{Float64, 1},
 							orientation_constraint_lower::Float64,
 							orientation_constraint_upper::Float64,
@@ -81,6 +82,12 @@ function equilibrate_system(	particle_type::String,
 	yAB::Float64 = 0.0
 	zAB::Float64 = 0.0
 	overlapfun::Float64 = 0.0
+	
+	is_position_ok::Bool = false
+	
+	orientation_axis_rotated::Array{Float64, 1} = zeros(3)
+	angle_to_orientation_constraint_axis::Float64 = 0.0
+	is_orientation_ok::Bool = false
 
 	for current_sweep = 1:number_of_equilibration_sweeps
 		println(join(["   Sweep ", string(current_sweep)]))
@@ -124,7 +131,24 @@ function equilibrate_system(	particle_type::String,
 			end
 
 			# Generate random proposal position and compute new local energy with translation.
-			(x_star, y_star, z_star) = generate_proposal_position(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
+			is_position_ok = false
+			while !is_position_ok
+				(x_star, y_star, z_star) = generate_proposal_position(X[currentA], Y[currentA], Z[currentA], Lx, Ly, Lz, sigma_translation)
+				if position_constraint_axis == "x"
+					if position_constraint_lower * Lx <= x_star <= position_constraint_upper * Lx
+						is_position_ok = true
+					end				
+				elseif position_constraint_axis == "y"
+					if position_constraint_lower * Ly <= y_star <= position_constraint_upper * Ly
+						is_position_ok = true
+					end		
+				elseif position_constraint_axis == "z"
+					if position_constraint_lower * Lz <= z_star <= position_constraint_upper * Lz
+						is_position_ok = true
+					end		
+				end
+			end
+			
 			energy_particle_star = 0.0
 			for currentB = [1:currentA-1;currentA+1:number_of_particles]
 				xAB = signed_distance_mod(x_star, X[currentB], Lx)
@@ -167,7 +191,18 @@ function equilibrate_system(	particle_type::String,
 			
 			# Generate random proposal orientation and compute new local energy with rotation.
 			if particle_type != "sphere"
-				(q0_star, q1_star, q2_star, q3_star) = generate_proposal_orientation(Q0[currentA], Q1[currentA], Q2[currentA], Q3[currentA], sigma_rotation)
+			is_orientation_ok = false
+				while !is_orientation_ok
+					(q0_star, q1_star, q2_star, q3_star) = generate_proposal_orientation(Q0[currentA], Q1[currentA], Q2[currentA], Q3[currentA], sigma_rotation)
+					(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = rotation_matrix(q0_star, q1_star, q2_star, q3_star)
+					orientation_axis_rotated[1] = a11_star * orientation_axis[1] + a12_star * orientation_axis[2] + a13_star * orientation_axis[3]
+					orientation_axis_rotated[2] = a21_star * orientation_axis[1] + a22_star * orientation_axis[2] + a23_star * orientation_axis[3]
+					orientation_axis_rotated[3] = a31_star * orientation_axis[1] + a32_star * orientation_axis[2] + a33_star * orientation_axis[3]
+					angle_to_orientation_constraint_axis = acos(orientation_axis_rotated[1] * orientation_constraint_axis[1] + orientation_axis_rotated[2] * orientation_constraint_axis[2] + orientation_axis_rotated[3] * orientation_constraint_axis[3])
+					if orientation_constraint_lower <= angle_to_orientation_constraint_axis <= orientation_constraint_upper
+						is_orientation_ok = true
+					end
+				end
 				
 				if particle_type == "ellipse"
 					(a11_star, a12_star, a13_star, a21_star, a22_star, a23_star, a31_star, a32_star, a33_star) = characteristic_matrix_ellipse(q0_star, q1_star, q2_star, q3_star, R[currentA, 1], R[currentA, 2])

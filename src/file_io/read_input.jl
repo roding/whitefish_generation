@@ -34,6 +34,7 @@ function read_input(file_path::String)
 	position_constraint_upper::Float64 = read_key(file_string, "position_constraint_upper", Float64)
 
 	# Orientation constraint.	
+	orientation_axis::Array{Float64, 1} = read_key(file_string, "orientation_axis", Array{Float64, 1})
 	orientation_constraint_axis::Array{Float64, 1} = read_key(file_string, "orientation_constraint_axis", Array{Float64, 1})
 	orientation_constraint_lower::Float64 = read_key(file_string, "orientation_constraint_lower", Float64)
 	orientation_constraint_upper::Float64 = read_key(file_string, "orientation_constraint_upper", Float64)
@@ -57,6 +58,7 @@ function read_input(file_path::String)
 		position_constraint_axis, 
 		position_constraint_lower, 
 		position_constraint_upper, 
+		orientation_axis,
 		orientation_constraint_axis, 
 		orientation_constraint_lower, 
 		orientation_constraint_upper,

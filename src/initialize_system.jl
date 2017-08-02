@@ -7,6 +7,7 @@ function initialize_system(	particle_type::String,
 							position_constraint_axis::String, 
 							position_constraint_lower::Float64, 
 							position_constraint_upper::Float64, 
+							orientation_axis::Array{Float64, 1},
 							orientation_constraint_axis::Array{Float64, 1},
 							orientation_constraint_lower::Float64,
 							orientation_constraint_upper::Float64)
@@ -68,7 +69,6 @@ function initialize_system(	particle_type::String,
 	q2::Float64 = 0.0
 	q3::Float64 = 0.0
 	if particle_type != "sphere"
-		orientation_axis::Array{Float64, 1} = [0.0, 0.0, 1.0]
 		orientation_axis_rotated::Array{Float64, 1} = zeros(3)
 		angle_to_orientation_constraint_axis::Float64 = 0.0
 		is_orientation_ok::Bool = false

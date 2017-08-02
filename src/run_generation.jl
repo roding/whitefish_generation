@@ -35,6 +35,9 @@ function run_generation()
 	(program_file_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
 	program_file_dir = abspath(program_file_dir)
 	cd(program_file_dir)
+	
+	# Execution time.
+	t_exec::Float64 = 0.0
 
 	# Assert that input is file and store path.
 	input_file_path::String = ""
@@ -57,6 +60,7 @@ function run_generation()
 		position_constraint_axis::String, 
 		position_constraint_lower::Float64, 
 		position_constraint_upper::Float64, 
+		orientation_axis::Array{Float64, 1},
 		orientation_constraint_axis::Array{Float64, 1},
 		orientation_constraint_lower::Float64,
 		orientation_constraint_upper::Float64,
@@ -107,6 +111,7 @@ function run_generation()
 												position_constraint_axis, 
 												position_constraint_lower, 
 												position_constraint_upper, 
+												orientation_axis,
 												orientation_constraint_axis,
 												orientation_constraint_lower,
 												orientation_constraint_upper)
@@ -127,26 +132,6 @@ function run_generation()
 	println(A31)
 	println(A32)
 	println(A33)
-	
-	# Write output.
-	t_exec::Float64 = 77777.0
-	write_output(	output_file_path, 
-				particle_type, 
-				R, 
-				Lx, 
-				Ly, 
-				Lz,
-				phi,
-				X, 
-				Y, 
-				Z, 
-				Q0, 
-				Q1, 
-				Q2, 
-				Q3,
-				t_exec)
-				
-	return 0
 	
 	# Translation and rotation speeds.
 	sigma_translation::Float64 = sigma_translation_max
@@ -194,6 +179,7 @@ function run_generation()
 										position_constraint_axis, 
 										position_constraint_lower, 
 										position_constraint_upper, 
+										orientation_axis,
 										orientation_constraint_axis,
 										orientation_constraint_lower,
 										orientation_constraint_upper,
@@ -244,6 +230,7 @@ function run_generation()
 											position_constraint_axis, 
 											position_constraint_lower, 
 											position_constraint_upper, 
+											orientation_axis,
 											orientation_constraint_axis,
 											orientation_constraint_lower,
 											orientation_constraint_upper,
@@ -304,6 +291,7 @@ function run_generation()
 												position_constraint_axis, 
 												position_constraint_lower, 
 												position_constraint_upper, 
+												orientation_axis,
 												orientation_constraint_axis,
 												orientation_constraint_lower,
 												orientation_constraint_upper,
@@ -323,7 +311,7 @@ function run_generation()
 	end										
 	
 	# Write output.
-	#t_exec::Float64 = 77777.0
+	t_exec = 77777.0
 	write_output(	output_file_path, 
 				particle_type, 
 				R, 

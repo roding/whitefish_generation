@@ -108,6 +108,6 @@ camlight left;
 lighting flat
 
 axis 'equal'
-% axis([0 Lx 0 Ly 0 Lz])
+axis([0 Lx 0 Ly 0 Lz])
 % 
 check_overlap_cuboid()
