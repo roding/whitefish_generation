@@ -48,11 +48,11 @@ function overlap_cuboid(	xAB::Float64,
 			gamma = 0.5 * (gamma_min + gamma_max)
 		end
 		
-		overlapfun = 1.0 / gamma
+		overlapfun = 1.0 - gamma
 	end
 end
 
-# xAB = 1.99999
+# xAB = 0.01
 # yAB = xAB
 # zAB = xAB
 # a11 = 1.0

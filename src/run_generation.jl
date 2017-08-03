@@ -19,7 +19,11 @@ include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
 include("overlap_ellipse.jl")
-include("overlap_cuboid_working.jl")
+
+#include("overlap_cuboid_working_newer.jl")
+include("overlap_cuboid.jl")
+include("overlap_cuboid_binary.jl")
+
 include("signed_distance_mod.jl")
 include("quaternion_mult.jl")
 
@@ -28,7 +32,7 @@ include("vtk/write_vtk.jl")
 
 function run_generation()
 	# Inititalization of random number generation device.
-	random_seed::Int64 = convert(Int64, time_ns())
+	random_seed::Int64 = 1#convert(Int64, time_ns())
 	srand(random_seed)
 	
 	# Change current folder to the folder where this script lies.
@@ -138,6 +142,7 @@ function run_generation()
 	sigma_rotation::Float64 = sigma_rotation_max
 	
 	# Relax system.
+	number_of_sweeps_max::Int64 = typemax(Int64)
 	(	X, 
 		Y, 
 		Z, 
@@ -186,7 +191,8 @@ function run_generation()
 										sigma_translation, 
 										sigma_translation_max, 
 										sigma_rotation, 
-										sigma_rotation_max)
+										sigma_rotation_max,
+										number_of_sweeps_max)										
 	
 	# Equilibrate system.
 	(	X, 
@@ -241,7 +247,7 @@ function run_generation()
 											number_of_equilibration_sweeps)
 	
 	# Compress system.
-	number_of_sweeps_max::Int64 = 10000
+	number_of_sweeps_max = 100
 	if particle_type != "ellipse" 
 		if phi_target > phi
 			(	Lx, 
@@ -329,7 +335,7 @@ function run_generation()
 				t_exec)
 	
 	# Generate voxel structure and write VTK file.
-	voxel_size::Float64 = 0.05 # a.u.
+	#voxel_size::Float64 = 0.05 # a.u.
 	
 	# M::Array{Bool, 3} = voxel_structure(	particle_type, 
 										# R, 

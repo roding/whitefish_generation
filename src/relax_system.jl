@@ -29,7 +29,8 @@ function relax_system(		particle_type::String,
 						sigma_translation::Float64,
 						sigma_translation_max::Float64,
 						sigma_rotation::Float64,
-						sigma_rotation_max::Float64)
+						sigma_rotation_max::Float64,
+						number_of_sweeps_max::Int64)
 
 	number_of_particles::Int64 = size(R, 1)
 	
@@ -91,7 +92,7 @@ function relax_system(		particle_type::String,
 	is_orientation_ok::Bool = false
 	
 	energy_system = 1.0
-	while energy_system > 0.0
+	while energy_system > 0.0 && current_sweep < number_of_sweeps_max
 		current_sweep += 1
 		println(join(["   Sweep ", string(current_sweep)]))
 		
@@ -337,5 +338,9 @@ function relax_system(		particle_type::String,
 		
 	end
 	
-	return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
+	if energy_system == 0.0
+		return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
+	else
+		return (Inf * X, Inf * Y, Inf * Z, Inf * Q0, Inf * Q1, Inf * Q2, Inf * Q3, Inf * A11, Inf * A12, Inf * A13, Inf * A21, Inf * A22, Inf * A23, Inf * A31, Inf * A32, Inf * A33, sigma_translation, sigma_rotation)
+	end
 end
