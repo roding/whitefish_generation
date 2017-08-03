@@ -19,7 +19,7 @@ include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
 include("overlap_ellipse.jl")
-include("overlap_cuboid.jl")
+include("overlap_cuboid_working.jl")
 include("signed_distance_mod.jl")
 include("quaternion_mult.jl")
 
@@ -241,7 +241,7 @@ function run_generation()
 											number_of_equilibration_sweeps)
 	
 	# Compress system.
-	number_of_sweeps_max::Int64 = 1000
+	number_of_sweeps_max::Int64 = 10000
 	if particle_type != "ellipse" 
 		if phi_target > phi
 			(	Lx, 
@@ -331,24 +331,24 @@ function run_generation()
 	# Generate voxel structure and write VTK file.
 	voxel_size::Float64 = 0.05 # a.u.
 	
-	M::Array{Bool, 3} = voxel_structure(	particle_type, 
-										R, 
-										Lx, 
-										Ly, 
-										Lz,
-										X, 
-										Y, 
-										Z, 
-										Q0, 
-										Q1, 
-										Q2, 
-										Q3, 
-										voxel_size)
+	# M::Array{Bool, 3} = voxel_structure(	particle_type, 
+										# R, 
+										# Lx, 
+										# Ly, 
+										# Lz,
+										# X, 
+										# Y, 
+										# Z, 
+										# Q0, 
+										# Q1, 
+										# Q2, 
+										# Q3, 
+										# voxel_size)
 	
-	file_path_vtk::String = "../../test_files/output.vtk"
-	write_vtk(M, file_path_vtk)
+	# file_path_vtk::String = "../../test_files/output.vtk"
+	# write_vtk(M, file_path_vtk)
 		
-	return 0
+	# return 0
 	
 	nothing
 end
