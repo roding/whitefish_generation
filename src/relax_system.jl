@@ -32,6 +32,9 @@ function relax_system(		particle_type::String,
 						sigma_rotation_max::Float64,
 						number_of_sweeps_max::Int64)
 
+						
+	is_relaxed::Bool = false
+	
 	number_of_particles::Int64 = size(R, 1)
 	
 	acceptance_probability_target::Float64 = 0.25
@@ -334,13 +337,14 @@ function relax_system(		particle_type::String,
 			end
 		end
 			
-		println((energy_system,sigma_translation,sigma_rotation))
-		
 	end
 	
+	println((energy_system, sigma_translation, sigma_rotation))
+	
 	if energy_system == 0.0
-		return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
-	else
-		return (Inf * X, Inf * Y, Inf * Z, Inf * Q0, Inf * Q1, Inf * Q2, Inf * Q3, Inf * A11, Inf * A12, Inf * A13, Inf * A21, Inf * A22, Inf * A23, Inf * A31, Inf * A32, Inf * A33, sigma_translation, sigma_rotation)
+		is_relaxed = true
 	end
+	
+	return (X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation, is_relaxed)
 end
+

@@ -160,7 +160,8 @@ function run_generation()
 		A32, 
 		A33, 
 		sigma_translation, 
-		sigma_rotation) = relax_system(	particle_type, 
+		sigma_rotation,
+		is_relaxed::Bool) = relax_system(	particle_type, 
 										R, 
 										Lx, 
 										Ly, 
@@ -192,7 +193,7 @@ function run_generation()
 										sigma_translation_max, 
 										sigma_rotation, 
 										sigma_rotation_max,
-										number_of_sweeps_max)										
+										number_of_sweeps_max)						
 	
 	# Equilibrate system.
 	(	X, 
@@ -247,7 +248,7 @@ function run_generation()
 											number_of_equilibration_sweeps)
 	
 	# Compress system.
-	number_of_sweeps_max = 100
+	number_of_sweeps_max = 1000
 	if particle_type != "ellipse" 
 		if phi_target > phi
 			(	Lx, 
