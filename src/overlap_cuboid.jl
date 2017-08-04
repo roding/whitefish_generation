@@ -31,6 +31,8 @@ function overlap_cuboid(	xAB::Float64,
 
 	overlapfun_binary = overlap_cuboid_binary(xAB, yAB, zAB, a11, a12, a13, a21, a22, a23, a31, a32, a33, b11, b12, b13, b21, b22, b23, b31, b32, b33, r1a, r2a, r3a, r1b, r2b, r3b)
 
+	return overlapfun_binary
+
 	if overlapfun_binary == 0.0
 		return 0.0
 	else
