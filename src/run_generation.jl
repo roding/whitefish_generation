@@ -32,7 +32,7 @@ include("vtk/write_vtk.jl")
 
 function run_generation()
 	# Inititalization of random number generation device.
-	random_seed::Int64 = 1#convert(Int64, time_ns())
+	random_seed::Int64 = convert(Int64, time_ns())
 	srand(random_seed)
 
 	# Change current folder to the folder where this script lies.
