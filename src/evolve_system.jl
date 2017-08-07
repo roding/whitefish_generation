@@ -101,10 +101,10 @@ function evolve_system(	particle_type::String,
 	while (energy_system > 0.0 && current_relaxation_sweep < number_of_relaxation_sweeps_max) || current_equilibration_sweep < number_of_equilibration_sweeps
 		if energy_system > 0.0
 			current_relaxation_sweep += 1
-			println(join(("Relaxation sweep ", string(current_relaxation_sweep))))
+			#println(join(("Relaxation sweep ", string(current_relaxation_sweep))))
 		else
 			current_equilibration_sweep += 1
-			println(join(("Equlibration sweep ", string(current_equilibration_sweep), " out of ", string(number_of_equilibration_sweeps))))
+			#println(join(("Equlibration sweep ", string(current_equilibration_sweep), " out of ", string(number_of_equilibration_sweeps))))
 		end
 
 		acceptance_probability_translation = 0.0
@@ -379,7 +379,7 @@ function evolve_system(	particle_type::String,
 
 	end
 
-	println((energy_system, sigma_translation, sigma_rotation))
+	#println((energy_system, sigma_translation, sigma_rotation))
 
 	if energy_system == 0.0
 		is_relaxed = true

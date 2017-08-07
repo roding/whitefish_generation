@@ -152,7 +152,6 @@ function compress_system(	particle_type::String,
 										number_of_relaxation_sweeps_max,
 										0)
 
-		println(is_relaxed)
 		if is_relaxed # If system has been successfully relaxed.
 			phi = phi_prim
 			Lx = Lx_prim
