@@ -19,7 +19,6 @@ include("generate_proposal_orientation.jl")
 include("overlap_ellipsoid.jl")
 include("overlap_ellipse.jl")
 
-#include("overlap_cuboid_working_newer.jl")
 include("overlap_cuboid.jl")
 include("overlap_cuboid_binary.jl")
 
@@ -69,6 +68,7 @@ function run_generation()
 		orientation_constraint_upper::Float64,
 		sigma_translation_max::Float64,
 		sigma_rotation_max::Float64,
+		sigma_ratio::Float64,
 		number_of_equilibration_sweeps::Int64,
 		delta_phi::Float64,
 		output_file_path::String) = read_input(input_file_path)
@@ -163,60 +163,9 @@ function run_generation()
 										sigma_translation_max,
 										sigma_rotation,
 										sigma_rotation_max,
+										sigma_ratio,
 										number_of_relaxation_sweeps_max,
 										number_of_equilibration_sweeps)
-
-	# Equilibrate system.
-#	(	X,
-#		Y,
-#		Z,
-#		Q0,
-#		Q1,
-#		Q2,
-#		Q3,
-#		A11,
-#		A12,
-#		A13,
-#		A21,
-#		A22,
-#		A23,
-#		A31,
-#		A32,
-#		A33,
-#		sigma_translation,
-#		sigma_rotation) = equilibrate_system(	particle_type,
-#											R,
-#											Lx,
-#											Ly,
-#											Lz,
-#											X,
-#											Y,
-#											Z,
-#											Q0,
-#											Q1,
-#											Q2,
-#											Q3,
-#											A11,
-#											A12,
-#											A13,
-#											A21,
-#											A22,
-#											A23,
-#											A31,
-#											A32,
-##											A33,
-#											position_constraint_axis,
-#											position_constraint_lower,
-#											position_constraint_upper,
-#											orientation_axis,
-#											orientation_constraint_axis,
-#											orientation_constraint_lower,
-#											orientation_constraint_upper,
-#											sigma_translation,
-#											sigma_translation_max,
-#											sigma_rotation,
-#											sigma_rotation_max,
-#											number_of_equilibration_sweeps)
 
 	# Compress system.
 	number_of_relaxation_sweeps_max = 1000
@@ -277,6 +226,7 @@ function run_generation()
 												sigma_translation_max,
 												sigma_rotation,
 												sigma_rotation_max,
+												sigma_ratio,
 												delta_phi,
 												number_of_relaxation_sweeps_max)
 		else
@@ -305,7 +255,7 @@ function run_generation()
 				Q2,
 				Q3,
 				t_exec)
-				
+
 	nothing
 end
 

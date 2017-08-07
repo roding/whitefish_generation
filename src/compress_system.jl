@@ -32,6 +32,7 @@ function compress_system(	particle_type::String,
 						sigma_translation_max::Float64,
 						sigma_rotation::Float64,
 						sigma_rotation_max::Float64,
+						sigma_ratio::Float64,
 						delta_phi::Float64,
 						number_of_relaxation_sweeps_max::Int64)
 
@@ -147,6 +148,7 @@ function compress_system(	particle_type::String,
 										sigma_translation_max,
 										sigma_rotation,
 										sigma_rotation_max,
+										sigma_ratio,
 										number_of_relaxation_sweeps_max,
 										0)
 
