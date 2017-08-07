@@ -4,16 +4,15 @@ include("file_io/write_output.jl")
 include("file_io/write_key.jl")
 
 include("initialize_system.jl")
-include("relax_system.jl")
-include("equilibrate_system.jl")
+#include("relax_system.jl")
+#include("equilibrate_system.jl")
+include("evolve_system.jl")
 include("compress_system.jl")
-
 
 include("generate_random_unit_quaternion.jl")
 include("characteristic_matrix_ellipsoid.jl")
 include("characteristic_matrix_ellipse.jl")
 include("rotation_matrix.jl")
-
 
 include("generate_proposal_position.jl")
 include("generate_proposal_orientation.jl")
@@ -112,8 +111,8 @@ function run_generation()
 	sigma_translation::Float64 = sigma_translation_max
 	sigma_rotation::Float64 = sigma_rotation_max
 
-	# Relax system.
-	number_of_sweeps_max::Int64 = typemax(Int64)
+	# Relax and equlibrate system.
+	number_of_relaxation_sweeps_max::Int64 = typemax(Int64)
 	(	X,
 		Y,
 		Z,
@@ -132,7 +131,7 @@ function run_generation()
 		A33,
 		sigma_translation,
 		sigma_rotation,
-		is_relaxed::Bool) = relax_system(	particle_type,
+		is_relaxed::Bool) = evolve_system(	particle_type,
 										R,
 										Lx,
 										Ly,
@@ -164,62 +163,63 @@ function run_generation()
 										sigma_translation_max,
 										sigma_rotation,
 										sigma_rotation_max,
-										number_of_sweeps_max)
+										number_of_relaxation_sweeps_max,
+										number_of_equilibration_sweeps)
 
 	# Equilibrate system.
-	(	X,
-		Y,
-		Z,
-		Q0,
-		Q1,
-		Q2,
-		Q3,
-		A11,
-		A12,
-		A13,
-		A21,
-		A22,
-		A23,
-		A31,
-		A32,
-		A33,
-		sigma_translation,
-		sigma_rotation) = equilibrate_system(	particle_type,
-											R,
-											Lx,
-											Ly,
-											Lz,
-											X,
-											Y,
-											Z,
-											Q0,
-											Q1,
-											Q2,
-											Q3,
-											A11,
-											A12,
-											A13,
-											A21,
-											A22,
-											A23,
-											A31,
-											A32,
-											A33,
-											position_constraint_axis,
-											position_constraint_lower,
-											position_constraint_upper,
-											orientation_axis,
-											orientation_constraint_axis,
-											orientation_constraint_lower,
-											orientation_constraint_upper,
-											sigma_translation,
-											sigma_translation_max,
-											sigma_rotation,
-											sigma_rotation_max,
-											number_of_equilibration_sweeps)
+#	(	X,
+#		Y,
+#		Z,
+#		Q0,
+#		Q1,
+#		Q2,
+#		Q3,
+#		A11,
+#		A12,
+#		A13,
+#		A21,
+#		A22,
+#		A23,
+#		A31,
+#		A32,
+#		A33,
+#		sigma_translation,
+#		sigma_rotation) = equilibrate_system(	particle_type,
+#											R,
+#											Lx,
+#											Ly,
+#											Lz,
+#											X,
+#											Y,
+#											Z,
+#											Q0,
+#											Q1,
+#											Q2,
+#											Q3,
+#											A11,
+#											A12,
+#											A13,
+#											A21,
+#											A22,
+#											A23,
+#											A31,
+#											A32,
+##											A33,
+#											position_constraint_axis,
+#											position_constraint_lower,
+#											position_constraint_upper,
+#											orientation_axis,
+#											orientation_constraint_axis,
+#											orientation_constraint_lower,
+#											orientation_constraint_upper,
+#											sigma_translation,
+#											sigma_translation_max,
+#											sigma_rotation,
+#											sigma_rotation_max,
+#											number_of_equilibration_sweeps)
 
 	# Compress system.
-	number_of_sweeps_max = 1000
+	number_of_relaxation_sweeps_max = 1000
 	if particle_type != "ellipse"
 		if phi_target > phi
 			(	Lx,
@@ -278,7 +278,7 @@ function run_generation()
 												sigma_rotation,
 												sigma_rotation_max,
 												delta_phi,
-												number_of_sweeps_max)
+												number_of_relaxation_sweeps_max)
 		else
 			println("Target volume fraction not larger than initial volume fraction. Not compressing system.")
 		end
@@ -305,29 +305,7 @@ function run_generation()
 				Q2,
 				Q3,
 				t_exec)
-
-	# Generate voxel structure and write VTK file.
-	#voxel_size::Float64 = 0.05 # a.u.
-
-	# M::Array{Bool, 3} = voxel_structure(	particle_type,
-										# R,
-										# Lx,
-										# Ly,
-										# Lz,
-										# X,
-										# Y,
-										# Z,
-										# Q0,
-										# Q1,
-										# Q2,
-										# Q3,
-										# voxel_size)
-
-	# file_path_vtk::String = "../../test_files/output.vtk"
-	# write_vtk(M, file_path_vtk)
-
-	# return 0
-
+				
 	nothing
 end
 
