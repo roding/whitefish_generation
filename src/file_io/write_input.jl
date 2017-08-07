@@ -40,7 +40,7 @@ function write_input(	file_path::String,
 	write_key(file_stream, "orientation_constraint_upper", orientation_constraint_upper)
 	write_key(file_stream, "sigma_translation_max", sigma_translation_max)
 	write_key(file_stream, "sigma_rotation_max", sigma_rotation_max)
-	write_key(file_stream, "sigma_ratio", sigma_rotation_max)
+	write_key(file_stream, "sigma_ratio", sigma_ratio)
 	write_key(file_stream, "number_of_equilibration_sweeps", number_of_equilibration_sweeps)
 	write_key(file_stream, "delta_phi", delta_phi)
 	write_key(file_stream, "output_file_path", output_file_path)

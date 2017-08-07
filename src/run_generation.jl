@@ -109,7 +109,13 @@ function run_generation()
 
 	# Translation and rotation speeds.
 	sigma_translation::Float64 = sigma_translation_max
-	sigma_rotation::Float64 = sigma_rotation_max
+	sigma_rotation::Float64 = 0.0
+	if sigma_ratio >= 0.0
+		sigma_rotation = sigma_ratio * sigma_translation
+	else
+		sigma_rotation = sigma_rotation_max
+	end
+
 
 	# Relax and equlibrate system.
 	number_of_relaxation_sweeps_max::Int64 = typemax(Int64)

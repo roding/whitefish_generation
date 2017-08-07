@@ -287,30 +287,44 @@ function evolve_system(	particle_type::String,
 				sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
 			end
 		else
-			if sigma_ratio >= 0.0
-				acceptance_probability_combined = (acceptance_probability_translation + acceptance_probability_rotation) / (2.0 * number_of_particles)
-				if acceptance_probability_combined <= acceptance_probability_target
-					sigma_translation *= 0.95
-				else
-					sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
-				end
-
-				sigma_rotation = sigma_ratio * sigma_translation
+			acceptance_probability_translation /= number_of_particles
+			if acceptance_probability_translation <= acceptance_probability_target
+				sigma_translation *= 0.95
 			else
-				acceptance_probability_translation /= number_of_particles
-				if acceptance_probability_translation <= acceptance_probability_target
-					sigma_translation *= 0.95
-				else
-					sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
-				end
-
-				acceptance_probability_rotation /= number_of_particles
-				if acceptance_probability_rotation <= acceptance_probability_target
-					sigma_rotation *= 0.95
-				else
-					sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_max)
-				end
+				sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
 			end
+
+			acceptance_probability_rotation /= number_of_particles
+			if acceptance_probability_rotation <= acceptance_probability_target
+				sigma_rotation *= 0.95
+			else
+				sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_max, sigma_ratio * sigma_translation)
+			end
+
+		#	if sigma_ratio >= 0.0
+		#		acceptance_probability_combined = (acceptance_probability_translation + acceptance_probability_rotation) / (2.0 * number_of_particles)
+		#		if acceptance_probability_combined <= acceptance_probability_target
+		#			sigma_translation *= 0.95
+		#		else
+		#			sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
+		#		end
+
+		#		sigma_rotation = sigma_ratio * sigma_translation
+		#	else
+		#		acceptance_probability_translation /= number_of_particles
+		#		if acceptance_probability_translation <= acceptance_probability_target
+		#			sigma_translation *= 0.95
+		#		else
+		#			sigma_translation = min(1.05 * sigma_translation, sigma_translation_max)
+		#		end
+
+		#		acceptance_probability_rotation /= number_of_particles
+		#		if acceptance_probability_rotation <= acceptance_probability_target
+		#			sigma_rotation *= 0.95
+		#		else
+		#			sigma_rotation = min(1.05 * sigma_rotation, sigma_rotation_max)
+		#		end
+		#	end
 		end
 
 #		# Final computation of system energy after finishing the sweep. This needs to be performed because only local optimization is performed when the particles translate and rotate.
