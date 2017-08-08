@@ -4,8 +4,6 @@ include("file_io/write_output.jl")
 include("file_io/write_key.jl")
 
 include("initialize_system.jl")
-#include("relax_system.jl")
-#include("equilibrate_system.jl")
 include("evolve_system.jl")
 include("compress_system.jl")
 
@@ -33,13 +31,13 @@ function run_generation()
 	random_seed::Int64 = convert(Int64, time_ns())
 	srand(random_seed)
 
+	# Start time.
+	t_start_ns::Int64 = convert(Int64, time_ns())
+
 	# Change current folder to the folder where this script lies.
 	(program_file_dir::String, program_file_name::String) = splitdir(PROGRAM_FILE)
 	program_file_dir = abspath(program_file_dir)
 	cd(program_file_dir)
-
-	# Execution time.
-	t_exec::Float64 = 0.0
 
 	# Assert that input is file and store path.
 	input_file_path::String = ""
@@ -245,7 +243,8 @@ function run_generation()
 	end
 
 	# Write output.
-	t_exec = 77777.0
+	t_exec_ns::Int64 = convert(Int64, time_ns()) - t_start_ns
+	t_exec_s::Float64 = convert(Float64, t_exec_ns) / 1e9
 	write_output(	output_file_path,
 				particle_type,
 				R,
@@ -260,7 +259,7 @@ function run_generation()
 				Q1,
 				Q2,
 				Q3,
-				t_exec)
+				t_exec_s)
 
 	nothing
 end
