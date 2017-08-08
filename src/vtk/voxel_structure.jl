@@ -44,8 +44,6 @@ function voxel_structure(	particle_type::String,
 		end
 	end
 
-
-
 	x::Float64 = 0.0
 	y::Float64 = 0.0
 	z::Float64 = 0.0
@@ -69,6 +67,7 @@ function voxel_structure(	particle_type::String,
 	x_prim::Float64 = 0.0
 	y_prim::Float64 = 0.0
 	z_prim::Float64 = 0.0
+	X_prim::Array{Float64, 1} = zeros(3)
 
 	for current_particle = 1:number_of_particles
 		for i = -1:1
@@ -100,9 +99,11 @@ function voxel_structure(	particle_type::String,
 										end
 									elseif particle_type == "cuboid"
 										(a11, a12, a13, a21, a22, a23, a31, a32, a33) = rotation_matrix(Q0[current_particle], Q1[current_particle], Q2[current_particle], Q3[current_particle])
-										x_prim = a11 * (x - convert(Float64, xx)) + a12 * (y - convert(Float64, yy)) + a13 * (z - convert(Float64, zz))
-										y_prim = a21 * (x - convert(Float64, xx)) + a22 * (y - convert(Float64, yy)) + a23 * (z - convert(Float64, zz))
-										z_prim = a31 * (x - convert(Float64, xx)) + a32 * (y - convert(Float64, yy)) + a33 * (z - convert(Float64, zz))
+										X_prim = [a11 a12 a13; a21 a22 a23; a31 a32 a33] \ [x - convert(Float64, xx), y - convert(Float64, yy), z - convert(Float64, zz)]
+
+										x_prim = X_prim[1]#a11 * (x - convert(Float64, xx)) + a12 * (y - convert(Float64, yy)) + a13 * (z - convert(Float64, zz))
+										y_prim = X_prim[2]#a21 * (x - convert(Float64, xx)) + a22 * (y - convert(Float64, yy)) + a23 * (z - convert(Float64, zz))
+										z_prim = X_prim[3]#a31 * (x - convert(Float64, xx)) + a32 * (y - convert(Float64, yy)) + a33 * (z - convert(Float64, zz))
 										if abs(x_prim) <= R[current_particle, 1] && abs(y_prim) <= R[current_particle, 2] && abs(z_prim) <= R[current_particle, 3]
 											M[xx, yy, zz] = true
 										end

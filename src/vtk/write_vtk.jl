@@ -1,7 +1,7 @@
 function write_vtk(M::Array{Bool, 3}, file_path::String)
 
-	M = permutedims(M, (3, 2, 1))
-	
+	#M = permutedims(M, (3, 2, 1))
+
 	file_stream::IOStream = open(file_path, "w")
 	@printf(file_stream, "%s", "# vtk DataFile Version 3.0\n")
 	@printf(file_stream, "%s", "Generated from within Julia\n")
@@ -17,6 +17,6 @@ function write_vtk(M::Array{Bool, 3}, file_path::String)
 		@printf(file_stream, "%0.0f\n", M[i])
 	end
 	close(file_stream)
-	
+
 	nothing
 end
