@@ -16,7 +16,7 @@ function voxel_structure(	particle_type::String,
 	Ny::Int64 = convert(Int64, round(Ly/voxel_size))
 	Nz::Int64 = convert(Int64, round(Lz/voxel_size))
 
-	M::Array{Bool, 3} = falses(Nx, Ny, Nz)
+	M::BitArray{3} = falses(Nx, Ny, Nz)
 
     X /= voxel_size
 	Y /= voxel_size

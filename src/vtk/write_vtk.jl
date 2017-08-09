@@ -1,6 +1,4 @@
-function write_vtk(M::Array{Bool, 3}, file_path::String)
-
-	#M = permutedims(M, (3, 2, 1))
+function write_vtk(M, file_path::String)
 
 	file_stream::IOStream = open(file_path, "w")
 	@printf(file_stream, "%s", "# vtk DataFile Version 3.0\n")
@@ -14,7 +12,7 @@ function write_vtk(M::Array{Bool, 3}, file_path::String)
 	@printf(file_stream, "%s", "SCALARS values float 1\n")
 	@printf(file_stream, "%s", "LOOKUP_TABLE default\n")
 	for i = 1:length(M)
-		@printf(file_stream, "%0.0f\n", M[i])
+		@printf(file_stream, "%s\n", M[i])
 	end
 	close(file_stream)
 
