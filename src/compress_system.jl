@@ -180,7 +180,7 @@ function compress_system(	particle_type::String,
 				A33[current_particle] = A33_prim[current_particle]
 			end
 
-			println(join(["   Current volume fraction: ", string(phi)]))
+			println(join(("   Current volume fraction: ", string(round(phi, convert(Int64, ceil(-log10(delta_phi))))))))
 		else
 			is_converged = true
 		end
@@ -188,15 +188,16 @@ function compress_system(	particle_type::String,
 
 	# Due to rounding errors, it happens that phi > phi_target. Compensate by
 	# slightly expanding the system.
-#	if phi > phi_target
-#		linear_expansion_factor::Float64 = (phi / phi_target)^(1/3)
-#		Lx *= linear_expansion_factor
-#		Ly *= linear_expansion_factor
-#		Lz *= linear_expansion_factor
-#		X *= linear_expansion_factor
-#		Y *= linear_expansion_factor
-#		Z *= linear_expansion_factor
-#	end
+	if phi > phi_target
+		linear_expansion_factor::Float64 = (phi / phi_target)^(1/3)
+		phi = phi_target
+		Lx *= linear_expansion_factor
+		Ly *= linear_expansion_factor
+		Lz *= linear_expansion_factor
+		X *= linear_expansion_factor
+		Y *= linear_expansion_factor
+		Z *= linear_expansion_factor
+	end
 
 	return (Lx, Ly, Lz, phi, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
 end
