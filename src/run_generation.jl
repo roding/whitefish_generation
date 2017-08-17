@@ -201,7 +201,6 @@ function run_generation()
 												Lx,
 												Ly,
 												Lz,
-												phi,
 												phi_target,
 												X,
 												Y,

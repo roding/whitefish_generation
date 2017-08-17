@@ -3,7 +3,6 @@ function compress_system(	particle_type::String,
 						Lx::Float64,
 						Ly::Float64,
 						Lz::Float64,
-						phi_initial::Float64,
 						phi_target::Float64,
 						X::Array{Float64, 1},
 						Y::Array{Float64, 1},
@@ -38,21 +37,23 @@ function compress_system(	particle_type::String,
 
 	number_of_particles::Int64 = size(R, 1)
 
-	phi::Float64 = 0.0
+	phi_initial::Float64 = 0.0
 	if particle_type == "sphere"
-		phi = sum(4.0 * pi / 3.0 * R[:, 1].^3) / (Lx * Ly * Lz)
+		phi_initial = sum(4.0 * pi / 3.0 * R[:, 1].^3) / (Lx * Ly * Lz)
 	elseif particle_type == "ellipsoid"
-		phi = sum(4.0 * pi / 3.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
+		phi_initial = sum(4.0 * pi / 3.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
 	elseif particle_type == "cuboid"
-		phi = sum(8.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
+		phi_initial = sum(8.0 * R[:, 1] .* R[:, 2] .* R[:, 3]) / (Lx * Ly * Lz)
 	end
 
 	is_converged::Bool = false
 	is_relaxed::Bool = false
+	phi::Float64 = phi_initial
 	phi_prim::Float64 = 0.0
 	Lx_prim::Float64 = 0.0
 	Ly_prim::Float64 = 0.0
 	Lz_prim::Float64 = 0.0
+	current_compression::Int64 = 0
 
 	X_prim::Array{Float64, 1} = zeros(number_of_particles)
 	Y_prim::Array{Float64, 1} = zeros(number_of_particles)
@@ -72,7 +73,8 @@ function compress_system(	particle_type::String,
 	A33_prim::Array{Float64, 1} = zeros(number_of_particles)
 
 	while !is_converged && phi < phi_target
-		phi_prim = phi + delta_phi
+		current_compression += 1
+		phi_prim = phi_initial + convert(Float64, current_compression) * delta_phi
 
 		Lx_prim = (phi / phi_prim)^(1/3) * Lx
 		Ly_prim = (phi / phi_prim)^(1/3) * Ly
@@ -183,6 +185,18 @@ function compress_system(	particle_type::String,
 			is_converged = true
 		end
 	end
+
+	# Due to rounding errors, it happens that phi > phi_target. Compensate by
+	# slightly expanding the system.
+#	if phi > phi_target
+#		linear_expansion_factor::Float64 = (phi / phi_target)^(1/3)
+#		Lx *= linear_expansion_factor
+#		Ly *= linear_expansion_factor
+#		Lz *= linear_expansion_factor
+#		X *= linear_expansion_factor
+#		Y *= linear_expansion_factor
+#		Z *= linear_expansion_factor
+#	end
 
 	return (Lx, Ly, Lz, phi, X, Y, Z, Q0, Q1, Q2, Q3, A11, A12, A13, A21, A22, A23, A31, A32, A33, sigma_translation, sigma_rotation)
 end
