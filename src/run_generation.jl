@@ -92,18 +92,18 @@ function run_generation()
 		A31::Array{Float64, 1},
 		A32::Array{Float64, 1},
 		A33::Array{Float64, 1}) = initialize_system(	particle_type,
-												R,
-												Lx,
-												Ly,
-												Lz,
-												phi,
-												position_constraint_axis,
-												position_constraint_lower,
-												position_constraint_upper,
-												orientation_axis,
-												orientation_constraint_axis,
-												orientation_constraint_lower,
-												orientation_constraint_upper)
+														R,
+														Lx,
+														Ly,
+														Lz,
+														phi,
+														position_constraint_axis,
+														position_constraint_lower,
+														position_constraint_upper,
+														orientation_axis,
+														orientation_constraint_axis,
+														orientation_constraint_lower,
+														orientation_constraint_upper)
 
 	# Translation and rotation speeds.
 	sigma_translation::Float64 = sigma_translation_max
@@ -113,7 +113,6 @@ function run_generation()
 	else
 		sigma_rotation = sigma_rotation_max
 	end
-
 
 	# Relax and equlibrate system.
 	number_of_relaxation_sweeps_max::Int64 = typemax(Int64)

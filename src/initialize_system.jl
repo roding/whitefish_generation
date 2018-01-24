@@ -1,19 +1,19 @@
 function initialize_system(	particle_type::String,
 							R::Array{Float64, 2},
-							Lx::Float64, 
-							Ly::Float64, 
+							Lx::Float64,
+							Ly::Float64,
 							Lz::Float64,
 							phi_initial::Float64,
-							position_constraint_axis::String, 
-							position_constraint_lower::Float64, 
-							position_constraint_upper::Float64, 
+							position_constraint_axis::String,
+							position_constraint_lower::Float64,
+							position_constraint_upper::Float64,
 							orientation_axis::Array{Float64, 1},
 							orientation_constraint_axis::Array{Float64, 1},
 							orientation_constraint_lower::Float64,
 							orientation_constraint_upper::Float64)
 
 	number_of_particles::Int64 = size(R, 1)
-	
+
 	# Determine initial system size.
 	if phi_initial > 0.0 # If phi_initial specified, compute (Lx, Ly, Lz), assuming cubic domain.
 		if particle_type == "sphere"
@@ -58,7 +58,7 @@ function initialize_system(	particle_type::String,
 	else
 		Z = Lz * rand(number_of_particles)
 	end
-	
+
 	# Generate random orientations.
 	Q0::Array{Float64, 1} = zeros(number_of_particles)
 	Q1::Array{Float64, 1} = zeros(number_of_particles)
@@ -72,7 +72,7 @@ function initialize_system(	particle_type::String,
 		orientation_axis_rotated::Array{Float64, 1} = zeros(3)
 		angle_to_orientation_constraint_axis::Float64 = 0.0
 		is_orientation_ok::Bool = false
-		
+
 		for current_particle = 1:number_of_particles
 			is_orientation_ok = false
 			while !is_orientation_ok
@@ -92,7 +92,7 @@ function initialize_system(	particle_type::String,
 			end
 		end
 	end
-	
+
 	# Characteristic/rotation matrix entries.
 	A11::Array{Float64, 1} = zeros(number_of_particles)
 	A12::Array{Float64, 1} = zeros(number_of_particles)
@@ -103,7 +103,7 @@ function initialize_system(	particle_type::String,
 	A31::Array{Float64, 1} = zeros(number_of_particles)
 	A32::Array{Float64, 1} = zeros(number_of_particles)
 	A33::Array{Float64, 1} = zeros(number_of_particles)
-	
+
 	a11::Float64 = 0.0
 	a12::Float64 = 0.0
 	a13::Float64 = 0.0
@@ -153,25 +153,25 @@ function initialize_system(	particle_type::String,
 			A33[current_particle] = a33
 		end
 	end
-	
-	return (	Lx, 
-			Ly, 
-			Lz, 
-			phi_initial, 
-			X, 
-			Y, 
-			Z, 
-			Q0, 
-			Q1, 
-			Q2, 
-			Q3, 
-			A11, 
-			A12, 
-			A13, 
-			A21, 
-			A22, 
-			A23, 
-			A31, 
-			A32, 
+
+	return (Lx,
+			Ly,
+			Lz,
+			phi_initial,
+			X,
+			Y,
+			Z,
+			Q0,
+			Q1,
+			Q2,
+			Q3,
+			A11,
+			A12,
+			A13,
+			A21,
+			A22,
+			A23,
+			A31,
+			A32,
 			A33)
 end
